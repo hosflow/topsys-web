@@ -6,7 +6,7 @@
 	<artifactId>topsys-web</artifactId>
 	<version>2.0</version>
 	<name>TopSys IT Solutions - WEB</name>
-	
+
 	<description>TopSys IT Solutions - WEB</description>
 	<url>http://maven.apache.org</url>
 
@@ -18,13 +18,13 @@
 		</license>
 	</licenses>
 
-	<scm> 
+	<scm>
 		<url>https://svn.apache.org/viewvc/maven</url>
 	</scm>
 
 	<properties>
 		<java.version>15</java.version>
-
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>15</maven.compiler.source>
 		<maven.compiler.target>15</maven.compiler.target>
 
