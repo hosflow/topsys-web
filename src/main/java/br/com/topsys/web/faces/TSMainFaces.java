@@ -13,14 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.stereotype.Component;
 
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.util.TSRestAPI;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
 public abstract class TSMainFaces<T extends Serializable> {
 
 	private String baseURL;
