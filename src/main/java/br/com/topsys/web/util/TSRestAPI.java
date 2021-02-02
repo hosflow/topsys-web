@@ -44,7 +44,7 @@ public class TSRestAPI<T extends Serializable> {
 			
 			retorno = (T) restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
 			
-			TSMainFaces.addInfoMessage("OperaÃ§Ã£o realizada com sucesso!");
+			TSMainFaces.addInfoMessage("Operação realizada com sucesso!");
 
 		} catch (RuntimeException e) {
 			this.handlerException(e);
