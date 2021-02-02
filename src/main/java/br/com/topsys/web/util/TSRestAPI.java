@@ -80,6 +80,8 @@ public class TSRestAPI<T extends Serializable> {
 	}
 
 	private void handlerException(RuntimeException e) {
+		String ERRO_INTERNO = "Ocorreu um erro interno, entre em contato com a TI!";
+		
 		if (e instanceof TSApplicationException) {
 
 			TSApplicationException tsApplicationException = (TSApplicationException) e;
@@ -92,13 +94,11 @@ public class TSRestAPI<T extends Serializable> {
 
 				TSMainFaces.addErrorMessage(e.getMessage());
 			}
-
 		} else {
 
 			log.error(e.getMessage());
-
-			TSMainFaces.addErrorMessage(e.getMessage());
-
+			TSMainFaces.addErrorMessage(ERRO_INTERNO);
+			
 		}
 
 	}
