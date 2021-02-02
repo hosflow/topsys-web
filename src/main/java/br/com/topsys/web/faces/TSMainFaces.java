@@ -20,7 +20,6 @@ import br.com.topsys.web.util.TSRestAPI;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
 public abstract class TSMainFaces<T extends Serializable> {
 
 	private String baseURL;
