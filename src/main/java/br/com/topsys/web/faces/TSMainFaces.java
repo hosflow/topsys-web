@@ -46,17 +46,12 @@ public abstract class TSMainFaces<T extends Serializable> {
 		return (T) new TSRestAPI<T>(this.baseURL).postReturnObject(classe, url, objeto);
 	}
 
-	protected List<T> postReturnList(String url, T object) {
+	protected List<T> postReturnList(Class<T> classe,String url, T object) {
 
-		return new TSRestAPI<T>(this.baseURL).postReturnList(url, object);
-
-	}
-
-	protected List<T> postReturnList(String url) {
-
-		return this.postReturnList(url, null);
+		return new TSRestAPI<T>(this.baseURL).postReturnList(classe,url, object);
 
 	}
+
 
 	@SuppressWarnings("static-access")
 	protected List<SelectItem> initCombo(List<?> coll, String nomeValue, String nomeLabel) {

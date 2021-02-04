@@ -1,11 +1,16 @@
 package br.com.topsys.web.util;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.util.TSType;
@@ -25,7 +30,6 @@ public class TSRestAPI<T extends Serializable> {
 
 	private RestTemplate restTemplate = null;
 
-	
 	public TSRestAPI(String baseURL) {
 		this.baseURL = baseURL;
 		this.restTemplate = new RestTemplate();
@@ -41,9 +45,9 @@ public class TSRestAPI<T extends Serializable> {
 
 		try {
 			entity = new HttpEntity<T>(object);
-			
-			retorno = (T) restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
-			
+
+			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
+
 			TSMainFaces.addInfoMessage("Operação realizada com sucesso!");
 
 		} catch (RuntimeException e) {
@@ -54,7 +58,7 @@ public class TSRestAPI<T extends Serializable> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> postReturnList(String url, T object) {
+	public List<T> postReturnList(Class<T> classe, String url, T object) {
 
 		List<T> retorno = null;
 
@@ -65,6 +69,11 @@ public class TSRestAPI<T extends Serializable> {
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
 
+			ObjectMapper objectMapper = new ObjectMapper();
+			CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
+
+			retorno = objectMapper.convertValue(retorno, listType);
+
 		} catch (RuntimeException e) {
 			this.handlerException(e);
 		}
@@ -73,15 +82,9 @@ public class TSRestAPI<T extends Serializable> {
 
 	}
 
-	public List<T> postReturnList(String url) {
-
-		return this.postReturnList(url, null);
-
-	}
-
 	private void handlerException(RuntimeException e) {
 		String ERRO_INTERNO = "Ocorreu um erro interno, entre em contato com a TI!";
-		
+
 		if (e instanceof TSApplicationException) {
 
 			TSApplicationException tsApplicationException = (TSApplicationException) e;
@@ -98,7 +101,7 @@ public class TSRestAPI<T extends Serializable> {
 
 			log.error(e.getMessage());
 			TSMainFaces.addErrorMessage(ERRO_INTERNO);
-			
+
 		}
 
 	}
