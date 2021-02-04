@@ -19,7 +19,10 @@ import br.com.topsys.web.util.TSRestAPI;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class TSMainFaces<T extends Serializable> {
+public abstract class TSMainFaces<T extends Serializable> implements Serializable {
+
+	
+	private static final long serialVersionUID = 7539681980350460538L;
 
 	private String baseURL;
 
