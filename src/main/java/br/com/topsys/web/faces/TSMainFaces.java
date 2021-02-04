@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
 
+import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.util.TSRestAPI;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class TSMainFaces<T extends Serializable> implements Serializable {
 
-	
 	private static final long serialVersionUID = 7539681980350460538L;
 
 	private String baseURL;
@@ -49,12 +49,23 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 		return (T) new TSRestAPI<T>(this.baseURL).postReturnObject(classe, url, objeto);
 	}
 
-	protected List<T> postReturnList(Class<T> classe,String url, T object) {
+	protected List<T> postReturnList(Class<T> classe, String url, T object) {
 
-		return new TSRestAPI<T>(this.baseURL).postReturnList(classe,url, object);
+		List<T> lista = null;
+		try {
 
+			lista = new TSRestAPI<T>(this.baseURL).postReturnList(classe, url, object);
+
+			this.addResultMessage(lista);
+
+		} catch (TSSystemException e) {
+
+			TSMainFaces.addErrorMessage(e.getMessage());
+
+		}
+
+		return lista;
 	}
-
 
 	@SuppressWarnings("static-access")
 	protected List<SelectItem> initCombo(List<?> coll, String nomeValue, String nomeLabel) {

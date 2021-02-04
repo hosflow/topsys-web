@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 
 import br.com.topsys.base.exception.TSApplicationException;
+import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.util.TSType;
 import br.com.topsys.web.exception.TSRestResponseException;
 import br.com.topsys.web.faces.TSMainFaces;
@@ -47,8 +48,7 @@ public class TSRestAPI<T extends Serializable> {
 			entity = new HttpEntity<T>(object);
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
-
-			TSMainFaces.addInfoMessage("Operação realizada com sucesso!");
+			
 
 		} catch (RuntimeException e) {
 			this.handlerException(e);
@@ -99,9 +99,7 @@ public class TSRestAPI<T extends Serializable> {
 			}
 		} else {
 
-			log.error(e.getMessage());
-			TSMainFaces.addErrorMessage(ERRO_INTERNO);
-
+			throw new TSSystemException(ERRO_INTERNO,e);
 		}
 
 	}
