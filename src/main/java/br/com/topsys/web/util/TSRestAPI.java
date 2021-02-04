@@ -13,7 +13,9 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
+import br.com.topsys.base.util.TSType;
 import br.com.topsys.web.exception.TSRestResponseException;
+import br.com.topsys.web.faces.TSMainFaces;
 
 @Component
 public class TSRestAPI<T extends Serializable> {
@@ -81,11 +83,11 @@ public class TSRestAPI<T extends Serializable> {
 
 		if (e instanceof TSApplicationException) {
 
-			throw new TSApplicationException(e.getMessage());
+			throw new TSApplicationException(e.getMessage(),e);
 
 		} else {
 
-			throw new TSSystemException(ERRO_INTERNO, e);
+			throw new TSSystemException(ERRO_INTERNO,e);
 		}
 
 	}
