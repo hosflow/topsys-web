@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -14,12 +13,8 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
-import br.com.topsys.base.util.TSType;
 import br.com.topsys.web.exception.TSRestResponseException;
-import br.com.topsys.web.faces.TSMainFaces;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Component
 public class TSRestAPI<T extends Serializable> {
 
@@ -48,7 +43,6 @@ public class TSRestAPI<T extends Serializable> {
 			entity = new HttpEntity<T>(object);
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
-			
 
 		} catch (RuntimeException e) {
 			this.handlerException(e);
@@ -87,19 +81,11 @@ public class TSRestAPI<T extends Serializable> {
 
 		if (e instanceof TSApplicationException) {
 
-			TSApplicationException tsApplicationException = (TSApplicationException) e;
+			throw new TSApplicationException(e.getMessage());
 
-			if (tsApplicationException.getTSType().equals(TSType.BUSINESS)) {
-
-				TSMainFaces.addInfoMessage(e.getMessage());
-
-			} else {
-
-				TSMainFaces.addErrorMessage(e.getMessage());
-			}
 		} else {
 
-			throw new TSSystemException(ERRO_INTERNO,e);
+			throw new TSSystemException(ERRO_INTERNO, e);
 		}
 
 	}
