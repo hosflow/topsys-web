@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.BeanUtils;
 
 import br.com.topsys.base.exception.TSSystemException;
+import br.com.topsys.base.model.TSRetornoModel;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.util.TSRestAPI;
 import lombok.extern.slf4j.Slf4j;
@@ -44,19 +45,19 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 		this.model = model;
 	}
 
-	protected T postReturnObject(Class<T> classe, String url, T objeto) {
+	protected TSRetornoModel<T> postReturnObject(Class<T> classe, String url, T objeto) {
 
-		return (T) new TSRestAPI<T>(this.baseURL).postReturnObject(classe, url, objeto);
+		return new TSRestAPI<T>(this.baseURL).postReturnObject(classe, url, objeto);
 	}
 
-	protected List<T> postReturnList(Class<T> classe, String url, T object) {
+	protected TSRetornoModel<T> postReturnList(Class<T> classe, String url, T object) {
 
-		List<T> lista = null;
+		TSRetornoModel<T> retorno = new TSRetornoModel<T>();
 		try {
 
-			lista = new TSRestAPI<T>(this.baseURL).postReturnList(classe, url, object);
+			retorno = new TSRestAPI<T>(this.baseURL).postReturnList(classe, url, object);
 
-			this.addResultMessage(lista);
+			this.addResultMessage(retorno.getList());
 
 		} catch (TSSystemException e) {
 
@@ -64,7 +65,7 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 
 		}
 
-		return lista;
+		return retorno;
 	}
 
 	@SuppressWarnings("static-access")

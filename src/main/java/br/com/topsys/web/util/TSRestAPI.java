@@ -13,9 +13,8 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
-import br.com.topsys.base.util.TSType;
+import br.com.topsys.base.model.TSRetornoModel;
 import br.com.topsys.web.exception.TSRestResponseException;
-import br.com.topsys.web.faces.TSMainFaces;
 
 @Component
 public class TSRestAPI<T extends Serializable> {
@@ -35,16 +34,16 @@ public class TSRestAPI<T extends Serializable> {
 
 	}
 
-	public T postReturnObject(Class<T> classe, String url, T object) {
+	public TSRetornoModel<T> postReturnObject(Class<T> classe, String url, T object) {
 
-		T retorno = null;
+		TSRetornoModel<T> retorno = null;
 
 		HttpEntity<T> entity = null;
 
 		try {
 			entity = new HttpEntity<T>(object);
 
-			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
+			retorno = new TSRetornoModel<T>(restTemplate.postForObject(this.getBaseURL() + url, entity, classe));
 
 		} catch (RuntimeException e) {
 			this.handlerException(e);
@@ -54,21 +53,23 @@ public class TSRestAPI<T extends Serializable> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> postReturnList(Class<T> classe, String url, T object) {
+	public TSRetornoModel<T> postReturnList(Class<T> classe, String url, T object) {
 
-		List<T> retorno = null;
+		List<T> lista = null;
+
+		TSRetornoModel<T> retorno = null;
 
 		HttpEntity<T> entity = null;
 
 		try {
 			entity = new HttpEntity<T>(object);
 
-			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
+			lista = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
 
-			retorno = objectMapper.convertValue(retorno, listType);
+			retorno = new TSRetornoModel<T>((List<T>) objectMapper.convertValue(lista, listType));
 
 		} catch (RuntimeException e) {
 			this.handlerException(e);
@@ -83,11 +84,11 @@ public class TSRestAPI<T extends Serializable> {
 
 		if (e instanceof TSApplicationException) {
 
-			throw new TSApplicationException(e.getMessage(),e);
+			throw new TSApplicationException(e.getMessage(), e);
 
 		} else {
 
-			throw new TSSystemException(ERRO_INTERNO,e);
+			throw new TSSystemException(ERRO_INTERNO, e);
 		}
 
 	}
