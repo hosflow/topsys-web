@@ -59,7 +59,7 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 
 	protected TSRetornoModel<T> postReturnList(Class<T> classe, String url, T object) {
 
-		TSRetornoModel<T> retorno = new TSRetornoModel<T>();
+		TSRetornoModel<T> retorno = null;
 		try {
 
 			retorno = new TSRestAPI<T>(this.baseURL).postReturnList(classe, url, object);

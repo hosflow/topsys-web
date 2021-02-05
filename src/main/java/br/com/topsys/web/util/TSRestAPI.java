@@ -15,7 +15,8 @@ import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.model.TSRetornoModel;
 import br.com.topsys.web.exception.TSRestResponseException;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Component
 public class TSRestAPI<T extends Serializable> {
 
@@ -83,11 +84,12 @@ public class TSRestAPI<T extends Serializable> {
 		String ERRO_INTERNO = "Ocorreu um erro interno, entre em contato com a TI!";
 
 		if (e instanceof TSApplicationException) {
-
+            
 			throw new TSApplicationException(e.getMessage(), e);
 
 		} else {
-
+            log.error(e.getMessage());
+            e.printStackTrace();
 			throw new TSSystemException(ERRO_INTERNO, e);
 		}
 
