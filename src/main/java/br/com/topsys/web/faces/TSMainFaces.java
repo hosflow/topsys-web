@@ -22,9 +22,9 @@ import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.util.TSRestAPI;
 import lombok.extern.slf4j.Slf4j;
 
+@SuppressWarnings("serial")
 @Slf4j
 public abstract class TSMainFaces<T extends Serializable> implements Serializable {
-	private static final long serialVersionUID = 7539681980350460538L;
 
 	@Value("${smpep.base.url}")
 	private String baseURL;
@@ -52,20 +52,14 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 		this.model = model;
 	}
 
-	protected TSRetornoModel<T> postReturnObject(Class<T> classe, String url, T objeto) {
 
-		return new TSRestAPI<T>(this.baseURL).postReturnObject(classe, url, objeto);
-	}
-
-	protected TSRetornoModel<T> postReturnList(Class<T> classe, String url, T object) {
+	protected TSRetornoModel<T> post(String url, T object) {
 
 		TSRetornoModel<T> retorno = null;
 		try {
 
-			retorno = new TSRestAPI<T>(this.baseURL).postReturnList(classe, url, object);
-
-			this.addResultMessage(retorno.getList());
-
+			retorno = new TSRestAPI<T>(this.baseURL).post( url, object);
+          
 		} catch (TSSystemException e) {
 
 			TSMainFaces.addErrorMessage(e.getMessage());
