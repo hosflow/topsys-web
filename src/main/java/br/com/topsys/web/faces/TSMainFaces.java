@@ -53,16 +53,16 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 	}
 
 
-	protected TSRetornoModel<T> post(String url, T object) {
+	protected TSRetornoModel<T> post(Class<T> classe, String url, T object) {
 
 		TSRetornoModel<T> retorno = null;
 		try {
 
-			retorno = new TSRestAPI<T>(this.baseURL).post( url, object);
+			retorno = new TSRestAPI<T>(this.baseURL).post(classe, url, object);
           
 		} catch (TSSystemException e) {
 
-			TSMainFaces.addErrorMessage(e.getMessage());
+			this.addErrorMessage(e.getMessage());
 
 		}
 
@@ -126,7 +126,7 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 
 	}
 
-	public static void addInfoMessage(String msg) {
+	public void addInfoMessage(String msg) {
 		addInfoMessage(null, msg);
 	}
 
@@ -146,11 +146,11 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 		return FacesContext.getCurrentInstance();
 	}
 
-	public static void addErrorMessage(String msg) {
+	public void addErrorMessage(String msg) {
 		addErrorMessage(null, msg);
 	}
 
-	protected static void addErrorMessage(String clientId, String msg) {
+	protected void addErrorMessage(String clientId, String msg) {
 		FacesContext.getCurrentInstance().addMessage(clientId,
 				new FacesMessage(FacesMessage.SEVERITY_ERROR, null, msg));
 	}
