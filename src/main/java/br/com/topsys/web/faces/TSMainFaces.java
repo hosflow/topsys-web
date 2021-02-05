@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 
 import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.model.TSRetornoModel;
@@ -22,10 +24,15 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class TSMainFaces<T extends Serializable> implements Serializable {
-
 	private static final long serialVersionUID = 7539681980350460538L;
 
+	@Value("${smpep.base.url}")
 	private String baseURL;
+
+	@PostConstruct
+	private void init() {
+		this.setBaseURL(this.baseURL);
+	}
 
 	private T model;
 
