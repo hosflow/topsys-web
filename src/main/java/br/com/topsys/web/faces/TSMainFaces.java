@@ -52,21 +52,10 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 		this.model = model;
 	}
 
-
 	protected TSRetornoModel<T> post(Class<T> classe, String url, T object) {
-
-		TSRetornoModel<T> retorno = null;
-		try {
-
-			retorno = new TSRestAPI<T>(this.baseURL).post(classe, url, object);
-          
-		} catch (TSSystemException e) {
-
-			this.addErrorMessage(e.getMessage());
-
-		}
-
-		return retorno;
+		
+		return new TSRestAPI<T>(this.baseURL).post(classe, url, object);
+		
 	}
 
 	@SuppressWarnings("static-access")
