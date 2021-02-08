@@ -12,52 +12,49 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import br.com.topsys.base.model.TSRetornoModel;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.util.TSRestAPI;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @SuppressWarnings("serial")
 @Slf4j
-public abstract class TSMainFaces<T extends Serializable> implements Serializable {
+@Data
+public abstract class TSMainFaces implements Serializable {
 
 	@Value("${smpep.base.url}")
 	private String baseURL;
+
+	@Autowired
+	private HttpSession httpSession;
+
+	@Autowired
+	private HttpServletRequest httpServletRequest;
+
+	@Autowired
+	private HttpServletResponse httpServletResponse;
 
 	@PostConstruct
 	private void init() {
 		this.setBaseURL(this.baseURL);
 	}
+	
+	
 
-	private T model;
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected TSRetornoModel<?> post(Class<?> classe, String url, Object object) {
 
-	protected String getBaseURL() {
-		return this.baseURL;
+		return new TSRestAPI(this.baseURL).post(classe, url, object);
+
 	}
 
-	protected void setBaseURL(String baseURL) {
-		this.baseURL = baseURL;
-	}
-
-	public T getModel() {
-		return this.model;
-	}
-
-	public void setModel(T model) {
-		this.model = model;
-	}
-
-	protected TSRetornoModel<T> post(Class<T> classe, String url, T object) {
-		
-		return new TSRestAPI<T>(this.baseURL).post(classe, url, object);
-		
-	}
-
-	@SuppressWarnings("static-access")
 	protected List<SelectItem> initCombo(List<?> coll, String nomeValue, String nomeLabel) {
 		List<SelectItem> list = new ArrayList<SelectItem>();
 
@@ -68,6 +65,7 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 
 			} catch (Exception e) {
 				log.error(e.getMessage());
+				e.printStackTrace();
 
 				this.addErrorMessage(e.getMessage());
 			}
@@ -76,71 +74,35 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 	}
 
 	protected ServletContext getServletContext() {
-		return (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-	}
-
-	protected Object getManagedBeanInSession(String beanName) {
-		return FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(beanName);
-	}
-
-	protected void addObjectInSession(String beanName, Object managedBean) {
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(beanName, managedBean);
-	}
-
-	protected void addObjectInRequest(String beanName, Object managedBean) {
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(beanName, managedBean);
-
-	}
-
-	protected void addRequestParameter(String name, String object) {
-		FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().put(name, object);
-	}
-
-	protected void removeObjectInSession(String beanName) {
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(beanName);
-	}
-
-	protected Object getObjectInSession(String beanName) {
-		return FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(beanName);
-	}
-
-	protected String getRequestParameter(String name) {
-		return (String) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(name);
-
-	}
-
-	protected Object getObjectInRequest(String name) {
-		return FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get(name);
-
-	}
-
-	public void addInfoMessage(String msg) {
-		addInfoMessage(null, msg);
-	}
-
-	protected static void addInfoMessage(String clientId, String msg) {
-		FacesContext.getCurrentInstance().addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_INFO, null, msg));
-	}
-
-	protected HttpServletRequest getRequest() {
-		return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-	}
-
-	protected HttpServletResponse getResponse() {
-		return (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		return (ServletContext) getFacesContext().getExternalContext().getContext();
 	}
 
 	protected FacesContext getFacesContext() {
 		return FacesContext.getCurrentInstance();
 	}
 
-	public void addErrorMessage(String msg) {
+	protected void addWarnMessage(String msg) {
+		addInfoMessage(null, msg);
+	}
+
+	protected void addWarnMessage(String clientId, String msg) {
+		getFacesContext().addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_WARN, null, msg));
+	}
+
+	protected void addInfoMessage(String msg) {
+		addInfoMessage(null, msg);
+	}
+
+	protected void addInfoMessage(String clientId, String msg) {
+		getFacesContext().addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_INFO, null, msg));
+	}
+
+	protected void addErrorMessage(String msg) {
 		addErrorMessage(null, msg);
 	}
 
 	protected void addErrorMessage(String clientId, String msg) {
-		FacesContext.getCurrentInstance().addMessage(clientId,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, null, msg));
+		getFacesContext().addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, msg));
 	}
 
 	protected void addResultMessage(List<?> lista) {
@@ -149,33 +111,24 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 
 	protected void addResultMessage(List<?> lista, String destino) {
 
-		if (TSUtil.isEmpty(lista)) {
+		String mensagem = "A pesquisa não retornou nenhuma ocorrência";
 
-			String msg_nenhuma_ocorrencia = "A pesquisa não retornou nenhuma ocorrência";
+		if (!TSUtil.isEmpty(lista)) {
 
-			if (TSUtil.isEmpty(destino)) {
-				addInfoMessage(destino, msg_nenhuma_ocorrencia);
-			} else {
-				addInfoMessage(msg_nenhuma_ocorrencia);
-			}
+			mensagem = "A pesquisa retornou " + lista.size() + " ocorrência(s)";
+		}
 
+		if (TSUtil.isEmpty(destino)) {
+			addInfoMessage(destino, mensagem);
 		} else {
-
-			String msg_ocorrencia = "A pesquisa retornou " + lista.size() + " ocorrência(s)";
-
-			if (TSUtil.isEmpty(destino)) {
-				addInfoMessage(destino, msg_ocorrencia);
-			} else {
-				addInfoMessage(msg_ocorrencia);
-			}
-
+			addInfoMessage(mensagem);
 		}
 
 	}
 
 	protected Cookie getCookie(String nome) {
 
-		Cookie cookies[] = getRequest().getCookies();
+		Cookie cookies[] = this.getHttpServletRequest().getCookies();
 
 		Cookie donaBenta = null;
 
@@ -205,7 +158,7 @@ public abstract class TSMainFaces<T extends Serializable> implements Serializabl
 
 		donaBenta.setMaxAge(duracao);
 
-		getResponse().addCookie(donaBenta);
+		this.getHttpServletResponse().addCookie(donaBenta);
 
 	}
 

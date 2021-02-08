@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class TSRestAPI<T extends Serializable> {
+public final class TSRestAPI<T extends Serializable> {
 
 	private String baseURL;
 
@@ -36,20 +36,21 @@ public class TSRestAPI<T extends Serializable> {
 
 	}
 
-	public TSRetornoModel<T> post(Class<T> classe,String url, T object) {
+
+	@SuppressWarnings("unchecked")
+	public TSRetornoModel<T> post(Class<T> classe, String url, Object object) {
 
 		TSRetornoModel<T> retorno = null;
 
-		HttpEntity<T> entity = null;
+		HttpEntity<Object> entity = null;
 
 		try {
 			if(TSUtil.isEmpty(object)) {
 				throw new TSSystemException("O objeto passado por parâmetro do método post não pode ser nulo!");
 			}
-			entity = new HttpEntity<T>(object);
+			entity = new HttpEntity<Object>(object);
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, TSRetornoModel.class);
-			
 			
 			if(!TSUtil.isEmpty(retorno, retorno.getList())) {
 				
@@ -60,14 +61,14 @@ public class TSRestAPI<T extends Serializable> {
 				
 			}
 			
-
 		} catch (RuntimeException e) {
 			this.handlerException(e);
 		}
 
 		return retorno;
 	}
-
+	
+	
 	
 	private void handlerException(RuntimeException e) {
 		String ERRO_INTERNO = "Ocorreu um erro interno, entre em contato com a TI!";
