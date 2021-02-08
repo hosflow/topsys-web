@@ -3,9 +3,6 @@ package br.com.topsys.web.util;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -26,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public final class TSRestAPI<T extends Serializable> {
 
-	@Value("${smpep.base.url}")
 	private String baseURL;
 
 	private RestTemplate restTemplate;
@@ -42,11 +38,6 @@ public final class TSRestAPI<T extends Serializable> {
 		this.restTemplate = new RestTemplate();
 		this.restTemplate.setErrorHandler(new TSRestResponseException());
 
-	}
-
-	@PostConstruct
-	private void init() {
-		this.setBaseURL(this.baseURL);
 	}
 
 	@SuppressWarnings("unchecked")
