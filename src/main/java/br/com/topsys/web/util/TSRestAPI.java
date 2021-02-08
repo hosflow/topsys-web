@@ -56,6 +56,10 @@ public final class TSRestAPI<T extends Serializable> {
 
 		HttpEntity<Object> entity = null;
 
+		ObjectMapper objectMapper = null;
+
+		CollectionType listType = null;
+
 		try {
 			if (TSUtil.isEmpty(object)) {
 				throw new TSSystemException("O objeto passado por parâmetro do método post não pode ser nulo!");
@@ -64,13 +68,21 @@ public final class TSRestAPI<T extends Serializable> {
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, TSRetornoModel.class);
 
-			if (!TSUtil.isEmpty(retorno, retorno.getList())) {
+			if (!TSUtil.isEmpty(retorno)) {
 
-				ObjectMapper objectMapper = new ObjectMapper();
-				CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class,
-						classe);
+				objectMapper = new ObjectMapper();
 
-				retorno.setList(objectMapper.convertValue(retorno.getList(), listType));
+				if (!TSUtil.isEmpty(retorno.getList())) {
+
+					listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
+
+					retorno.setList(objectMapper.convertValue(retorno.getList(), listType));
+
+				} else {
+
+					retorno.setModel(objectMapper.convertValue(retorno.getModel(), classe));
+
+				}
 
 			}
 
