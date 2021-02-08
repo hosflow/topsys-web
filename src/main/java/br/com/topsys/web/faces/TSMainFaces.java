@@ -18,9 +18,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import br.com.topsys.base.model.TSRetornoModel;
 import br.com.topsys.base.util.TSUtil;
-import br.com.topsys.web.util.TSRestAPI;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,13 +45,6 @@ public abstract class TSMainFaces implements Serializable {
 	}
 	
 	
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected TSRetornoModel<?> post(Class<?> classe, String url, Object object) {
-
-		return new TSRestAPI(this.baseURL).post(classe, url, object);
-
-	}
 
 	protected List<SelectItem> initCombo(List<?> coll, String nomeValue, String nomeLabel) {
 		List<SelectItem> list = new ArrayList<SelectItem>();
