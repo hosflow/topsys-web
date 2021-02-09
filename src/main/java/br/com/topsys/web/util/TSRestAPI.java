@@ -2,6 +2,7 @@ package br.com.topsys.web.util;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,6 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
-import br.com.topsys.base.model.TSRetornoModel;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.exception.TSRestResponseException;
 import lombok.Data;
@@ -22,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @Component
 public final class TSRestAPI<T extends Serializable> {
+
+	private static final String NAO_PODE_SER_NULO = "O objeto passado por parâmetro do método post não pode ser nulo!";
 
 	private String baseURL;
 
@@ -39,11 +41,42 @@ public final class TSRestAPI<T extends Serializable> {
 		this.restTemplate.setErrorHandler(new TSRestResponseException());
 
 	}
+	
+	public T post(Class<T> classe, String url, Object object) {
+
+		T retorno = null;
+
+		HttpEntity<Object> entity = null;
+
+		ObjectMapper objectMapper = null;
+	
+		try {
+			if (TSUtil.isEmpty(object)) {
+				throw new TSSystemException(NAO_PODE_SER_NULO);
+			}
+			entity = new HttpEntity<Object>(object);
+
+			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
+
+			if (!TSUtil.isEmpty(retorno)) {
+
+				objectMapper = new ObjectMapper();
+
+				retorno = objectMapper.convertValue(retorno, classe);
+			}
+
+		} catch (RuntimeException e) {
+			this.handlerException(e);
+		}
+
+		return retorno;
+	}
+
 
 	@SuppressWarnings("unchecked")
-	public TSRetornoModel<T> post(Class<T> classe, String url, Object object) {
+	public List<T> postList(Class<T> classe, String url, Object object) {
 
-		TSRetornoModel<T> retorno = null;
+		List<T> retorno = null;
 
 		HttpEntity<Object> entity = null;
 
@@ -53,28 +86,19 @@ public final class TSRestAPI<T extends Serializable> {
 
 		try {
 			if (TSUtil.isEmpty(object)) {
-				throw new TSSystemException("O objeto passado por parâmetro do método post não pode ser nulo!");
+				throw new TSSystemException(NAO_PODE_SER_NULO);
 			}
 			entity = new HttpEntity<Object>(object);
 
-			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, TSRetornoModel.class);
+			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
 
 			if (!TSUtil.isEmpty(retorno)) {
 
 				objectMapper = new ObjectMapper();
 
-				if (!TSUtil.isEmpty(retorno.getList())) {
+				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
 
-					listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
-
-					retorno.setList(objectMapper.convertValue(retorno.getList(), listType));
-
-				} else {
-
-					retorno.setModel(objectMapper.convertValue(retorno.getModel(), classe));
-
-				}
-
+				retorno = objectMapper.convertValue(retorno, listType);
 			}
 
 		} catch (RuntimeException e) {
