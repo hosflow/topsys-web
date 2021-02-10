@@ -71,6 +71,36 @@ public final class TSRestAPI<T extends Serializable> {
 
 		return retorno;
 	}
+	
+	public Object postObject(Class<?> classe, String url, Object object) {
+
+		Object retorno = null;
+
+		HttpEntity<Object> entity = null;
+
+		ObjectMapper objectMapper = null;
+	
+		try {
+			if (TSUtil.isEmpty(object)) {
+				throw new TSSystemException(NAO_PODE_SER_NULO);
+			}
+			entity = new HttpEntity<Object>(object);
+
+			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
+
+			if (!TSUtil.isEmpty(retorno)) {
+
+				objectMapper = new ObjectMapper();
+
+				retorno = objectMapper.convertValue(retorno, classe);
+			}
+
+		} catch (RuntimeException e) {
+			this.handlerException(e);
+		}
+
+		return retorno;
+	}
 
 
 	@SuppressWarnings("unchecked")
