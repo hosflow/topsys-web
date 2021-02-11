@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,6 +28,7 @@ public final class TSRestAPI<T extends Serializable> {
 
 	private static final String NAO_PODE_SER_NULO = "O objeto passado por parâmetro do método post não pode ser nulo!";
 
+	@Value("${smpep.base.url}")
 	private String baseURL;
 
 	private RestTemplate restTemplate;
@@ -54,7 +58,11 @@ public final class TSRestAPI<T extends Serializable> {
 			if (TSUtil.isEmpty(object)) {
 				throw new TSSystemException(NAO_PODE_SER_NULO);
 			}
-			entity = new HttpEntity<Object>(object);
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+			
+			entity = new HttpEntity<Object>(object,headers);
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
 
@@ -84,7 +92,11 @@ public final class TSRestAPI<T extends Serializable> {
 			if (TSUtil.isEmpty(object)) {
 				throw new TSSystemException(NAO_PODE_SER_NULO);
 			}
-			entity = new HttpEntity<Object>(object);
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+			
+			entity = new HttpEntity<Object>(object,headers);
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
 
@@ -118,7 +130,11 @@ public final class TSRestAPI<T extends Serializable> {
 			if (TSUtil.isEmpty(object)) {
 				throw new TSSystemException(NAO_PODE_SER_NULO);
 			}
-			entity = new HttpEntity<Object>(object);
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+			
+			entity = new HttpEntity<Object>(object,headers);
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
 
