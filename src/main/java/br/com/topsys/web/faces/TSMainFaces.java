@@ -27,6 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public abstract class TSMainFaces implements Serializable {
 
+	private static final String SMPEP_TOKEN = "smpep.token";
+
 	@Value("${smpep.base.url}")
 	private String baseURL;
 
@@ -151,6 +153,14 @@ public abstract class TSMainFaces implements Serializable {
 
 		this.getHttpServletResponse().addCookie(donaBenta);
 
+	}
+	
+	protected String getToken() {
+		return getCookie(SMPEP_TOKEN).getValue();
+	}
+	
+	protected void setToken(String token) {
+		 addCookie(SMPEP_TOKEN, token, -1);
 	}
 
 }

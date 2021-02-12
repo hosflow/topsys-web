@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,7 +36,7 @@ public final class TSRestAPI<T extends Serializable> {
 		this.restTemplate.setErrorHandler(new TSRestResponseException());
 	}
 
-	public T post(Class<T> classe, String url, Object object) {
+	public T post(Class<T> classe, String url, Object object, String token) {
 
 		T retorno = null;
 
@@ -48,8 +49,11 @@ public final class TSRestAPI<T extends Serializable> {
 				throw new TSSystemException(NAO_PODE_SER_NULO);
 			}
 
+			HttpHeaders headers = new HttpHeaders();
+			headers.setBearerAuth(token);
 			
-			entity = new HttpEntity<Object>(object);
+			
+			entity = new HttpEntity<Object>(object,headers);
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
 
@@ -67,7 +71,7 @@ public final class TSRestAPI<T extends Serializable> {
 		return retorno;
 	}
 
-	public Object postObject(Class<?> classe, String url, Object object) {
+	public Object postObject(Class<?> classe, String url, Object object, String token) {
 
 		Object retorno = null;
 
@@ -81,7 +85,10 @@ public final class TSRestAPI<T extends Serializable> {
 			}
 
 			
-			entity = new HttpEntity<Object>(object);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setBearerAuth(token);
+			
+			entity = new HttpEntity<Object>(object,headers);
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
 
@@ -100,7 +107,7 @@ public final class TSRestAPI<T extends Serializable> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> postList(Class<T> classe, String url, Object object) {
+	public List<T> postList(Class<T> classe, String url, Object object, String token) {
 
 		List<T> retorno = null;
 
@@ -115,8 +122,11 @@ public final class TSRestAPI<T extends Serializable> {
 				throw new TSSystemException(NAO_PODE_SER_NULO);
 			}
 
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.setBearerAuth(token);
 		
-			entity = new HttpEntity<Object>(object);
+			entity = new HttpEntity<Object>(object, headers);
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
 
