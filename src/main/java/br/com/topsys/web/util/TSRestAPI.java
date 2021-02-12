@@ -49,11 +49,13 @@ public final class TSRestAPI<T extends Serializable> {
 				throw new TSSystemException(NAO_PODE_SER_NULO);
 			}
 
-			HttpHeaders headers = new HttpHeaders();
-			headers.setBearerAuth(token);
-			
-			
-			entity = new HttpEntity<Object>(object,headers);
+			if (!TSUtil.isEmpty(token)) {
+				HttpHeaders headers = new HttpHeaders();
+				headers.setBearerAuth(token);
+				entity = new HttpEntity<Object>(object, headers);
+			} else {
+				entity = new HttpEntity<Object>(object);
+			}
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
 
@@ -84,11 +86,13 @@ public final class TSRestAPI<T extends Serializable> {
 				throw new TSSystemException(NAO_PODE_SER_NULO);
 			}
 
-			
-			HttpHeaders headers = new HttpHeaders();
-			headers.setBearerAuth(token);
-			
-			entity = new HttpEntity<Object>(object,headers);
+			if (!TSUtil.isEmpty(token)) {
+				HttpHeaders headers = new HttpHeaders();
+				headers.setBearerAuth(token);
+				entity = new HttpEntity<Object>(object, headers);
+			} else {
+				entity = new HttpEntity<Object>(object);
+			}
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
 
@@ -122,11 +126,13 @@ public final class TSRestAPI<T extends Serializable> {
 				throw new TSSystemException(NAO_PODE_SER_NULO);
 			}
 
-			
-			HttpHeaders headers = new HttpHeaders();
-			headers.setBearerAuth(token);
-		
-			entity = new HttpEntity<Object>(object, headers);
+			if (!TSUtil.isEmpty(token)) {
+				HttpHeaders headers = new HttpHeaders();
+				headers.setBearerAuth(token);
+				entity = new HttpEntity<Object>(object, headers);
+			} else {
+				entity = new HttpEntity<Object>(object);
+			}
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
 
