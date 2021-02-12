@@ -155,12 +155,18 @@ public abstract class TSMainFaces implements Serializable {
 
 	}
 	
+
+	
 	protected String getToken() {
 		return getCookie(SMPEP_TOKEN) != null ? getCookie(SMPEP_TOKEN).getValue() : null;
 	}
 	
 	protected void setToken(String token, Integer duracao) {
 		 addCookie(SMPEP_TOKEN, token, duracao);
+	}
+	
+	protected void removeToken() {
+		 addCookie(SMPEP_TOKEN, "", 0);
 	}
 
 }
