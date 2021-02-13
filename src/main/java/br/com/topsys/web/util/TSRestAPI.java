@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 
@@ -62,6 +63,8 @@ public final class TSRestAPI<T extends Serializable> {
 			if (!TSUtil.isEmpty(retorno)) {
 
 				objectMapper = new ObjectMapper();
+				objectMapper.setSerializationInclusion(Include.NON_NULL);
+
 
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
@@ -99,6 +102,8 @@ public final class TSRestAPI<T extends Serializable> {
 			if (!TSUtil.isEmpty(retorno)) {
 
 				objectMapper = new ObjectMapper();
+				objectMapper.setSerializationInclusion(Include.NON_NULL);
+
 
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
@@ -139,6 +144,8 @@ public final class TSRestAPI<T extends Serializable> {
 			if (!TSUtil.isEmpty(retorno)) {
 
 				objectMapper = new ObjectMapper();
+				objectMapper.setSerializationInclusion(Include.NON_NULL);
+
 
 				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
 

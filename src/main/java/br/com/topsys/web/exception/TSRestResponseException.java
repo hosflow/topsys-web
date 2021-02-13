@@ -12,6 +12,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.topsys.base.exception.TSApplicationException;
@@ -33,8 +34,12 @@ public class TSRestResponseException implements ResponseErrorHandler {
 
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
+		
 		String body = toString(response.getBody());
+		
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_NULL);
+
 		TSResponseExceptionModel model = mapper.readValue(body, TSResponseExceptionModel.class);
  
 		log.error("ResponseBody: {}", model.getMensagem());
@@ -43,8 +48,12 @@ public class TSRestResponseException implements ResponseErrorHandler {
 
 	@Override
 	public void handleError(URI url, HttpMethod method, ClientHttpResponse response) throws IOException {
+		
 		String body = toString(response.getBody());
+
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_NULL);
+
 		TSResponseExceptionModel model = mapper.readValue(body, TSResponseExceptionModel.class);
 		
 		String ERROR_LOG = "URL: {}, HttpMethod: {}, ResponseBody: {}";
