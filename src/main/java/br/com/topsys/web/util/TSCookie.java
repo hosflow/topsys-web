@@ -41,5 +41,8 @@ public final class TSCookie {
 		httpServletResponse.addCookie(donaBenta);
 
 	}
-
+	
+	public static void removeCookie(HttpServletResponse httpServletResponse, String nome) {
+		addCookie(httpServletResponse, nome, "",  0);
+	}
 }
