@@ -9,7 +9,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import br.com.topsys.base.util.TSUtil;
+import br.com.topsys.web.util.TSCookie;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,8 +45,6 @@ public abstract class TSMainFaces implements Serializable {
 	private void init() {
 		this.setBaseURL(this.baseURL);
 	}
-	
-	
 
 	protected List<SelectItem> initCombo(List<?> coll, String nomeValue, String nomeLabel) {
 		List<SelectItem> list = new ArrayList<SelectItem>();
@@ -119,54 +117,18 @@ public abstract class TSMainFaces implements Serializable {
 
 	}
 
-	protected Cookie getCookie(String nome) {
-
-		Cookie cookies[] = this.getHttpServletRequest().getCookies();
-
-		Cookie donaBenta = null;
-
-		if (cookies != null) {
-
-			for (int x = 0; x < cookies.length; x++) {
-
-				if (cookies[x].getName().equals(nome)) {
-
-					donaBenta = cookies[x];
-
-					break;
-
-				}
-
-			}
-
-		}
-
-		return donaBenta;
-
-	}
-
-	protected void addCookie(String nome, String valor, Integer duracao) {
-
-		Cookie donaBenta = new Cookie(nome, valor);
-
-		donaBenta.setMaxAge(duracao);
-
-		this.getHttpServletResponse().addCookie(donaBenta);
-
-	}
-	
-
-	
 	protected String getToken() {
-		return getCookie(SMPEP_TOKEN) != null ? getCookie(SMPEP_TOKEN).getValue() : null;
+		return TSCookie.getCookie(httpServletRequest, SMPEP_TOKEN) != null
+				? TSCookie.getCookie(httpServletRequest, SMPEP_TOKEN).getValue()
+				: null;
 	}
-	
+
 	protected void setToken(String token, Integer duracao) {
-		 addCookie(SMPEP_TOKEN, token, duracao);
+		TSCookie.addCookie(httpServletResponse, SMPEP_TOKEN, token, duracao);
 	}
-	
+
 	protected void removeToken() {
-		 addCookie(SMPEP_TOKEN, "", 0);
+		TSCookie.addCookie(httpServletResponse, SMPEP_TOKEN, "", 0);
 	}
 
 }
