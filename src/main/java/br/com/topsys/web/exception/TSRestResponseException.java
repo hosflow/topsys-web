@@ -55,11 +55,11 @@ public class TSRestResponseException implements ResponseErrorHandler {
 			
 			throw new TSSystemException(model.getMensagem() != null ? model.getMensagem() : model.getMessage());
 
-		}else if(model.getCodigo() == HttpStatus.BAD_REQUEST.value()) {
+		}else if(model.getCodigo() == HttpStatus.BAD_REQUEST.value() || model.getStatus() == HttpStatus.FORBIDDEN.value()) {
 			
 			log.error(ERROR_LOG, url, method, body);
 			
-			throw new TSApplicationException(model.getMensagem(),TSType.ERROR);
+			throw new TSApplicationException(model.getMensagem() != null ? model.getMensagem() : model.getMessage(),TSType.ERROR);
 		}
 
 		throw new TSApplicationException(model.getMensagem());
