@@ -8,24 +8,18 @@ public final class TSCookie {
 
 	public static Cookie getCookie(HttpServletRequest httpServletRequest, String nome) {
 
-		Cookie cookies[] = httpServletRequest.getCookies();
+		Cookie[] cookies = httpServletRequest.getCookies();
 
 		Cookie donaBenta = null;
 
 		if (cookies != null) {
-
-			for (int x = 0; x < cookies.length; x++) {
-
-				if (cookies[x].getName().equals(nome)) {
-
-					donaBenta = cookies[x];
-
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals(nome)) {
+					donaBenta = cookie;
 					break;
-
 				}
 
 			}
-
 		}
 
 		return donaBenta;
@@ -41,8 +35,8 @@ public final class TSCookie {
 		httpServletResponse.addCookie(donaBenta);
 
 	}
-	
+
 	public static void removeCookie(HttpServletResponse httpServletResponse, String nome) {
-		addCookie(httpServletResponse, nome, "",  0);
+		addCookie(httpServletResponse, nome, "", 0);
 	}
 }
