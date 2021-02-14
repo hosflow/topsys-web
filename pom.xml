@@ -68,6 +68,13 @@
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
+		
+		<dependency>  
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>8.0</version>
+			<scope>compile</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>br.com.topsys</groupId>
