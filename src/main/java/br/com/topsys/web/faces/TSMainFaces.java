@@ -133,6 +133,15 @@ public abstract class TSMainFaces implements Serializable {
 		TSCookie.addCookie(httpServletResponse, SMPEP_TOKEN, "", 0);
 	}
 	
+	protected void addCookie(String nome, String valor) {
+		TSCookie.addCookie(httpServletResponse,nome, valor, -1);
+	}
+	
+	protected String getCookie(String nome) {
+		return TSCookie.getCookie(httpServletRequest,nome) != null ? TSCookie.getCookie(httpServletRequest,nome).getValue() : null;
+	}
+
+	
 	protected TSControleAcesso getTSControleAcesso() {
 		return new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso();
 	}
