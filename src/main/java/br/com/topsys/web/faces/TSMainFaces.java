@@ -134,7 +134,7 @@ public abstract class TSMainFaces implements Serializable {
 	}
 	
 	protected TSControleAcesso getTSControleAcesso() {
-		return new TSControleAcessoSession().getTSControleAcesso();
+		return new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso();
 	}
 
 }
