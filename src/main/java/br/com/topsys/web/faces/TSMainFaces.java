@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import br.com.topsys.base.util.TSUtil;
+import br.com.topsys.web.session.TSControleAcesso;
+import br.com.topsys.web.session.TSControleAcessoSession;
 import br.com.topsys.web.util.TSCookie;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -129,6 +131,10 @@ public abstract class TSMainFaces implements Serializable {
 
 	protected void removeToken() {
 		TSCookie.addCookie(httpServletResponse, SMPEP_TOKEN, "", 0);
+	}
+	
+	protected TSControleAcesso getTSControleAcesso() {
+		return new TSControleAcessoSession().getTSControleAcesso();
 	}
 
 }
