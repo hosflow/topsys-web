@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 
@@ -51,9 +52,11 @@ public final class TSRestAPI<T extends Serializable> {
 			}
 
 			if (!TSUtil.isEmpty(token)) {
+				
 				HttpHeaders headers = new HttpHeaders();
 				headers.setBearerAuth(token);
 				entity = new HttpEntity<Object>(object, headers);
+			
 			} else {
 				entity = new HttpEntity<Object>(object);
 			}
@@ -64,7 +67,7 @@ public final class TSRestAPI<T extends Serializable> {
 
 				objectMapper = new ObjectMapper();
 				objectMapper.setSerializationInclusion(Include.NON_NULL);
-
+				objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); 
 
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
@@ -90,9 +93,11 @@ public final class TSRestAPI<T extends Serializable> {
 			}
 
 			if (!TSUtil.isEmpty(token)) {
+				
 				HttpHeaders headers = new HttpHeaders();
 				headers.setBearerAuth(token);
 				entity = new HttpEntity<Object>(object, headers);
+			
 			} else {
 				entity = new HttpEntity<Object>(object);
 			}
@@ -103,6 +108,7 @@ public final class TSRestAPI<T extends Serializable> {
 
 				objectMapper = new ObjectMapper();
 				objectMapper.setSerializationInclusion(Include.NON_NULL);
+				objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); 
 
 
 				retorno = objectMapper.convertValue(retorno, classe);
@@ -132,9 +138,11 @@ public final class TSRestAPI<T extends Serializable> {
 			}
 
 			if (!TSUtil.isEmpty(token)) {
+				
 				HttpHeaders headers = new HttpHeaders();
 				headers.setBearerAuth(token);
 				entity = new HttpEntity<Object>(object, headers);
+			
 			} else {
 				entity = new HttpEntity<Object>(object);
 			}
@@ -145,6 +153,7 @@ public final class TSRestAPI<T extends Serializable> {
 
 				objectMapper = new ObjectMapper();
 				objectMapper.setSerializationInclusion(Include.NON_NULL);
+				objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); 
 
 
 				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
