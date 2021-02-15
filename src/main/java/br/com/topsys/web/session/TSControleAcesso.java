@@ -13,6 +13,7 @@ public final class TSControleAcesso implements Serializable {
 	private Long usuarioFuncaoId;
 	private Long funcaoId;
 	private Long origemId;
+	private Long menuAtualId;
 	
 	private String nomeUsuario;
 	private String nomeFuncao;
