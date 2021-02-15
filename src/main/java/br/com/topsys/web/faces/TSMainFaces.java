@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.primefaces.context.PrimeRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -145,5 +146,30 @@ public abstract class TSMainFaces implements Serializable {
 	protected TSControleAcesso getTSControleAcesso() {
 		return new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso();
 	}
+	
+	protected void showDialog(String dialog) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("PF('");
+		builder.append(dialog);
+		builder.append("').show()");
+		PrimeRequestContext.getCurrentInstance().getScriptsToExecute().add(builder.toString());
+
+	}
+	
+	protected void hideDialog(String dialog) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("PF('");
+		builder.append(dialog);
+		builder.append("').hide()");
+		PrimeRequestContext.getCurrentInstance().getScriptsToExecute().add(builder.toString());
+
+	}
+	
+	protected void executeScriptPrime(String valor) {
+		PrimeRequestContext.getCurrentInstance().getScriptsToExecute().add(valor);
+
+	}
+
+	
 
 }
