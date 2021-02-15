@@ -47,27 +47,14 @@ public final class TSRestAPI<T extends Serializable> {
 		ObjectMapper objectMapper = null;
 
 		try {
-			if (TSUtil.isEmpty(object)) {
-				throw new TSSystemException(NAO_PODE_SER_NULO);
-			}
-
-			if (!TSUtil.isEmpty(token)) {
-				
-				HttpHeaders headers = new HttpHeaders();
-				headers.setBearerAuth(token);
-				entity = new HttpEntity<Object>(object, headers);
-			
-			} else {
-				entity = new HttpEntity<Object>(object);
-			}
+		
+			entity = getHttpEntity(object, token);
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
 
 			if (!TSUtil.isEmpty(retorno)) {
 
-				objectMapper = new ObjectMapper();
-				objectMapper.setSerializationInclusion(Include.NON_NULL);
-				objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); 
+				objectMapper = getObjectMapper(); 
 
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
@@ -79,6 +66,9 @@ public final class TSRestAPI<T extends Serializable> {
 		return retorno;
 	}
 
+	
+	
+
 	public Object postObject(Class<?> classe, String url, Object object, String token) {
 
 		Object retorno = null;
@@ -88,27 +78,14 @@ public final class TSRestAPI<T extends Serializable> {
 		ObjectMapper objectMapper = null;
 
 		try {
-			if (TSUtil.isEmpty(object)) {
-				throw new TSSystemException(NAO_PODE_SER_NULO);
-			}
 
-			if (!TSUtil.isEmpty(token)) {
-				
-				HttpHeaders headers = new HttpHeaders();
-				headers.setBearerAuth(token);
-				entity = new HttpEntity<Object>(object, headers);
-			
-			} else {
-				entity = new HttpEntity<Object>(object);
-			}
+			entity = getHttpEntity(object, token);
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
 
 			if (!TSUtil.isEmpty(retorno)) {
 
-				objectMapper = new ObjectMapper();
-				objectMapper.setSerializationInclusion(Include.NON_NULL);
-				objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); 
+				objectMapper = getObjectMapper(); 
 
 
 				retorno = objectMapper.convertValue(retorno, classe);
@@ -133,27 +110,14 @@ public final class TSRestAPI<T extends Serializable> {
 		CollectionType listType = null;
 
 		try {
-			if (TSUtil.isEmpty(object)) {
-				throw new TSSystemException(NAO_PODE_SER_NULO);
-			}
-
-			if (!TSUtil.isEmpty(token)) {
-				
-				HttpHeaders headers = new HttpHeaders();
-				headers.setBearerAuth(token);
-				entity = new HttpEntity<Object>(object, headers);
 			
-			} else {
-				entity = new HttpEntity<Object>(object);
-			}
+			entity = getHttpEntity(object, token);
 
 			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
 
 			if (!TSUtil.isEmpty(retorno)) {
 
-				objectMapper = new ObjectMapper();
-				objectMapper.setSerializationInclusion(Include.NON_NULL);
-				objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); 
+				objectMapper = getObjectMapper(); 
 
 
 				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
@@ -166,6 +130,34 @@ public final class TSRestAPI<T extends Serializable> {
 		}
 
 		return retorno;
+	}
+	
+	private HttpEntity<Object> getHttpEntity(Object object, String token) {
+		
+		if (TSUtil.isEmpty(object)) {
+			throw new TSSystemException(NAO_PODE_SER_NULO);
+		}
+		
+		HttpEntity<Object> entity;
+		
+		if (!TSUtil.isEmpty(token)) {
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.setBearerAuth(token);
+			entity = new HttpEntity<Object>(object, headers);
+		
+		} else {
+			entity = new HttpEntity<Object>(object);
+		}
+		
+		return entity;
+	}
+	
+	private ObjectMapper getObjectMapper() {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setSerializationInclusion(Include.NON_NULL);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		return objectMapper;
 	}
 
 	private void handlerException(RuntimeException e) {
