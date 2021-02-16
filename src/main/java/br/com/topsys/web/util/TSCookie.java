@@ -31,6 +31,8 @@ public final class TSCookie {
 		Cookie donaBenta = new Cookie(nome, valor);
 
 		donaBenta.setMaxAge(duracao);
+		
+		donaBenta.setHttpOnly(true);
 
 		httpServletResponse.addCookie(donaBenta);
 
