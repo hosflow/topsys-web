@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -28,13 +30,19 @@ public final class TSRestAPI<T extends Serializable> {
 
 	private static final String NAO_PODE_SER_NULO = "O objeto passado por parâmetro do método post não pode ser nulo!";
 
+	@Value("${topsys.base.url}")
 	private String baseURL;
 
+	@Autowired
 	private RestTemplate restTemplate;
 
 	public TSRestAPI(String baseURL) {
 		this.baseURL = baseURL;
 		this.restTemplate = new RestTemplate();
+		this.restTemplate.setErrorHandler(new TSRestResponseException());
+	}
+	
+	public TSRestAPI() {
 		this.restTemplate.setErrorHandler(new TSRestResponseException());
 	}
 
