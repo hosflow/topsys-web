@@ -45,7 +45,7 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 
 	@PostConstruct
 	protected void init() {
-		this.restAPI = new TSRestAPI<T>(this.getBaseURL());
+		this.restAPI = new TSRestAPI<T>();
 		inicializarCampos();
 		inicializarServicos();
 	}

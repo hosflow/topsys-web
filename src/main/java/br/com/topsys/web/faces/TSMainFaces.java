@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.context.PrimeRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.session.TSControleAcesso;
@@ -30,10 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public abstract class TSMainFaces implements Serializable {
 
-	private static final String SMPEP_TOKEN = "smpep.token";
-
-	@Value("${smpep.base.url}")
-	private String baseURL;
+	private static final String TOKEN = "token";
 
 	@Autowired
 	private HttpSession httpSession;
@@ -44,10 +39,6 @@ public abstract class TSMainFaces implements Serializable {
 	@Autowired
 	private HttpServletResponse httpServletResponse;
 
-	@PostConstruct
-	private void init() {
-		this.setBaseURL(this.baseURL);
-	}
 
 	protected List<SelectItem> initCombo(List<?> coll, String nomeValue, String nomeLabel) {
 		List<SelectItem> list = new ArrayList<SelectItem>();
@@ -121,17 +112,17 @@ public abstract class TSMainFaces implements Serializable {
 	}
 
 	protected String getToken() {
-		return TSCookie.getCookie(httpServletRequest, SMPEP_TOKEN) != null
-				? TSCookie.getCookie(httpServletRequest, SMPEP_TOKEN).getValue()
+		return TSCookie.getCookie(httpServletRequest, TOKEN) != null
+				? TSCookie.getCookie(httpServletRequest, TOKEN).getValue()
 				: null;
 	}
 
 	protected void setToken(String token, Integer duracao) {
-		TSCookie.addCookie(httpServletResponse, SMPEP_TOKEN, token, duracao);
+		TSCookie.addCookie(httpServletResponse, TOKEN, token, duracao);
 	}
 
 	protected void removeToken() {
-		TSCookie.addCookie(httpServletResponse, SMPEP_TOKEN, "", 0);
+		TSCookie.addCookie(httpServletResponse, TOKEN, "", 0);
 	}
 	
 	protected void addCookie(String nome, String valor) {

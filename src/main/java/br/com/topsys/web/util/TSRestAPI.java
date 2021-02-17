@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -33,7 +32,6 @@ public final class TSRestAPI<T extends Serializable> {
 	@Value("${topsys.base.url}")
 	private String baseURL;
 
-	@Autowired
 	private RestTemplate restTemplate;
 
 	public TSRestAPI(String baseURL) {
@@ -43,6 +41,7 @@ public final class TSRestAPI<T extends Serializable> {
 	}
 	
 	public TSRestAPI() {
+		this.restTemplate = new RestTemplate();
 		this.restTemplate.setErrorHandler(new TSRestResponseException());
 	}
 
