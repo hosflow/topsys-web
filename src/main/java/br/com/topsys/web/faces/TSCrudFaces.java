@@ -6,6 +6,7 @@ import javax.annotation.PostConstruct;
 
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
@@ -29,13 +30,14 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 	private List<T> tabelaPesquisa;
 	private LazyDataModel<T> tabelaPaginacao;
 
+	@Autowired
 	private TSRestAPI<T> restAPI; 
 	
+	protected abstract String getURL();
+
 	protected abstract void inicializarCampos();
 
 	protected abstract Class<T> getCrudClass();
-
-	protected abstract void inicializarServicos();
 
 	public TSCrudFaces() {
 		limparCampos = true;
@@ -43,9 +45,7 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 
 	@PostConstruct
 	protected void init() {
-		this.restAPI = new TSRestAPI<T>();
 		inicializarCampos();
-		inicializarServicos();
 	}
 
 	public void onRowSelect(SelectEvent<T> event) {
@@ -62,7 +62,7 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 
 	public void pesquisar() {
 		try {
-			this.tabelaPesquisa = this.getRestAPI().postList(this.getCrudClass(), "/pesquisar", this.getModel(), super.getToken());
+			this.tabelaPesquisa = this.getRestAPI().postList(this.getCrudClass(), this.getURL() + "/pesquisar", this.getModel(), super.getToken());
 
 			this.addResultMessage(tabelaPesquisa);
 		} catch (TSSystemException e) {
@@ -72,7 +72,7 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 
 	public void obter() {
 
-		this.setModel(this.getRestAPI().post(this.getCrudClass(), "/obter", this.getModel(), super.getToken()));
+		this.setModel(this.getRestAPI().post(this.getCrudClass(), this.getURL() + "/obter", this.getModel(), super.getToken()));
 
 	}
 
@@ -80,7 +80,7 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.setModel(this.getRestAPI().post(this.getCrudClass(), "/inserir", this.getModel(), super.getToken()));
+			this.setModel(this.getRestAPI().post(this.getCrudClass(), this.getURL() + "/inserir", this.getModel(), super.getToken()));
 
 			this.addInfoMessage(OPERACAO_OK);
 
@@ -99,7 +99,7 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 	public void alterar() {
 		try {
 
-			this.getRestAPI().post(this.getCrudClass(), "/alterar", this.getModel(), super.getToken());
+			this.getRestAPI().post(this.getCrudClass(), this.getURL() + "/alterar", this.getModel(), super.getToken());
 
 			this.addInfoMessage(OPERACAO_OK);
 
@@ -113,7 +113,7 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 	public void excluir() {
 		try {
 
-			this.getRestAPI().post(this.getCrudClass(), "/excluir", this.getModel(), super.getToken());
+			this.getRestAPI().post(this.getCrudClass(), this.getURL() + "/excluir", this.getModel(), super.getToken());
 
 			this.addInfoMessage(OPERACAO_OK);
 			
