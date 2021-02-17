@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.topsys.base.exception.TSApplicationException;
@@ -37,8 +38,7 @@ public class TSRestResponseException implements ResponseErrorHandler {
 		
 		String body = toString(response.getBody());
 		
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.setSerializationInclusion(Include.NON_NULL);
+		ObjectMapper mapper = getObjectMapper();
 
 		TSResponseExceptionModel model = mapper.readValue(body, TSResponseExceptionModel.class);
  
@@ -51,8 +51,7 @@ public class TSRestResponseException implements ResponseErrorHandler {
 		
 		String body = toString(response.getBody());
 
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.setSerializationInclusion(Include.NON_NULL);
+		ObjectMapper mapper = getObjectMapper();
 
 		TSResponseExceptionModel model = mapper.readValue(body, TSResponseExceptionModel.class);
 		
@@ -85,6 +84,13 @@ public class TSRestResponseException implements ResponseErrorHandler {
 		try (Scanner s = new Scanner(inputStream).useDelimiter("\\A")) {
 			return s.hasNext() ? s.next() : "";
 		}
+	}
+	
+	private ObjectMapper getObjectMapper() {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setSerializationInclusion(Include.NON_NULL);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		return objectMapper;
 	}
 
 }
