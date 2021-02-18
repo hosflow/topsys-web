@@ -46,6 +46,12 @@ public final class TSRestAPI<T extends Serializable> {
 	}
 
 	public T post(Class<T> classe, String url, Object object, String token) {
+			
+		return this.post(classe, null, url, object, token);
+		
+	}
+	
+	public T post(Class<T> classe, String baseUrl, String url, Object object, String token) {
 
 		T retorno = null;
 
@@ -56,8 +62,14 @@ public final class TSRestAPI<T extends Serializable> {
 		try {
 		
 			entity = getHttpEntity(object, token);
+			
+			if(TSUtil.isEmpty(baseUrl)) {
+				retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
+			}else {
+				retorno = restTemplate.postForObject(baseUrl + url, entity, classe);
+			}
 
-			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
+			
 
 			if (!TSUtil.isEmpty(retorno)) {
 
@@ -78,6 +90,11 @@ public final class TSRestAPI<T extends Serializable> {
 
 	public Object postObject(Class<?> classe, String url, Object object, String token) {
 
+		return this.postObject(classe,null, url, object, token);
+	}
+	
+	public Object postObject(Class<?> classe, String baseUrl, String url, Object object, String token) {
+		
 		Object retorno = null;
 
 		HttpEntity<Object> entity = null;
@@ -87,8 +104,15 @@ public final class TSRestAPI<T extends Serializable> {
 		try {
 
 			entity = getHttpEntity(object, token);
+			
+			if(TSUtil.isEmpty(baseUrl)) {
+				retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
+			}else {
+				retorno = restTemplate.postForObject(baseUrl + url, entity, classe);
+			}
+			
 
-			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
+			
 
 			if (!TSUtil.isEmpty(retorno)) {
 
@@ -103,11 +127,18 @@ public final class TSRestAPI<T extends Serializable> {
 		}
 
 		return retorno;
+		
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<T> postList(Class<T> classe, String url, Object object, String token) {
 
+	public List<T> postList(Class<T> classe, String url, Object object, String token) {
+		return this.postList(classe, null, url, object, token);
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> postList(Class<T> classe, String baseUrl, String url, Object object, String token) {
+		
 		List<T> retorno = null;
 
 		HttpEntity<Object> entity = null;
@@ -119,8 +150,13 @@ public final class TSRestAPI<T extends Serializable> {
 		try {
 			
 			entity = getHttpEntity(object, token);
-
-			retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
+			
+			if(TSUtil.isEmpty(baseUrl)) {
+				retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
+			}else {
+				retorno = restTemplate.postForObject(baseUrl + url, entity, List.class);
+				
+			}
 
 			if (!TSUtil.isEmpty(retorno)) {
 
@@ -137,6 +173,7 @@ public final class TSRestAPI<T extends Serializable> {
 		}
 
 		return retorno;
+		
 	}
 	
 	private HttpEntity<Object> getHttpEntity(Object object, String token) {
