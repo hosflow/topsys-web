@@ -84,6 +84,43 @@ public final class TSRestAPI<T extends Serializable> {
 
 		return retorno;
 	}
+	
+	public T get(Class<T> classe, String url) {
+		
+		return this.post(classe, null, url);
+		
+	}
+	
+	public T post(Class<T> classe, String baseUrl, String url) {
+
+		T retorno = null;
+
+		ObjectMapper objectMapper = null;
+
+		try {
+		
+			
+			if(TSUtil.isEmpty(baseUrl)) {
+				retorno = restTemplate.getForObject(this.getBaseURL() + url, classe);
+			}else {
+				retorno = restTemplate.getForObject(baseUrl + url, classe);
+			}
+
+			
+
+			if (!TSUtil.isEmpty(retorno)) {
+
+				objectMapper = getObjectMapper(); 
+
+				retorno = objectMapper.convertValue(retorno, classe);
+			}
+
+		} catch (RuntimeException e) {
+			this.handlerException(e);
+		}
+
+		return retorno;
+	}
 
 	
 	
@@ -109,6 +146,43 @@ public final class TSRestAPI<T extends Serializable> {
 				retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
 			}else {
 				retorno = restTemplate.postForObject(baseUrl + url, entity, classe);
+			}
+			
+
+			
+
+			if (!TSUtil.isEmpty(retorno)) {
+
+				objectMapper = getObjectMapper(); 
+
+
+				retorno = objectMapper.convertValue(retorno, classe);
+			}
+
+		} catch (RuntimeException e) {
+			this.handlerException(e);
+		}
+
+		return retorno;
+		
+	}
+	
+	public Object getObject(Class<?> classe, String url) {
+
+		return this.getObject(classe,null, url);
+	}
+	
+	public Object getObject(Class<?> classe, String baseUrl, String url) {
+		
+		Object retorno = null;
+
+		ObjectMapper objectMapper = null;
+
+		try {
+			if(TSUtil.isEmpty(baseUrl)) {
+				retorno = restTemplate.getForObject(this.getBaseURL() + url, classe);
+			}else {
+				retorno = restTemplate.getForObject(baseUrl + url, classe);
 			}
 			
 
@@ -155,6 +229,48 @@ public final class TSRestAPI<T extends Serializable> {
 				retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
 			}else {
 				retorno = restTemplate.postForObject(baseUrl + url, entity, List.class);
+				
+			}
+
+			if (!TSUtil.isEmpty(retorno)) {
+
+				objectMapper = getObjectMapper(); 
+
+
+				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
+
+				retorno = objectMapper.convertValue(retorno, listType);
+			}
+
+		} catch (RuntimeException e) {
+			this.handlerException(e);
+		}
+
+		return retorno;
+		
+	}
+	
+	public List<T> getList(Class<T> classe, String url) {
+		return this.getList(classe, null, url);
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> getList(Class<T> classe, String baseUrl, String url) {
+		
+		List<T> retorno = null;
+
+		ObjectMapper objectMapper = null;
+
+		CollectionType listType = null;
+
+		try {
+			
+			
+			if(TSUtil.isEmpty(baseUrl)) {
+				retorno = restTemplate.getForObject(this.getBaseURL() + url, List.class);
+			}else {
+				retorno = restTemplate.getForObject(baseUrl + url, List.class);
 				
 			}
 
