@@ -87,11 +87,11 @@ public final class TSRestAPI<T extends Serializable> {
 	
 	public T get(Class<T> classe, String url) {
 		
-		return this.post(classe, null, url);
+		return this.get(classe, null, url);
 		
 	}
 	
-	public T post(Class<T> classe, String baseUrl, String url) {
+	public T get(Class<T> classe, String baseUrl, String url) {
 
 		T retorno = null;
 
