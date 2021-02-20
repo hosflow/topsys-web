@@ -20,6 +20,4 @@ public final class TSControleAcesso implements Serializable {
 	private String nomeModulo;
 	private String nomeOrigem;
 	
-	private String slug;
-
 }
