@@ -25,14 +25,16 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 
 	private T model;
 
+	private Integer tabAtiva;
+
 	private boolean limparCampos;
 
 	private List<T> tabelaPesquisa;
 	private LazyDataModel<T> tabelaPaginacao;
 
 	@Autowired
-	private transient TSRestAPI<T> restAPI; 
-	
+	private transient TSRestAPI<T> restAPI;
+
 	protected abstract String getURL();
 
 	protected abstract void inicializarCampos();
@@ -53,6 +55,8 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 		if (!TSUtil.isEmpty(event.getObject())) {
 
 			setModel(event.getObject());
+
+			setTabAtiva(0);
 
 			this.obter();
 
@@ -116,7 +120,7 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 			this.getRestAPI().post(this.getCrudClass(), this.getURL() + "/excluir", this.getModel(), super.getToken());
 
 			this.addInfoMessage(OPERACAO_OK);
-			
+
 			this.pesquisar();
 
 		} catch (TSApplicationException e) {
