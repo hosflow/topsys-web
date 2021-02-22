@@ -1,15 +1,19 @@
 package br.com.topsys.web.faces;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortMeta;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
+import br.com.topsys.base.model.TSLazyModel;
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.util.TSRestAPI;
@@ -30,7 +34,7 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 	private boolean limparCampos;
 
 	private List<T> tabelaPesquisa;
-	private LazyDataModel<T> tabelaPaginacao;
+	private LazyDataModel<T> tabelaPesquisaPaginacao;
 
 	@Autowired
 	private transient TSRestAPI<T> restAPI;
@@ -66,12 +70,19 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 
 	public void pesquisar() {
 		try {
+
 			this.tabelaPesquisa = this.getRestAPI().postList(this.getCrudClass(), this.getURL() + "/pesquisar", this.getModel(), super.getToken());
 
 			this.addResultMessage(tabelaPesquisa);
 		} catch (TSSystemException e) {
 			this.addErrorMessage(e.getMessage());
 		}
+	}
+
+	public void pesquisarPaginacao() {
+
+		this.tabelaPesquisaPaginacao = new LazyList();
+
 	}
 
 	public void obter() {
@@ -131,6 +142,53 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 
 	public boolean isFlagAlterar() {
 		return !TSUtil.isEmpty(this.getModel().getId());
+	}
+
+	class LazyList extends LazyDataModel<T> {
+
+		public LazyList() {
+			setRowCount((Integer) getRestAPI().postObject(Integer.class, getURL() + "/rowcount", getModel(), getToken()));
+			addResultMessage(getRowCount());
+		}
+
+		@Override
+		public T getRowData(String rowKey) {
+
+			Long id = Long.valueOf(rowKey);
+
+			T model = null;
+
+			try {
+
+				if (TSUtil.isEmpty(getModel().getId()) || !getModel().getId().equals(id)) {
+					model = getCrudClass().newInstance();
+					model.setId(id);
+				}
+
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+
+			return model;
+
+		}
+
+		@Override
+	    public String getRowKey(T model) {
+	        return String.valueOf(model.getId());
+	    }
+
+		@Override
+	    public List<T> load(int offset, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
+
+			List<T> linhas = getRestAPI().postList(getCrudClass(), getURL() + "/pesquisar-lazy", new TSLazyModel<T>(getModel(), offset, pageSize), getToken());
+
+			return linhas;
+
+	    }
+
 	}
 
 }

@@ -39,7 +39,6 @@ public abstract class TSMainFaces implements Serializable {
 	@Autowired
 	private HttpServletResponse httpServletResponse;
 
-
 	protected List<SelectItem> initCombo(List<?> coll, String nomeValue, String nomeLabel) {
 		List<SelectItem> list = new ArrayList<SelectItem>();
 
@@ -91,30 +90,32 @@ public abstract class TSMainFaces implements Serializable {
 	}
 
 	protected void addResultMessage(List<?> lista) {
-		this.addResultMessage(lista, null);
+
+		Integer quantidade = 0;
+
+		if (!TSUtil.isEmpty(lista)) {
+			quantidade = lista.size();
+		}
+
+		this.addResultMessage(quantidade);
+
 	}
 
-	protected void addResultMessage(List<?> lista, String destino) {
+	protected void addResultMessage(Integer quantidade) {
 
 		String mensagem = "A pesquisa não retornou nenhuma ocorrência";
 
-		if (!TSUtil.isEmpty(lista)) {
+		if (!TSUtil.isEmpty(quantidade) && quantidade > 0) {
 
-			mensagem = "A pesquisa retornou " + lista.size() + " ocorrência(s)";
+			mensagem = "A pesquisa retornou " + quantidade + " ocorrência(s)";
 		}
 
-		if (TSUtil.isEmpty(destino)) {
-			addInfoMessage(destino, mensagem);
-		} else {
-			addInfoMessage(mensagem);
-		}
+		addInfoMessage(mensagem);
 
 	}
 
 	protected String getToken() {
-		return TSCookie.getCookie(httpServletRequest, TOKEN) != null
-				? TSCookie.getCookie(httpServletRequest, TOKEN).getValue()
-				: null;
+		return TSCookie.getCookie(httpServletRequest, TOKEN) != null ? TSCookie.getCookie(httpServletRequest, TOKEN).getValue() : null;
 	}
 
 	protected void setToken(String token, Integer duracao) {
@@ -124,20 +125,19 @@ public abstract class TSMainFaces implements Serializable {
 	protected void removeToken() {
 		TSCookie.addCookie(httpServletResponse, TOKEN, "", 0);
 	}
-	
+
 	protected void addCookie(String nome, String valor) {
-		TSCookie.addCookie(httpServletResponse,nome, valor, -1);
-	}
-	
-	protected String getCookie(String nome) {
-		return TSCookie.getCookie(httpServletRequest,nome) != null ? TSCookie.getCookie(httpServletRequest,nome).getValue() : null;
+		TSCookie.addCookie(httpServletResponse, nome, valor, -1);
 	}
 
-	
+	protected String getCookie(String nome) {
+		return TSCookie.getCookie(httpServletRequest, nome) != null ? TSCookie.getCookie(httpServletRequest, nome).getValue() : null;
+	}
+
 	protected TSControleAcesso getTSControleAcesso() {
 		return new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso();
 	}
-	
+
 	protected void showDialog(String dialog) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("PF('");
@@ -146,7 +146,7 @@ public abstract class TSMainFaces implements Serializable {
 		PrimeRequestContext.getCurrentInstance().getScriptsToExecute().add(builder.toString());
 
 	}
-	
+
 	protected void hideDialog(String dialog) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("PF('");
@@ -155,12 +155,10 @@ public abstract class TSMainFaces implements Serializable {
 		PrimeRequestContext.getCurrentInstance().getScriptsToExecute().add(builder.toString());
 
 	}
-	
+
 	protected void executeScriptPrime(String valor) {
 		PrimeRequestContext.getCurrentInstance().getScriptsToExecute().add(valor);
 
 	}
-
-	
 
 }
