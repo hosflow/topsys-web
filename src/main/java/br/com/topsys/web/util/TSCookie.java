@@ -6,6 +6,10 @@ import javax.servlet.http.HttpServletResponse;
 
 public final class TSCookie {
 
+	private TSCookie(){
+		
+	}
+
 	public static Cookie getCookie(HttpServletRequest httpServletRequest, String nome) {
 
 		Cookie[] cookies = httpServletRequest.getCookies();

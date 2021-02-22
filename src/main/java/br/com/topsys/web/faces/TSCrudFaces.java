@@ -31,7 +31,7 @@ public abstract class TSCrudFaces<T extends TSMainModel> extends TSMainFaces {
 	private LazyDataModel<T> tabelaPaginacao;
 
 	@Autowired
-	private TSRestAPI<T> restAPI; 
+	private transient TSRestAPI<T> restAPI; 
 	
 	protected abstract String getURL();
 
