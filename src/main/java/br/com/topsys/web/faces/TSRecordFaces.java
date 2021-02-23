@@ -29,8 +29,6 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	protected abstract void initFields();
 
-	protected abstract boolean isValidFields();
-
 	@PostConstruct
 	protected void init() {
 		this.setClearFields(true);

@@ -172,5 +172,10 @@ public abstract class TSMainFaces implements Serializable {
 		PrimeRequestContext.getCurrentInstance().getScriptsToExecute().add(valor);
 
 	}
+	
+	protected boolean isValidFields() {
+		return true;
+	}
+
 
 }

@@ -35,8 +35,6 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	protected abstract void initFields();
 
-	protected abstract boolean isValidFields();
-
 	private List<T> table;
 	private LazyDataModel<T> tablePagination;
 
