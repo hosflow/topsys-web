@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -28,19 +29,26 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public abstract class TSMainFaces implements Serializable {
 
-	private static final String TOKEN = "token";
+	protected static final String TOKEN = "token";
+	protected static final String OPERACAO_OK = "Operação realizada com sucesso!";
 
 	@Autowired
-	private HttpSession httpSession;
+	private transient HttpSession httpSession;
 
 	@Autowired
-	private HttpServletRequest httpServletRequest;
+	private transient HttpServletRequest httpServletRequest;
 
 	@Autowired
-	private HttpServletResponse httpServletResponse;
+	private transient HttpServletResponse httpServletResponse;
+
+	private Integer tabActive;
+
+	private boolean clearFields;
+
+	
 
 	protected List<SelectItem> initCombo(List<?> coll, String nomeValue, String nomeLabel) {
-		List<SelectItem> list = new ArrayList<SelectItem>();
+		List<SelectItem> list = new ArrayList<>();
 
 		for (Object o : coll) {
 			try {
@@ -115,7 +123,9 @@ public abstract class TSMainFaces implements Serializable {
 	}
 
 	protected String getToken() {
-		return TSCookie.getCookie(httpServletRequest, TOKEN) != null ? TSCookie.getCookie(httpServletRequest, TOKEN).getValue() : null;
+		return TSCookie.getCookie(httpServletRequest, TOKEN) != null
+				? TSCookie.getCookie(httpServletRequest, TOKEN).getValue()
+				: null;
 	}
 
 	protected void setToken(String token, Integer duracao) {
@@ -131,7 +141,9 @@ public abstract class TSMainFaces implements Serializable {
 	}
 
 	protected String getCookie(String nome) {
-		return TSCookie.getCookie(httpServletRequest, nome) != null ? TSCookie.getCookie(httpServletRequest, nome).getValue() : null;
+		return TSCookie.getCookie(httpServletRequest, nome) != null
+				? TSCookie.getCookie(httpServletRequest, nome).getValue()
+				: null;
 	}
 
 	protected TSControleAcesso getTSControleAcesso() {

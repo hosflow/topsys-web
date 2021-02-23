@@ -8,8 +8,6 @@ public class TSControleAcessoSession {
 
 	private HttpSession httpSession;
 
-	private TSControleAcesso controleAcesso = null;
-
 	public TSControleAcessoSession(HttpSession httpSession) {
 		this.httpSession = httpSession;
 	}
@@ -17,14 +15,14 @@ public class TSControleAcessoSession {
 	
 
 	public TSControleAcesso getTSControleAcesso() {
-		controleAcesso = (TSControleAcesso) httpSession.getAttribute(TSTypeSession.OBJECT_SESSION_MODEL.name());
+		TSControleAcesso controleAcesso = (TSControleAcesso) httpSession.getAttribute(TSTypeSession.OBJECT_SESSION_MODEL.name());
 		
 		if (controleAcesso == null) {
-			this.controleAcesso = new TSControleAcesso();
-			httpSession.setAttribute(TSTypeSession.OBJECT_SESSION_MODEL.name(), this.controleAcesso);
+			controleAcesso = new TSControleAcesso();
+			httpSession.setAttribute(TSTypeSession.OBJECT_SESSION_MODEL.name(), controleAcesso);
 		}
 		
-		return this.controleAcesso;
+		return controleAcesso;
 	}
 
 }
