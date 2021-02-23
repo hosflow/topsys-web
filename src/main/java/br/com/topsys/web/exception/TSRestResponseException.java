@@ -65,7 +65,9 @@ public class TSRestResponseException implements ResponseErrorHandler {
 			
 			log.error(ERROR_LOG, url, method, body);
 			
-			throw new TSApplicationException(model.getMensagem() != null ? model.getMensagem() : model.getMessage(),TSType.ERROR);
+			log.error("Trace: {}", model.getTrace());
+			
+			throw new TSSystemException(model.getMensagem() != null ? model.getMensagem() : model.getMessage());
 		
 		}else if(model.getStatus() == HttpStatus.FORBIDDEN.value() || model.getStatus() == HttpStatus.NOT_FOUND.value()) {
 			
