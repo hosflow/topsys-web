@@ -52,7 +52,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	public void get() {
 
-		this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/obter", this.getModel(),
+		this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get", this.getModel(),
 				super.getToken()));
 
 	}
@@ -61,7 +61,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/inserir", this.getModel(),
+			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/insert", this.getModel(),
 					super.getToken()));
 
 			this.addInfoMessage(OPERACAO_OK);
@@ -81,7 +81,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	public void update() {
 		try {
 
-			this.getRestAPI().post(this.getModelClass(), this.getURL() + "/alterar", this.getModel(), super.getToken());
+			this.getRestAPI().post(this.getModelClass(), this.getURL() + "/update", this.getModel(), super.getToken());
 
 			this.addInfoMessage(OPERACAO_OK);
 
