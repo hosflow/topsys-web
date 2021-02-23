@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 @SuppressWarnings("serial")
 @Data
 @EqualsAndHashCode(callSuper = false)
-public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
+public abstract class TSResearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	@Autowired
 	private transient TSRestAPI<T> restAPI;
@@ -35,8 +35,8 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	protected abstract void initFields();
 	
-	private List<T> tableSearch;
-	private LazyDataModel<T> tableSearchPagination;
+	private List<T> tableResearch;
+	private LazyDataModel<T> tableResearchPagination;
 
     
 	@PostConstruct
@@ -48,10 +48,10 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	public void find() {
 		try {
 
-			this.tableSearch = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find",
+			this.tableResearch = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find",
 					this.getModel(), super.getToken());
 
-			this.addResultMessage(tableSearch);
+			this.addResultMessage(tableResearch);
 		} catch (TSSystemException e) {
 			this.addErrorMessage(e.getMessage());
 		}
@@ -59,7 +59,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	public void findPagination() {
 
-		this.tableSearchPagination = new LazyList();
+		this.tableResearchPagination = new LazyList();
 
 	}
 
