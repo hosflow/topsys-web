@@ -57,13 +57,11 @@ public class TSRestResponseException implements ResponseErrorHandler {
 		
 		String ERROR_LOG = "URL: {}, HttpMethod: {}, ResponseBody: {}";
 		
-		if (model.getCodigo() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-			    
-			log.error(ERROR_LOG, url, method, body);
+		if (model.getCodigo() == HttpStatus.INTERNAL_SERVER_ERROR.value() || model.getStatus() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
 			
 			throw new TSSystemException(model.getMensagem() != null ? model.getMensagem() : model.getMessage());
 
-		}else if(model.getCodigo() == HttpStatus.BAD_REQUEST.value()) {
+		}else if(model.getCodigo() == HttpStatus.BAD_REQUEST.value() || model.getStatus() == HttpStatus.BAD_REQUEST.value()) {
 			
 			log.error(ERROR_LOG, url, method, body);
 			
