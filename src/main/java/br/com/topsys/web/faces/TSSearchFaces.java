@@ -30,15 +30,16 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	private T model;
 
 	protected abstract Class<T> getModelClass();
-	
+
 	protected abstract String getURL();
 
 	protected abstract void initFields();
-	
+
+	protected abstract boolean isValidFields();
+
 	private List<T> table;
 	private LazyDataModel<T> tablePagination;
 
-    
 	@PostConstruct
 	protected void init() {
 		this.setClearFields(true);
@@ -46,10 +47,15 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	}
 
 	public void find() {
+
+		if (!isValidFields()) {
+			return;
+		}
+
 		try {
 
-			this.table = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find",
-					this.getModel(), super.getToken());
+			this.table = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find", this.getModel(),
+					super.getToken());
 
 			this.addResultMessage(table);
 		} catch (TSSystemException e) {
@@ -58,6 +64,10 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	}
 
 	public void findPagination() {
+
+		if (!isValidFields()) {
+			return;
+		}
 
 		this.tablePagination = new LazyList();
 

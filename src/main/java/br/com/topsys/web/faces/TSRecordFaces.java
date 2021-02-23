@@ -29,6 +29,8 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	protected abstract void initFields();
 
+	protected abstract boolean isValidFields();
+
 	@PostConstruct
 	protected void init() {
 		this.setClearFields(true);
@@ -59,6 +61,10 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	public void insert() {
 
+		if (!isValidFields()) {
+			return;
+		}
+		
 		try {
 
 			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/insert", this.getModel(),
@@ -79,6 +85,11 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	}
 
 	public void update() {
+		
+		if (!isValidFields()) {
+			return;
+		}
+		
 		try {
 
 			this.getRestAPI().post(this.getModelClass(), this.getURL() + "/update", this.getModel(), super.getToken());
