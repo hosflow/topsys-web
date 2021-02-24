@@ -1,9 +1,11 @@
 package br.com.topsys.web.util;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,17 +19,22 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
+import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.exception.TSRestResponseException;
+import br.com.topsys.web.session.TSControleAcessoSession;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Data
 @Component
-public final class TSRestAPI<T extends Serializable> {
+public final class TSRestAPI<T extends TSMainModel> {
 
 	private static final String NAO_PODE_SER_NULO = "O objeto passado por parâmetro do método post não pode ser nulo!";
+	
+	@Autowired
+	private HttpSession httpSession;
 
 	@Value("${topsys.base.url}")
 	private String baseURL;
@@ -46,8 +53,11 @@ public final class TSRestAPI<T extends Serializable> {
 	}
 
 	public T post(Class<T> classe, String url, Object object, String token) {
-			
-		return this.post(classe, null, url, object, token);
+		
+		TSMainModel model = (TSMainModel)object;
+		model.setControleAcesso(new TSControleAcessoSession(this.httpSession).getTSControleAcesso());
+		
+		return this.post(classe, null, url, model, token);
 		
 	}
 	
@@ -304,10 +314,10 @@ public final class TSRestAPI<T extends Serializable> {
 			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setBearerAuth(token);
-			entity = new HttpEntity<Object>(object, headers);
+			entity = new HttpEntity<>(object, headers);
 		
 		} else {
-			entity = new HttpEntity<Object>(object);
+			entity = new HttpEntity<>(object);
 		}
 		
 		return entity;
