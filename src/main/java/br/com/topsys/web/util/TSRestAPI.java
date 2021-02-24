@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public final class TSRestAPI<T extends TSMainModel> {
 
 	private static final String NAO_PODE_SER_NULO = "O objeto passado por parâmetro do método post não pode ser nulo!";
-	
+
 	@Autowired
 	private HttpSession httpSession;
 
@@ -46,22 +46,19 @@ public final class TSRestAPI<T extends TSMainModel> {
 		this.restTemplate = new RestTemplate();
 		this.restTemplate.setErrorHandler(new TSRestResponseException());
 	}
-	
+
 	public TSRestAPI() {
 		this.restTemplate = new RestTemplate();
 		this.restTemplate.setErrorHandler(new TSRestResponseException());
 	}
 
-	public T post(Class<T> classe, String url, Object object, String token) {
-		
-		TSMainModel model = (TSMainModel)object;
-		model.setControleAcesso(new TSControleAcessoSession(this.httpSession).getTSControleAcesso());
-		
-		return this.post(classe, null, url, model, token);
-		
+	public T post(Class<T> classe, String url, final Object object, String token) {
+
+		return this.post(classe, null, url, object, token);
+
 	}
-	
-	public T post(Class<T> classe, String baseUrl, String url, Object object, String token) {
+
+	public T post(Class<T> classe, String baseUrl, String url, final Object object, String token) {
 
 		T retorno = null;
 
@@ -70,20 +67,18 @@ public final class TSRestAPI<T extends TSMainModel> {
 		ObjectMapper objectMapper = null;
 
 		try {
-		
+
 			entity = getHttpEntity(object, token);
-			
-			if(TSUtil.isEmpty(baseUrl)) {
+
+			if (TSUtil.isEmpty(baseUrl)) {
 				retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
-			}else {
+			} else {
 				retorno = restTemplate.postForObject(baseUrl + url, entity, classe);
 			}
 
-			
-
 			if (!TSUtil.isEmpty(retorno)) {
 
-				objectMapper = getObjectMapper(); 
+				objectMapper = getObjectMapper();
 
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
@@ -94,13 +89,13 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 		return retorno;
 	}
-	
+
 	public T get(Class<T> classe, String url) {
-		
+
 		return this.get(classe, null, url);
-		
+
 	}
-	
+
 	public T get(Class<T> classe, String baseUrl, String url) {
 
 		T retorno = null;
@@ -108,19 +103,16 @@ public final class TSRestAPI<T extends TSMainModel> {
 		ObjectMapper objectMapper = null;
 
 		try {
-		
-			
-			if(TSUtil.isEmpty(baseUrl)) {
+
+			if (TSUtil.isEmpty(baseUrl)) {
 				retorno = restTemplate.getForObject(this.getBaseURL() + url, classe);
-			}else {
+			} else {
 				retorno = restTemplate.getForObject(baseUrl + url, classe);
 			}
 
-			
-
 			if (!TSUtil.isEmpty(retorno)) {
 
-				objectMapper = getObjectMapper(); 
+				objectMapper = getObjectMapper();
 
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
@@ -132,16 +124,13 @@ public final class TSRestAPI<T extends TSMainModel> {
 		return retorno;
 	}
 
-	
-	
+	public Object postObject(Class<?> classe, String url, final Object object, String token) {
 
-	public Object postObject(Class<?> classe, String url, Object object, String token) {
-
-		return this.postObject(classe,null, url, object, token);
+		return this.postObject(classe, null, url, object, token);
 	}
-	
-	public Object postObject(Class<?> classe, String baseUrl, String url, Object object, String token) {
-		
+
+	public Object postObject(Class<?> classe, String baseUrl, String url, final Object object, String token) {
+
 		Object retorno = null;
 
 		HttpEntity<Object> entity = null;
@@ -151,20 +140,16 @@ public final class TSRestAPI<T extends TSMainModel> {
 		try {
 
 			entity = getHttpEntity(object, token);
-			
-			if(TSUtil.isEmpty(baseUrl)) {
+
+			if (TSUtil.isEmpty(baseUrl)) {
 				retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
-			}else {
+			} else {
 				retorno = restTemplate.postForObject(baseUrl + url, entity, classe);
 			}
-			
-
-			
 
 			if (!TSUtil.isEmpty(retorno)) {
 
-				objectMapper = getObjectMapper(); 
-
+				objectMapper = getObjectMapper();
 
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
@@ -174,34 +159,30 @@ public final class TSRestAPI<T extends TSMainModel> {
 		}
 
 		return retorno;
-		
+
 	}
-	
+
 	public Object getObject(Class<?> classe, String url) {
 
-		return this.getObject(classe,null, url);
+		return this.getObject(classe, null, url);
 	}
-	
+
 	public Object getObject(Class<?> classe, String baseUrl, String url) {
-		
+
 		Object retorno = null;
 
 		ObjectMapper objectMapper = null;
 
 		try {
-			if(TSUtil.isEmpty(baseUrl)) {
+			if (TSUtil.isEmpty(baseUrl)) {
 				retorno = restTemplate.getForObject(this.getBaseURL() + url, classe);
-			}else {
+			} else {
 				retorno = restTemplate.getForObject(baseUrl + url, classe);
 			}
-			
-
-			
 
 			if (!TSUtil.isEmpty(retorno)) {
 
-				objectMapper = getObjectMapper(); 
-
+				objectMapper = getObjectMapper();
 
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
@@ -211,18 +192,18 @@ public final class TSRestAPI<T extends TSMainModel> {
 		}
 
 		return retorno;
-		
+
 	}
 
+	public List<T> postList(Class<T> classe, String url, final Object object, String token) {
 
-	public List<T> postList(Class<T> classe, String url, Object object, String token) {
 		return this.postList(classe, null, url, object, token);
-		
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<T> postList(Class<T> classe, String baseUrl, String url, Object object, String token) {
-		
+	public List<T> postList(Class<T> classe, String baseUrl, String url, final Object object, String token) {
+
 		List<T> retorno = null;
 
 		HttpEntity<Object> entity = null;
@@ -232,20 +213,19 @@ public final class TSRestAPI<T extends TSMainModel> {
 		CollectionType listType = null;
 
 		try {
-			
+
 			entity = getHttpEntity(object, token);
-			
-			if(TSUtil.isEmpty(baseUrl)) {
+
+			if (TSUtil.isEmpty(baseUrl)) {
 				retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
-			}else {
+			} else {
 				retorno = restTemplate.postForObject(baseUrl + url, entity, List.class);
-				
+
 			}
 
 			if (!TSUtil.isEmpty(retorno)) {
 
-				objectMapper = getObjectMapper(); 
-
+				objectMapper = getObjectMapper();
 
 				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
 
@@ -257,17 +237,17 @@ public final class TSRestAPI<T extends TSMainModel> {
 		}
 
 		return retorno;
-		
+
 	}
-	
+
 	public List<T> getList(Class<T> classe, String url) {
 		return this.getList(classe, null, url);
-		
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<T> getList(Class<T> classe, String baseUrl, String url) {
-		
+
 		List<T> retorno = null;
 
 		ObjectMapper objectMapper = null;
@@ -275,19 +255,17 @@ public final class TSRestAPI<T extends TSMainModel> {
 		CollectionType listType = null;
 
 		try {
-			
-			
-			if(TSUtil.isEmpty(baseUrl)) {
+
+			if (TSUtil.isEmpty(baseUrl)) {
 				retorno = restTemplate.getForObject(this.getBaseURL() + url, List.class);
-			}else {
+			} else {
 				retorno = restTemplate.getForObject(baseUrl + url, List.class);
-				
+
 			}
 
 			if (!TSUtil.isEmpty(retorno)) {
 
-				objectMapper = getObjectMapper(); 
-
+				objectMapper = getObjectMapper();
 
 				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
 
@@ -299,30 +277,30 @@ public final class TSRestAPI<T extends TSMainModel> {
 		}
 
 		return retorno;
-		
+
 	}
-	
+
 	private HttpEntity<Object> getHttpEntity(Object object, String token) {
-		
+
 		if (TSUtil.isEmpty(object)) {
 			throw new TSSystemException(NAO_PODE_SER_NULO);
 		}
-		
+
 		HttpEntity<Object> entity;
-		
+
 		if (!TSUtil.isEmpty(token)) {
-			
+
 			HttpHeaders headers = new HttpHeaders();
 			headers.setBearerAuth(token);
 			entity = new HttpEntity<>(object, headers);
-		
+
 		} else {
 			entity = new HttpEntity<>(object);
 		}
-		
+
 		return entity;
 	}
-	
+
 	private ObjectMapper getObjectMapper() {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.setSerializationInclusion(Include.NON_NULL);
@@ -331,7 +309,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 	}
 
 	private void handlerException(RuntimeException e) {
-		String ERRO_INTERNO = "Ocorreu um erro interno, entre em contato com a TI!";
+		String erroInterno = "Ocorreu um erro interno, entre em contato com a TI!";
 
 		if (e instanceof TSApplicationException) {
 
@@ -340,7 +318,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 		} else {
 			log.error(e.getMessage());
 			e.printStackTrace();
-			throw new TSSystemException(ERRO_INTERNO, e);
+			throw new TSSystemException(erroInterno, e);
 		}
 
 	}
