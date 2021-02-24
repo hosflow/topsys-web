@@ -17,8 +17,8 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.context.PrimeRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.topsys.base.model.TSControleAcesso;
 import br.com.topsys.base.util.TSUtil;
-import br.com.topsys.web.session.TSControleAcesso;
 import br.com.topsys.web.session.TSControleAcessoSession;
 import br.com.topsys.web.util.TSCookie;
 import lombok.Data;
