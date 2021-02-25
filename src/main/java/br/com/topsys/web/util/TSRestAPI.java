@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
+import br.com.topsys.base.model.TSLazyModel;
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.exception.TSRestResponseException;
@@ -59,7 +60,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 	}
 
 	public T post(Class<T> classe, String baseUrl, String url, final Object object, String token) {
-		
+
 		Object model = accessControl(object);
 
 		T retorno = null;
@@ -132,7 +133,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 	}
 
 	public Object postObject(Class<?> classe, String baseUrl, String url, final Object object, String token) {
-		
+
 		Object model = accessControl(object);
 
 		Object retorno = null;
@@ -207,7 +208,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 	@SuppressWarnings("unchecked")
 	public List<T> postList(Class<T> classe, String baseUrl, String url, Object object, String token) {
-		
+
 		Object model = accessControl(object);
 
 		List<T> retorno = null;
@@ -306,15 +307,22 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 		return entity;
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	private Object accessControl(final Object object) {
-		
-		if(object instanceof TSMainModel) {
-			TSMainModel model = (TSMainModel) object;
-			model.setControleAcesso(new TSControleAcessoSession(this.httpSession).getTSControleAcesso());	
+
+		if (object instanceof TSLazyModel) {
+			TSLazyModel<T> model = (TSLazyModel<T>) object;
+			model.getModel().setControleAcesso(new TSControleAcessoSession(this.httpSession).getTSControleAcesso());
 			return model;
 		}
-		
+
+		if (object instanceof TSMainModel) {
+			TSMainModel model = (TSMainModel) object;
+			model.setControleAcesso(new TSControleAcessoSession(this.httpSession).getTSControleAcesso());
+			return model;
+		}
+
 		return object;
 	}
 
