@@ -60,7 +60,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 	public T post(Class<T> classe, String baseUrl, String url, final Object object, String token) {
 		
-		TSMainModel model = accessControl(object);
+		Object model = accessControl(object);
 
 		T retorno = null;
 
@@ -133,7 +133,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 	public Object postObject(Class<?> classe, String baseUrl, String url, final Object object, String token) {
 		
-		TSMainModel model = accessControl(object);
+		Object model = accessControl(object);
 
 		Object retorno = null;
 
@@ -208,7 +208,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 	@SuppressWarnings("unchecked")
 	public List<T> postList(Class<T> classe, String baseUrl, String url, Object object, String token) {
 		
-		TSMainModel model = accessControl(object);
+		Object model = accessControl(object);
 
 		List<T> retorno = null;
 
@@ -307,13 +307,15 @@ public final class TSRestAPI<T extends TSMainModel> {
 		return entity;
 	}
 	
-	private TSMainModel accessControl(final Object object) {
-		TSMainModel model = (TSMainModel)object;
-		if(model != null) {
+	private Object accessControl(final Object object) {
+		
+		if(object instanceof TSMainModel) {
+			TSMainModel model = (TSMainModel) object;
 			model.setControleAcesso(new TSControleAcessoSession(this.httpSession).getTSControleAcesso());	
+			return model;
 		}
 		
-		return model;
+		return object;
 	}
 
 	private ObjectMapper getObjectMapper() {
