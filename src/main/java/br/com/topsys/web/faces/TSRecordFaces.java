@@ -57,13 +57,23 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	}
 
+	protected void preInsert() {}
+
+	protected void preUpdate() {}
+
+	protected void prePersist() {}
+
 	public void insert() {
 
 		if (!isValidFields()) {
 			return;
 		}
-		
+
 		try {
+
+			this.prePersist();
+
+			this.preInsert();
 
 			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/insert", this.getModel(),
 					super.getToken()));
@@ -83,12 +93,16 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	}
 
 	public void update() {
-		
+
 		if (!isValidFields()) {
 			return;
 		}
-		
+
 		try {
+
+			this.prePersist();
+
+			this.preUpdate();
 
 			this.getRestAPI().post(this.getModelClass(), this.getURL() + "/update", this.getModel(), super.getToken());
 
