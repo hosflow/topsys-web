@@ -50,18 +50,23 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	}
 
-	public void get() {
-
-		this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get", this.getModel(),
-				super.getToken()));
-
-	}
+	protected void afterGet() {}
 
 	protected void beforeInsert() {}
 
 	protected void beforeUpdate() {}
 
 	protected void beforePersist() {}
+
+	public void get() {
+
+		this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get", this.getModel(),
+				super.getToken()));
+
+		this.afterGet();
+
+	}
+
 
 	public void insert() {
 
