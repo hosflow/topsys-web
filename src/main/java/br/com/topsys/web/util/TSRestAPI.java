@@ -15,7 +15,10 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
@@ -328,8 +331,11 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 	private ObjectMapper getObjectMapper() {
 		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.setSerializationInclusion(Include.NON_NULL);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		objectMapper.registerModule(new JavaTimeModule());	
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		objectMapper.setSerializationInclusion(Include.NON_NULL);
+		
 		return objectMapper;
 	}
 
