@@ -59,6 +59,8 @@ public final class TSRestAPI<T extends TSMainModel> {
 	}
 
 	public T post(Class<T> classe, String baseUrl, String url, final Object object, String token) {
+		
+		TSMainModel model = accessControl(object);
 
 		T retorno = null;
 
@@ -68,7 +70,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 		try {
 
-			entity = getHttpEntity(object, token);
+			entity = getHttpEntity(model, token);
 
 			if (TSUtil.isEmpty(baseUrl)) {
 				retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
@@ -130,6 +132,8 @@ public final class TSRestAPI<T extends TSMainModel> {
 	}
 
 	public Object postObject(Class<?> classe, String baseUrl, String url, final Object object, String token) {
+		
+		TSMainModel model = accessControl(object);
 
 		Object retorno = null;
 
@@ -139,7 +143,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 		try {
 
-			entity = getHttpEntity(object, token);
+			entity = getHttpEntity(model, token);
 
 			if (TSUtil.isEmpty(baseUrl)) {
 				retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, classe);
@@ -195,14 +199,16 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 	}
 
-	public List<T> postList(Class<T> classe, String url, final Object object, String token) {
+	public List<T> postList(Class<T> classe, String url, Object object, String token) {
 
 		return this.postList(classe, null, url, object, token);
 
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> postList(Class<T> classe, String baseUrl, String url, final Object object, String token) {
+	public List<T> postList(Class<T> classe, String baseUrl, String url, Object object, String token) {
+		
+		TSMainModel model = accessControl(object);
 
 		List<T> retorno = null;
 
@@ -214,7 +220,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 		try {
 
-			entity = getHttpEntity(object, token);
+			entity = getHttpEntity(model, token);
 
 			if (TSUtil.isEmpty(baseUrl)) {
 				retorno = restTemplate.postForObject(this.getBaseURL() + url, entity, List.class);
@@ -299,6 +305,15 @@ public final class TSRestAPI<T extends TSMainModel> {
 		}
 
 		return entity;
+	}
+	
+	private TSMainModel accessControl(final Object object) {
+		TSMainModel model = (TSMainModel)object;
+		if(model != null) {
+			model.setControleAcesso(new TSControleAcessoSession(this.httpSession).getTSControleAcesso());	
+		}
+		
+		return model;
 	}
 
 	private ObjectMapper getObjectMapper() {
