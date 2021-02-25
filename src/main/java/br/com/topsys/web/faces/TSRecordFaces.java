@@ -27,7 +27,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	protected abstract String getURL();
 
-	protected abstract void initFields();
+	public abstract void initFields();
 
 	@PostConstruct
 	protected void init() {
