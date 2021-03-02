@@ -56,7 +56,7 @@ public class TSRestResponseException implements ResponseErrorHandler {
 
 		TSResponseExceptionModel model = mapper.readValue(body, TSResponseExceptionModel.class);
 		
-		String ERROR_LOG = "URL: {}, HttpMethod: {}, ResponseBody: {}";
+		String erroLog = "URL: {}, HttpMethod: {}, ResponseBody: {}";
 		
 		if (model.getCodigo() == HttpStatus.INTERNAL_SERVER_ERROR.value() || model.getStatus() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
 			
@@ -64,18 +64,18 @@ public class TSRestResponseException implements ResponseErrorHandler {
 
 		}else if(model.getCodigo() == HttpStatus.BAD_REQUEST.value() || model.getStatus() == HttpStatus.BAD_REQUEST.value()) {
 			
-			log.error(ERROR_LOG, url, method, body);
+			log.error(erroLog, url, method, body);
 			
 			if(!TSUtil.isEmpty(model.getTrace())) {
 				log.error("Trace: {}", model.getTrace());
 			}
 			
 			
-			throw new TSSystemException(model.getMensagem() != null ? model.getMensagem() : model.getMessage());
+			throw new TSApplicationException(model.getMensagem() != null ? model.getMensagem() : model.getMessage(), TSType.ERROR);
 		
 		}else if(model.getStatus() == HttpStatus.FORBIDDEN.value() || model.getStatus() == HttpStatus.NOT_FOUND.value()) {
 			
-			log.info(ERROR_LOG, url, method, body);
+			log.info(erroLog, url, method, body);
 			
 			throw new TSApplicationException(model.getMensagem() != null ? model.getMensagem() : model.getMessage(),TSType.ERROR);
 		}

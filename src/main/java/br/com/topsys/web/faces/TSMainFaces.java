@@ -16,7 +16,9 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.context.PrimeRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSControleAcesso;
+import br.com.topsys.base.util.TSType;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.session.TSControleAcessoSession;
 import br.com.topsys.web.util.TSCookie;
@@ -43,8 +45,6 @@ public abstract class TSMainFaces implements Serializable {
 	private Integer tabActive;
 
 	private boolean clearFields;
-
-	
 
 	protected List<SelectItem> initCombo(List<?> coll, String nomeValue, String nomeLabel) {
 		List<SelectItem> list = new ArrayList<>();
@@ -171,10 +171,32 @@ public abstract class TSMainFaces implements Serializable {
 		PrimeRequestContext.getCurrentInstance().getScriptsToExecute().add(valor);
 
 	}
-	
+
 	protected boolean isValidFields() {
 		return true;
 	}
 
+	protected void handlerException(RuntimeException e) {
+		if (e instanceof TSApplicationException) {
+
+			TSApplicationException tsApplicationException = (TSApplicationException) e;
+
+			if (TSType.ERROR.equals(tsApplicationException.getTSType())) {
+                log.info(e.getMessage());
+				this.addErrorMessage(e.getMessage());
+
+			} else {
+
+				this.addInfoMessage(e.getMessage());
+
+			}
+
+		} else {
+			e.printStackTrace();
+			this.addErrorMessage(e.getMessage());
+
+		}
+
+	}
 
 }

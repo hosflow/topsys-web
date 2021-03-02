@@ -10,7 +10,6 @@ import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.model.TSLazyModel;
 import br.com.topsys.base.model.TSMainModel;
@@ -37,7 +36,6 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	private List<T> table;
 	private LazyDataModel<T> tablePagination;
-	
 
 	@PostConstruct
 	protected void init() {
@@ -57,8 +55,8 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 					super.getToken());
 
 			this.addResultMessage(table);
-		} catch (TSSystemException e) {
-			this.addErrorMessage(e.getMessage());
+		} catch (RuntimeException e) {
+			handlerException(e);
 		}
 	}
 
@@ -81,11 +79,8 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.find();
 
-		} catch (TSApplicationException e) {
-			this.addInfoMessage(e.getMessage());
-
-		}catch (TSSystemException e) {
-			this.addErrorMessage(e.getMessage());
+		} catch (RuntimeException e) {
+			handlerException(e);
 		}
 	}
 

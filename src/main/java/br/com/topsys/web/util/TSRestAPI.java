@@ -343,7 +343,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 		if (e instanceof TSApplicationException) {
 
-			throw new TSApplicationException(e.getMessage(), e);
+			throw new TSApplicationException(e.getMessage(),((TSApplicationException) e).getTSType());
 
 		} else {
 			log.error(e.getMessage());

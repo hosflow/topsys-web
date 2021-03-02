@@ -7,8 +7,6 @@ import javax.annotation.PostConstruct;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.topsys.base.exception.TSApplicationException;
-import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.util.TSRestAPI;
@@ -93,8 +91,8 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 			this.tableHistory = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find-history",
 					this.getModel(), super.getToken());
 
-		} catch (TSSystemException e) {
-			this.addErrorMessage(e.getMessage());
+		} catch (RuntimeException e) {
+			handlerException(e);
 		}
 	}
 
@@ -119,10 +117,8 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 				this.initFields();
 			}
 
-		} catch (TSApplicationException e) {
-			this.addInfoMessage(e.getMessage());
-		} catch (TSSystemException e) {
-			this.addErrorMessage(e.getMessage());
+		} catch (RuntimeException e) {
+			handlerException(e);
 		}
 
 	}
@@ -143,11 +139,8 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.addInfoMessage(OPERACAO_OK);
 
-		} catch (TSApplicationException e) {
-			this.addInfoMessage(e.getMessage());
-
-		}catch (TSSystemException e) {
-			this.addErrorMessage(e.getMessage());
+		} catch (RuntimeException e) {
+			handlerException(e);
 		}
 
 	}
