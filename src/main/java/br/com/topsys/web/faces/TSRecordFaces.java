@@ -1,5 +1,7 @@
 package br.com.topsys.web.faces;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import org.primefaces.event.SelectEvent;
@@ -22,6 +24,10 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	private transient TSRestAPI<T> restAPI;
 
 	private T model;
+
+	private T modelHistory;
+
+	private List<T> tableHistory;
 
 	protected abstract Class<T> getModelClass();
 
@@ -50,13 +56,17 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	}
 
-	protected void afterGet() {}
+	protected void afterGet() {
+	}
 
-	protected void beforeInsert() {}
+	protected void beforeInsert() {
+	}
 
-	protected void beforeUpdate() {}
+	protected void beforeUpdate() {
+	}
 
-	protected void beforePersist() {}
+	protected void beforePersist() {
+	}
 
 	public void get() {
 
@@ -67,6 +77,26 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	}
 
+	public void getHistory() {
+
+		this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get-history",
+				this.getModelHistory(), super.getToken()));
+
+		this.afterGet();
+
+	}
+
+	public void findHistory() {
+
+		try {
+
+			this.tableHistory = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find-history",
+					this.getModel(), super.getToken());
+
+		} catch (TSSystemException e) {
+			this.addErrorMessage(e.getMessage());
+		}
+	}
 
 	public void insert() {
 

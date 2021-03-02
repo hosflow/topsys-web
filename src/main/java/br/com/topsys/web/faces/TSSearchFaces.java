@@ -37,6 +37,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	private List<T> table;
 	private LazyDataModel<T> tablePagination;
+	
 
 	@PostConstruct
 	protected void init() {
