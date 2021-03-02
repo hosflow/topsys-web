@@ -146,6 +146,8 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 		} catch (TSApplicationException e) {
 			this.addInfoMessage(e.getMessage());
 
+		}catch (TSSystemException e) {
+			this.addErrorMessage(e.getMessage());
 		}
 
 	}
