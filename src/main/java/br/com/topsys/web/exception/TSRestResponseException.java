@@ -20,6 +20,7 @@ import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.model.TSResponseExceptionModel;
 import br.com.topsys.base.util.TSType;
+import br.com.topsys.base.util.TSUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -65,7 +66,10 @@ public class TSRestResponseException implements ResponseErrorHandler {
 			
 			log.error(ERROR_LOG, url, method, body);
 			
-			log.error("Trace: {}", model.getTrace());
+			if(!TSUtil.isEmpty(model.getTrace())) {
+				log.error("Trace: {}", model.getTrace());
+			}
+			
 			
 			throw new TSSystemException(model.getMensagem() != null ? model.getMensagem() : model.getMessage());
 		
