@@ -32,7 +32,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	protected abstract String getURL();
 
-	protected abstract void initFields();
+	public abstract void initFields();
 
 	private List<T> table;
 	private LazyDataModel<T> tablePagination;
