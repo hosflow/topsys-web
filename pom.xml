@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.topsys</groupId>
 	<artifactId>topsys-web</artifactId>
-	<version>2.0</version>
+	<version>2.0</version> 
 	<name>TopSys IT Solutions - WEB</name>
 
 	<description>TopSys IT Solutions - WEB</description>
@@ -80,7 +80,7 @@
 			<groupId>br.com.topsys</groupId>
 			<artifactId>topsys-base</artifactId>
 			<version>2.0</version>
-
+			<scope>compile</scope>
 		</dependency>
 
 
@@ -92,6 +92,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>3.2.0</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
