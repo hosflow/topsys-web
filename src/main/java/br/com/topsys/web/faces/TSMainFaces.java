@@ -176,7 +176,7 @@ public abstract class TSMainFaces implements Serializable {
 		return true;
 	}
 
-	protected void handlerException(RuntimeException e) {
+	protected void handlerException(Exception e) {
 		if (e instanceof TSApplicationException) {
 
 			TSApplicationException tsApplicationException = (TSApplicationException) e;

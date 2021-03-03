@@ -1,5 +1,6 @@
 package br.com.topsys.web.faces;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +11,6 @@ import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.model.TSLazyModel;
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.util.TSUtil;
@@ -55,7 +55,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 					super.getToken());
 
 			this.addResultMessage(table);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			handlerException(e);
 		}
 	}
@@ -79,7 +79,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.find();
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			handlerException(e);
 		}
 	}
@@ -107,7 +107,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 				}
 
 			} catch (Exception e) {
-				throw new TSSystemException(e);
+				handlerException(e);
 
 			}
 
@@ -122,9 +122,16 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 		@Override
 		public List<T> load(int offset, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
+			List<T> retorno = Collections.emptyList();
+			try {
+				retorno =  getRestAPI().postList(getModelClass(), getURL() + "/find-lazy",
+						new TSLazyModel<T>(getModel(), offset, pageSize), getToken());
 
-			return getRestAPI().postList(getModelClass(), getURL() + "/find-lazy",
-					new TSLazyModel<T>(getModel(), offset, pageSize), getToken());
+			} catch (Exception e) {
+				handlerException(e);
+			}
+			
+			return retorno;
 
 		}
 

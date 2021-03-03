@@ -68,20 +68,31 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	public void get() {
 
-		this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get", this.getModel(),
-				super.getToken()));
+		try {
 
-		this.afterGet();
+			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get", this.getModel(),
+					super.getToken()));
+
+			this.afterGet();
+
+		} catch (Exception e) {
+			handlerException(e);
+		}
 
 	}
 
 	public void getHistory() {
 
-		this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get-history",
-				this.getModelHistory(), super.getToken()));
+		try {
 
-		this.afterGet();
+			this.setModelHistory(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get-history",
+					this.getModelHistory(), super.getToken()));
 
+			this.afterGet();
+
+		} catch (Exception e) {
+			handlerException(e);
+		}
 	}
 
 	public void findHistory() {
@@ -91,7 +102,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 			this.tableHistory = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find-history",
 					this.getModel(), super.getToken());
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			handlerException(e);
 		}
 	}
@@ -117,7 +128,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 				this.initFields();
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			handlerException(e);
 		}
 
@@ -139,7 +150,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.addInfoMessage(OPERACAO_OK);
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			handlerException(e);
 		}
 
