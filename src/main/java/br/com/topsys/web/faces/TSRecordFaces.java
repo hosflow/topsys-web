@@ -23,8 +23,6 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	private T model;
 
-	private T modelHistory;
-
 	private List<T> tableHistory;
 
 	protected abstract Class<T> getModelClass();
@@ -81,12 +79,13 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	}
 
-	public void getHistory() {
+	public void getHistory(T modelHistory) {
 
 		try {
 
-			this.setModelHistory(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get-history",
-					this.getModelHistory(), super.getToken()));
+			T history =  this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get-history", modelHistory, super.getToken());
+
+			this.tableHistory.set(this.tableHistory.indexOf(history), history);
 
 			this.afterGet();
 
