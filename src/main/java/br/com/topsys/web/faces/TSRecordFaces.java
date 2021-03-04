@@ -55,6 +55,10 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	protected void afterGet() {
 	}
 
+	protected void afterGetHistory(T modelHistory) {
+
+	}
+
 	protected void beforeInsert() {
 	}
 
@@ -87,7 +91,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.tableHistory.set(this.tableHistory.indexOf(history), history);
 
-			this.afterGet();
+			this.afterGetHistory(this.tableHistory.get(this.tableHistory.indexOf(history)));
 
 		} catch (Exception e) {
 			handlerException(e);
