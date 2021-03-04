@@ -27,6 +27,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>15</maven.compiler.source>
 		<maven.compiler.target>15</maven.compiler.target>
+		<spring.boot.version>2.4.2</spring.boot.version>
+		<maven.source.version>3.2.0</maven.source.version>
+        <lombok.version>1.18.18</lombok.version>
+        <topsys.version>2.0</topsys.version>
+        <primefaces.version>8.0</primefaces.version>
+        <beanutils.version>1.9.4</beanutils.version>
+        <jsf.version>2.2.20</jsf.version>
 
 	</properties>
 
@@ -36,35 +43,35 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>2.4.2</version>
+			<version>${spring.boot.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>
-			<version>2.2.20</version>
+			<version>${jsf.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
-			<version>2.2.20</version>
+			<version>${jsf.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<version>1.9.4</version>
+			<version>${beanutils.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.16</version>
+			<version>${lombok.version}</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
@@ -72,14 +79,14 @@
 		<dependency>  
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>8.0</version>
+			<version>${primefaces.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>br.com.topsys</groupId>
 			<artifactId>topsys-base</artifactId>
-			<version>2.0</version>
+			<version>${topsys.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -92,7 +99,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.2.0</version>
+				<version>${maven.source.version}</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
