@@ -16,5 +16,5 @@ public class TSWebException extends TSMainFaces{
 		 handlerException(e);
 	 }
 	 
-	 
+	  
 }
