@@ -12,7 +12,6 @@ import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.util.TSRestAPI;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
 
 @SuppressWarnings("serial")
 @Data
@@ -32,7 +31,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	public abstract void initFields();
 
-	private @Setter String historyActiveTabIndex;
+	private String historyActiveTabIndex;
 
 	@PostConstruct
 	protected void init() {
@@ -40,7 +39,6 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 		initFields();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void onRowSelect(SelectEvent<T> event) {
 
 		if (!TSUtil.isEmpty(event.getObject())) {
@@ -71,8 +69,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get", this.getModel(),
-					super.getToken()));
+			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get", this.getModel(), super.getToken()));
 
 			this.afterGet();
 
@@ -86,10 +83,9 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			T history =  this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get-history", modelHistory, super.getToken());
+			T history = this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get-history", modelHistory, super.getToken());
 
 			this.tableHistory.set(this.tableHistory.indexOf(history), history);
-
 
 		} catch (Exception e) {
 			handlerException(e);
@@ -100,8 +96,9 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.tableHistory = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find-history",
-					this.getModel(), super.getToken());
+			this.tableHistory = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find-history", this.getModel(), super.getToken());
+
+			setHistoryActiveTabIndex("-1");
 
 		} catch (Exception e) {
 			handlerException(e);
@@ -120,8 +117,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.beforeInsert();
 
-			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/insert", this.getModel(),
-					super.getToken()));
+			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/insert", this.getModel(), super.getToken()));
 
 			this.addInfoMessage(OPERACAO_OK);
 
@@ -159,10 +155,6 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	public boolean isFlagUpdate() {
 		return !TSUtil.isEmpty(this.getModel().getId());
-	}
-
-	public String getHistoryActiveTabIndex() {
-		return "-1";
 	}
 
 }
