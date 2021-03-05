@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.util.TSRestAPI;
@@ -38,7 +39,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 			this.setModel(getModelClass().getDeclaredConstructor().newInstance());
 
 		} catch (Exception e) {
-			handlerException(e);
+			throw new TSSystemException(e);
 
 		}
 
@@ -77,43 +78,28 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	}
 
 	public void get() {
+		this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get", this.getModel(),
+				super.getToken()));
 
-		try {
-
-			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get", this.getModel(), super.getToken()));
-
-			this.afterGet();
-
-		} catch (Exception e) {
-			handlerException(e);
-		}
+		this.afterGet();
 
 	}
 
 	public void getHistory(T modelHistory) {
 
-		try {
+		T history = this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get-history", modelHistory,
+				super.getToken());
 
-			T history = this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get-history", modelHistory, super.getToken());
-
-			this.tableHistory.set(this.tableHistory.indexOf(history), history);
-
-		} catch (Exception e) {
-			handlerException(e);
-		}
+		this.tableHistory.set(this.tableHistory.indexOf(history), history);
 	}
 
 	public void findHistory() {
 
-		try {
+		this.tableHistory = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find-history",
+				this.getModel(), super.getToken());
 
-			this.tableHistory = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find-history", this.getModel(), super.getToken());
+		setHistoryActiveTabIndex("-1");
 
-			setHistoryActiveTabIndex("-1");
-
-		} catch (Exception e) {
-			handlerException(e);
-		}
 	}
 
 	public void insert() {
@@ -122,22 +108,17 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 			return;
 		}
 
-		try {
+		this.beforePersist();
 
-			this.beforePersist();
+		this.beforeInsert();
 
-			this.beforeInsert();
+		this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/insert", this.getModel(),
+				super.getToken()));
 
-			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/insert", this.getModel(), super.getToken()));
+		this.addInfoMessage(OPERACAO_OK);
 
-			this.addInfoMessage(OPERACAO_OK);
-
-			if (super.isClearFields()) {
-				this.initFields();
-			}
-
-		} catch (Exception e) {
-			handlerException(e);
+		if (super.isClearFields()) {
+			this.initFields();
 		}
 
 	}
@@ -148,19 +129,13 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 			return;
 		}
 
-		try {
+		this.beforePersist();
 
-			this.beforePersist();
+		this.beforeUpdate();
 
-			this.beforeUpdate();
+		this.getRestAPI().post(this.getModelClass(), this.getURL() + "/update", this.getModel(), super.getToken());
 
-			this.getRestAPI().post(this.getModelClass(), this.getURL() + "/update", this.getModel(), super.getToken());
-
-			this.addInfoMessage(OPERACAO_OK);
-
-		} catch (Exception e) {
-			handlerException(e);
-		}
+		this.addInfoMessage(OPERACAO_OK);
 
 	}
 

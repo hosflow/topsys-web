@@ -11,6 +11,7 @@ import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.model.TSLazyModel;
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.util.TSUtil;
@@ -44,12 +45,10 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 			this.tablePagination = null;
 
 		} catch (Exception e) {
-			handlerException(e);
-
+			throw new TSSystemException(e);
 		}
 
 	}
-
 
 	@PostConstruct
 	protected void init() {
@@ -63,15 +62,11 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 			return;
 		}
 
-		try {
+		this.table = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find", this.getModel(),
+				super.getToken());
 
-			this.table = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find", this.getModel(),
-					super.getToken());
+		this.addResultMessage(table);
 
-			this.addResultMessage(table);
-		} catch (Exception e) {
-			handlerException(e);
-		}
 	}
 
 	public void findPagination() {
@@ -85,17 +80,13 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	}
 
 	public void delete() {
-		try {
 
-			this.getRestAPI().post(this.getModelClass(), this.getURL() + "/delete", this.getModel(), super.getToken());
+		this.getRestAPI().post(this.getModelClass(), this.getURL() + "/delete", this.getModel(), super.getToken());
 
-			this.addInfoMessage(OPERACAO_OK);
+		this.addInfoMessage(OPERACAO_OK);
 
-			this.find();
+		this.find();
 
-		} catch (Exception e) {
-			handlerException(e);
-		}
 	}
 
 	private class LazyList extends LazyDataModel<T> {
@@ -121,7 +112,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 				}
 
 			} catch (Exception e) {
-				handlerException(e);
+				throw new TSSystemException(e);
 
 			}
 
@@ -136,16 +127,9 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 		@Override
 		public List<T> load(int offset, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
-			List<T> retorno = Collections.emptyList();
-			try {
-				retorno =  getRestAPI().postList(getModelClass(), getURL() + "/find-lazy",
-						new TSLazyModel<T>(getModel(), offset, pageSize), getToken());
-
-			} catch (Exception e) {
-				handlerException(e);
-			}
-
-			return retorno;
+			
+			return getRestAPI().postList(getModelClass(), getURL() + "/find-lazy",
+					new TSLazyModel<T>(getModel(), offset, pageSize), getToken());
 
 		}
 
