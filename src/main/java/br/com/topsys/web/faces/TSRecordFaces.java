@@ -12,6 +12,7 @@ import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.util.TSRestAPI;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 
 @SuppressWarnings("serial")
 @Data
@@ -30,6 +31,8 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	protected abstract String getURL();
 
 	public abstract void initFields();
+
+	private @Setter String historyActiveTabIndex;
 
 	@PostConstruct
 	protected void init() {
@@ -161,6 +164,10 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	public boolean isFlagUpdate() {
 		return !TSUtil.isEmpty(this.getModel().getId());
+	}
+
+	public String getHistoryActiveTabIndex() {
+		return "-1";
 	}
 
 }
