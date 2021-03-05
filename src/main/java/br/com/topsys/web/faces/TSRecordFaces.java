@@ -29,9 +29,20 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	protected abstract String getURL();
 
-	public abstract void initFields();
-
 	private String historyActiveTabIndex;
+
+	public void initFields() {
+
+		try {
+
+			this.setModel(getModelClass().getDeclaredConstructor().newInstance());
+
+		} catch (Exception e) {
+			handlerException(e);
+
+		}
+
+	}
 
 	@PostConstruct
 	protected void init() {

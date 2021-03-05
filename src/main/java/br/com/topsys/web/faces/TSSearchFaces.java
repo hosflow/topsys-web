@@ -32,10 +32,24 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	protected abstract String getURL();
 
-	public abstract void initFields();
-
 	private List<T> table;
 	private LazyDataModel<T> tablePagination;
+
+	public void initFields() {
+
+		try {
+
+			this.setModel(getModelClass().getDeclaredConstructor().newInstance());
+			this.setTable(Collections.emptyList());
+			this.tablePagination = null;
+
+		} catch (Exception e) {
+			handlerException(e);
+
+		}
+
+	}
+
 
 	@PostConstruct
 	protected void init() {
@@ -130,7 +144,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 			} catch (Exception e) {
 				handlerException(e);
 			}
-			
+
 			return retorno;
 
 		}
