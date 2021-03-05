@@ -37,13 +37,7 @@ public class TSRestResponseException implements ResponseErrorHandler {
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
 		
-		String body = toString(response.getBody());
-		
-		ObjectMapper mapper = getObjectMapper();
-
-		TSResponseExceptionModel model = mapper.readValue(body, TSResponseExceptionModel.class);
- 
-		log.error("ResponseBody: {}", model.getMensagem());
+		log.error("ResponseBody: {}", getObjectMapper(toString(response.getBody())).getMensagem());
 
 	}
 
@@ -51,10 +45,8 @@ public class TSRestResponseException implements ResponseErrorHandler {
 	public void handleError(URI url, HttpMethod method, ClientHttpResponse response) throws IOException {
 		
 		String body = toString(response.getBody());
-
-		ObjectMapper mapper = getObjectMapper();
-
-		TSResponseExceptionModel model = mapper.readValue(body, TSResponseExceptionModel.class);
+	
+		TSResponseExceptionModel model = getObjectMapper(body);
 		
 		String erroLog = "URL: {}, HttpMethod: {}, ResponseBody: {}";
 		
@@ -62,7 +54,10 @@ public class TSRestResponseException implements ResponseErrorHandler {
 			
 			throw new TSSystemException(model.getMensagem() != null ? model.getMensagem() : model.getMessage());
 
-		}else if(model.getCodigo() == HttpStatus.BAD_REQUEST.value() || model.getStatus() == HttpStatus.BAD_REQUEST.value()) {
+		}else if(model.getCodigo() == HttpStatus.BAD_REQUEST.value() 
+				|| model.getStatus() == HttpStatus.BAD_REQUEST.value()
+				|| model.getStatus() == HttpStatus.FORBIDDEN.value()
+				|| model.getStatus() == HttpStatus.NOT_FOUND.value()) {
 			
 			log.error(erroLog, url, method, body);
 			
@@ -70,14 +65,8 @@ public class TSRestResponseException implements ResponseErrorHandler {
 				log.error("Trace: {}", model.getTrace());
 			}
 			
-			
 			throw new TSApplicationException(model.getMensagem() != null ? model.getMensagem() : model.getMessage(), TSType.ERROR);
 		
-		}else if(model.getStatus() == HttpStatus.FORBIDDEN.value() || model.getStatus() == HttpStatus.NOT_FOUND.value()) {
-			
-			log.info(erroLog, url, method, body);
-			
-			throw new TSApplicationException(model.getMensagem() != null ? model.getMensagem() : model.getMessage(),TSType.ERROR);
 		}
 
 		throw new TSApplicationException(model.getMensagem());
@@ -90,11 +79,14 @@ public class TSRestResponseException implements ResponseErrorHandler {
 		}
 	}
 	
-	private ObjectMapper getObjectMapper() {
+	private TSResponseExceptionModel getObjectMapper(String body) throws IOException {
+	
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.setSerializationInclusion(Include.NON_NULL);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		return objectMapper;
+		
+		return objectMapper.readValue(body, TSResponseExceptionModel.class);
+		
 	}
 
 }
