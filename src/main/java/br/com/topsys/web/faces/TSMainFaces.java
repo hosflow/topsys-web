@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.context.PrimeRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSControleAcesso;
@@ -28,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressWarnings("serial")
 @Slf4j
 @Data
+@ControllerAdvice
 public abstract class TSMainFaces implements Serializable {
 
 	protected static final String TOKEN = "token";
@@ -176,6 +179,7 @@ public abstract class TSMainFaces implements Serializable {
 		return true;
 	}
 
+	@ExceptionHandler(Exception.class)
 	protected void handlerException(Exception e) {
 		if (e instanceof TSApplicationException) {
 
