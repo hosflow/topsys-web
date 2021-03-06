@@ -50,6 +50,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	}
 
+
 	@PostConstruct
 	protected void init() {
 		this.setClearFields(true);
@@ -62,11 +63,15 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 			return;
 		}
 
-		this.table = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find", this.getModel(),
-				super.getToken());
+		try {
 
-		this.addResultMessage(table);
+			this.table = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find", this.getModel(),
+					super.getToken());
 
+			this.addResultMessage(table);
+		} catch (Exception e) {
+			handlerException(e);
+		}
 	}
 
 	public void findPagination() {
@@ -80,13 +85,17 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	}
 
 	public void delete() {
+		try {
 
-		this.getRestAPI().post(this.getModelClass(), this.getURL() + "/delete", this.getModel(), super.getToken());
+			this.getRestAPI().post(this.getModelClass(), this.getURL() + "/delete", this.getModel(), super.getToken());
 
-		this.addInfoMessage(OPERACAO_OK);
+			this.addInfoMessage(OPERACAO_OK);
 
-		this.find();
+			this.find();
 
+		} catch (Exception e) {
+			handlerException(e);
+		}
 	}
 
 	private class LazyList extends LazyDataModel<T> {
@@ -128,9 +137,13 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 		@Override
 		public List<T> load(int offset, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
 			List<T> retorno = null;
+			try {
+				retorno =  getRestAPI().postList(getModelClass(), getURL() + "/find-lazy",
+						new TSLazyModel<T>(getModel(), offset, pageSize), getToken());
 
-			retorno = getRestAPI().postList(getModelClass(), getURL() + "/find-lazy",
-					new TSLazyModel<T>(getModel(), offset, pageSize), getToken());
+			} catch (Exception e) {
+				handlerException(e);
+			}
 
 			return retorno;
 

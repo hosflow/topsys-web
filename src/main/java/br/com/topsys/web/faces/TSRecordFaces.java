@@ -78,29 +78,42 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	public void get() {
 
-		this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get", this.getModel(),
-				super.getToken()));
+		try {
 
-		this.afterGet();
+			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get", this.getModel(), super.getToken()));
+
+			this.afterGet();
+
+		} catch (Exception e) {
+			handlerException(e);
+		}
 
 	}
 
 	public void getHistory(T modelHistory) {
 
-		T history = this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get-history", modelHistory,
-				super.getToken());
+		try {
 
-		this.tableHistory.set(this.tableHistory.indexOf(history), history);
+			T history = this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get-history", modelHistory, super.getToken());
 
+			this.tableHistory.set(this.tableHistory.indexOf(history), history);
+
+		} catch (Exception e) {
+			handlerException(e);
+		}
 	}
 
 	public void findHistory() {
 
-		this.tableHistory = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find-history",
-				this.getModel(), super.getToken());
+		try {
 
-		setHistoryActiveTabIndex("-1");
+			this.tableHistory = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find-history", this.getModel(), super.getToken());
 
+			setHistoryActiveTabIndex("-1");
+
+		} catch (Exception e) {
+			handlerException(e);
+		}
 	}
 
 	public void insert() {
@@ -109,17 +122,22 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 			return;
 		}
 
-		this.beforePersist();
+		try {
 
-		this.beforeInsert();
+			this.beforePersist();
 
-		this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/insert", this.getModel(),
-				super.getToken()));
+			this.beforeInsert();
 
-		this.addInfoMessage(OPERACAO_OK);
+			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/insert", this.getModel(), super.getToken()));
 
-		if (super.isClearFields()) {
-			this.initFields();
+			this.addInfoMessage(OPERACAO_OK);
+
+			if (super.isClearFields()) {
+				this.initFields();
+			}
+
+		} catch (Exception e) {
+			handlerException(e);
 		}
 
 	}
@@ -130,13 +148,19 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 			return;
 		}
 
-		this.beforePersist();
+		try {
 
-		this.beforeUpdate();
+			this.beforePersist();
 
-		this.getRestAPI().post(this.getModelClass(), this.getURL() + "/update", this.getModel(), super.getToken());
+			this.beforeUpdate();
 
-		this.addInfoMessage(OPERACAO_OK);
+			this.getRestAPI().post(this.getModelClass(), this.getURL() + "/update", this.getModel(), super.getToken());
+
+			this.addInfoMessage(OPERACAO_OK);
+
+		} catch (Exception e) {
+			handlerException(e);
+		}
 
 	}
 
