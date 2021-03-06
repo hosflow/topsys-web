@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.context.PrimeRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSControleAcesso;
@@ -172,7 +173,8 @@ public abstract class TSMainFaces implements Serializable {
 	protected boolean isValidFields() {
 		return true;
 	}
-
+    
+	@ExceptionHandler(Exception.class)
 	protected void handlerException(Exception e) {
 		if (e instanceof TSApplicationException) {
 
