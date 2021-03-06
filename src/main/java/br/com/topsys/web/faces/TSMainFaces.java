@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.context.PrimeRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSControleAcesso;
@@ -55,10 +56,7 @@ public abstract class TSMainFaces implements Serializable {
 				list.add(new SelectItem(BeanUtils.getProperty(o, nomeValue), BeanUtils.getProperty(o, nomeLabel)));
 
 			} catch (Exception e) {
-				log.error(e.getMessage());
-				e.printStackTrace();
-
-				this.addErrorMessage(e.getMessage());
+				this.handlerException(e);
 			}
 		}
 		return list;
@@ -175,14 +173,15 @@ public abstract class TSMainFaces implements Serializable {
 	protected boolean isValidFields() {
 		return true;
 	}
-
+    
+	@ExceptionHandler(Exception.class)
 	protected void handlerException(Exception e) {
 		if (e instanceof TSApplicationException) {
 
 			TSApplicationException tsApplicationException = (TSApplicationException) e;
 
 			if (TSType.ERROR.equals(tsApplicationException.getTSType())) {
-                log.info(e.getMessage());
+				log.info(e.getMessage());
 				this.addErrorMessage(e.getMessage());
 
 			} else {

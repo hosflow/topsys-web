@@ -136,7 +136,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 		@Override
 		public List<T> load(int offset, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
-			List<T> retorno = Collections.emptyList();
+			List<T> retorno = null;
 			try {
 				retorno =  getRestAPI().postList(getModelClass(), getURL() + "/find-lazy",
 						new TSLazyModel<T>(getModel(), offset, pageSize), getToken());
