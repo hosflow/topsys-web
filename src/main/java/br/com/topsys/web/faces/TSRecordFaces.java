@@ -164,6 +164,14 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	}
 
+	public void duplicate() {
+
+		if (!TSUtil.isEmpty(getModel())) {
+			getModel().setId(null);
+		}
+
+	}
+
 	public boolean isFlagUpdate() {
 		return !TSUtil.isEmpty(this.getModel().getId());
 	}
