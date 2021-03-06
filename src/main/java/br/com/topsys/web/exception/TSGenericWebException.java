@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-public class TSGenericWebException extends TSMessageFaces{
+public class TSGenericWebException {
 
 	protected void handlerException(Exception e) {
 		
@@ -18,17 +18,17 @@ public class TSGenericWebException extends TSMessageFaces{
 
 			if (TSType.ERROR.equals(tsApplicationException.getTSType())) {
                 log.info(e.getMessage());
-				this.addErrorMessage(e.getMessage());
+				new TSMessageFaces().addErrorMessage(e.getMessage());
 
 			} else {
 
-				this.addInfoMessage(e.getMessage());
+				new TSMessageFaces().addInfoMessage(e.getMessage());
 
 			}
 
 		} else {
 			e.printStackTrace();
-			this.addErrorMessage(e.getMessage());
+			new TSMessageFaces().addErrorMessage(e.getMessage());
 
 		}
 
