@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -14,17 +16,19 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.context.PrimeRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSControleAcesso;
+import br.com.topsys.base.util.TSType;
+import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.session.TSControleAcessoSession;
 import br.com.topsys.web.util.TSCookie;
-import br.com.topsys.web.util.TSMessageFaces;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @SuppressWarnings("serial")
 @Slf4j
 @Data
-public abstract class TSMainFaces extends TSMessageFaces implements Serializable {
+public abstract class TSMainFaces implements Serializable {
 
 	protected static final String TOKEN = "token";
 	protected static final String OPERACAO_OK = "Operação realizada com sucesso!";
@@ -51,10 +55,7 @@ public abstract class TSMainFaces extends TSMessageFaces implements Serializable
 				list.add(new SelectItem(BeanUtils.getProperty(o, nomeValue), BeanUtils.getProperty(o, nomeLabel)));
 
 			} catch (Exception e) {
-				log.error(e.getMessage());
-				e.printStackTrace();
-
-				this.addErrorMessage(e.getMessage());
+				this.handlerException(e);
 			}
 		}
 		return list;
@@ -64,7 +65,58 @@ public abstract class TSMainFaces extends TSMessageFaces implements Serializable
 		return (ServletContext) getFacesContext().getExternalContext().getContext();
 	}
 
-	
+	protected FacesContext getFacesContext() {
+		return FacesContext.getCurrentInstance();
+	}
+
+	protected void addWarnMessage(String msg) {
+		addInfoMessage(null, msg);
+	}
+
+	protected void addWarnMessage(String clientId, String msg) {
+		getFacesContext().addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_WARN, null, msg));
+	}
+
+	protected void addInfoMessage(String msg) {
+		addInfoMessage(null, msg);
+	}
+
+	protected void addInfoMessage(String clientId, String msg) {
+		getFacesContext().addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_INFO, null, msg));
+	}
+
+	protected void addErrorMessage(String msg) {
+		addErrorMessage(null, msg);
+	}
+
+	protected void addErrorMessage(String clientId, String msg) {
+		getFacesContext().addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, msg));
+	}
+
+	protected void addResultMessage(List<?> lista) {
+
+		Integer quantidade = 0;
+
+		if (!TSUtil.isEmpty(lista)) {
+			quantidade = lista.size();
+		}
+
+		this.addResultMessage(quantidade);
+
+	}
+
+	protected void addResultMessage(Integer quantidade) {
+
+		String mensagem = "A pesquisa não retornou nenhuma ocorrência";
+
+		if (!TSUtil.isEmpty(quantidade) && quantidade > 0) {
+
+			mensagem = "A pesquisa retornou " + quantidade + " ocorrência(s)";
+		}
+
+		addInfoMessage(mensagem);
+
+	}
 
 	protected String getToken() {
 		return TSCookie.getCookie(httpServletRequest, TOKEN) != null
@@ -121,7 +173,27 @@ public abstract class TSMainFaces extends TSMessageFaces implements Serializable
 		return true;
 	}
 
-	
-	
+	protected void handlerException(Exception e) {
+		if (e instanceof TSApplicationException) {
+
+			TSApplicationException tsApplicationException = (TSApplicationException) e;
+
+			if (TSType.ERROR.equals(tsApplicationException.getTSType())) {
+				log.info(e.getMessage());
+				this.addErrorMessage(e.getMessage());
+
+			} else {
+
+				this.addInfoMessage(e.getMessage());
+
+			}
+
+		} else {
+			e.printStackTrace();
+			this.addErrorMessage(e.getMessage());
+
+		}
+
+	}
 
 }
