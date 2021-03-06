@@ -1,6 +1,6 @@
 package br.com.topsys.web.exception;
 
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.topsys.base.exception.TSApplicationException;
@@ -10,11 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-@ControllerAdvice
+@Component
 public class TSGenericWebException extends TSMessageFaces{
 
 	@ExceptionHandler(Exception.class)
-	protected void handlerException(Exception e) {
+	public void handlerException(Exception e) {
 		
 		if (e instanceof TSApplicationException) {
 
