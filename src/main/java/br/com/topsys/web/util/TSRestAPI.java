@@ -38,6 +38,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 	@Autowired
 	private HttpSession httpSession;
+		
 
 	@Value("${topsys.base.url}")
 	private String baseURL;
@@ -315,13 +316,13 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 		if (object instanceof TSLazyModel) {
 			TSLazyModel<T> model = (TSLazyModel<T>) object;
-			model.getModel().setControleAcesso(new TSControleAcessoSession(this.httpSession).getTSControleAcesso());
+			model.getModel().setControleAcesso(new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso());
 			return model;
 		}
 
 		if (object instanceof TSMainModel) {
 			TSMainModel model = (TSMainModel) object;
-			model.setControleAcesso(new TSControleAcessoSession(this.httpSession).getTSControleAcesso());
+			model.setControleAcesso(new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso());
 			return model;
 		}
 

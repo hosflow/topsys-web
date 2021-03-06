@@ -4,10 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.application.FacesMessage;
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSControleAcesso;
 import br.com.topsys.base.util.TSType;
-import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.session.TSControleAcessoSession;
 import br.com.topsys.web.util.TSCookie;
 import lombok.Data;
@@ -62,28 +60,24 @@ public abstract class TSMainFaces implements Serializable {
 		return list;
 	}
 
-	protected ServletContext getServletContext() {
-		return (ServletContext) getFacesContext().getExternalContext().getContext();
-	}
-
-	protected FacesContext getFacesContext() {
-		return FacesContext.getCurrentInstance();
+	private TSMessageFaces getMessageFaces() {
+		return new TSMessageFaces(FacesContext.getCurrentInstance());
 	}
 
 	protected void addWarnMessage(String msg) {
-		addInfoMessage(null, msg);
+		this.addInfoMessage(null, msg);
 	}
 
 	protected void addWarnMessage(String clientId, String msg) {
-		getFacesContext().addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_WARN, null, msg));
+		this.getMessageFaces().addWarn(clientId, msg);
 	}
 
 	protected void addInfoMessage(String msg) {
-		addInfoMessage(null, msg);
+		this.addInfoMessage(null, msg);
 	}
 
 	protected void addInfoMessage(String clientId, String msg) {
-		getFacesContext().addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_INFO, null, msg));
+		this.getMessageFaces().addInfo(clientId, msg);
 	}
 
 	protected void addErrorMessage(String msg) {
@@ -91,56 +85,41 @@ public abstract class TSMainFaces implements Serializable {
 	}
 
 	protected void addErrorMessage(String clientId, String msg) {
-		getFacesContext().addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, msg));
+		this.getMessageFaces().addError(clientId, msg);
 	}
 
 	protected void addResultMessage(List<?> lista) {
-
-		Integer quantidade = 0;
-
-		if (!TSUtil.isEmpty(lista)) {
-			quantidade = lista.size();
-		}
-
-		this.addResultMessage(quantidade);
-
+		this.getMessageFaces().addResult(lista);
 	}
 
 	protected void addResultMessage(Integer quantidade) {
+		this.getMessageFaces().addResult(quantidade);
 
-		String mensagem = "A pesquisa não retornou nenhuma ocorrência";
+	}
 
-		if (!TSUtil.isEmpty(quantidade) && quantidade > 0) {
-
-			mensagem = "A pesquisa retornou " + quantidade + " ocorrência(s)";
-		}
-
-		addInfoMessage(mensagem);
-
+	private TSCookie getCookie() {
+		return new TSCookie(this.getHttpServletRequest(), this.getHttpServletResponse());
 	}
 
 	protected String getToken() {
-		return TSCookie.getCookie(httpServletRequest, TOKEN) != null
-				? TSCookie.getCookie(httpServletRequest, TOKEN).getValue()
-				: null;
+
+		return this.getCookie().getValue(TOKEN);
 	}
 
 	protected void setToken(String token, Integer duracao) {
-		TSCookie.addCookie(httpServletResponse, TOKEN, token, duracao);
+		this.getCookie().add(TOKEN, token, duracao);
 	}
 
 	protected void removeToken() {
-		TSCookie.addCookie(httpServletResponse, TOKEN, "", 0);
+		this.getCookie().add(TOKEN, "", 0);
 	}
 
 	protected void addCookie(String nome, String valor) {
-		TSCookie.addCookie(httpServletResponse, nome, valor, -1);
+		this.getCookie().add(nome, valor, -1);
 	}
 
 	protected String getCookie(String nome) {
-		return TSCookie.getCookie(httpServletRequest, nome) != null
-				? TSCookie.getCookie(httpServletRequest, nome).getValue()
-				: null;
+		return this.getCookie().getValue(nome);
 	}
 
 	protected TSControleAcesso getTSControleAcesso() {
@@ -173,7 +152,7 @@ public abstract class TSMainFaces implements Serializable {
 	protected boolean isValidFields() {
 		return true;
 	}
-    
+
 	@ExceptionHandler(Exception.class)
 	protected void handlerException(Exception e) {
 		if (e instanceof TSApplicationException) {

@@ -4,15 +4,21 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 public final class TSCookie {
-
-	private TSCookie(){
-		
+	
+	
+	private HttpServletRequest httpServletRequest;
+	private HttpServletResponse httpServletResponse;
+	
+	public TSCookie(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		this.httpServletRequest = httpServletRequest;
+		this.httpServletResponse = httpServletResponse;
 	}
+	
+	public Cookie getCookie(String nome) {
 
-	public static Cookie getCookie(HttpServletRequest httpServletRequest, String nome) {
-
-		Cookie[] cookies = httpServletRequest.getCookies();
+		Cookie[] cookies = this.httpServletRequest.getCookies();
 
 		Cookie donaBenta = null;
 
@@ -29,8 +35,14 @@ public final class TSCookie {
 		return donaBenta;
 
 	}
+	
+	public String getValue(String nome) {
+        Cookie cookie = this.getCookie(nome);
+		return cookie != null ? cookie.getValue() : null;
 
-	public static void addCookie(HttpServletResponse httpServletResponse, String nome, String valor, Integer duracao) {
+	}
+
+	public void add(String nome, String valor, Integer duracao) {
 
 		Cookie donaBenta = new Cookie(nome, valor);
 
@@ -38,11 +50,11 @@ public final class TSCookie {
 		
 		donaBenta.setHttpOnly(true);
 
-		httpServletResponse.addCookie(donaBenta);
+		this.httpServletResponse.addCookie(donaBenta);
 
 	}
 
-	public static void removeCookie(HttpServletResponse httpServletResponse, String nome) {
-		addCookie(httpServletResponse, nome, "", 0);
+	public void remove(String nome) {
+		this.add(nome, "", 0);
 	}
 }

@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
-	protected static final String OPERACAO_DUPLICATE_OK = "Clone realizado com sucesso! Após gravar as informação serão inseridas.";
+	private static final String OPERACAO_DUPLICATE_OK = "Clone realizado com sucesso! Após gravar as informação serão inseridas.";
 
 	@Autowired
 	private transient TSRestAPI<T> restAPI;
