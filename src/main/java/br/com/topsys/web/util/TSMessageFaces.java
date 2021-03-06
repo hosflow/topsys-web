@@ -6,9 +6,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import br.com.topsys.base.util.TSUtil;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class TSMessageFaces {
 	
 	public FacesContext getFacesContext() {
