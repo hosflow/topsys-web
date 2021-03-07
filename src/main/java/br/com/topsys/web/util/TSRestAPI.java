@@ -89,7 +89,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
@@ -123,7 +123,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
@@ -162,7 +162,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
@@ -195,7 +195,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
@@ -242,7 +242,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 				retorno = objectMapper.convertValue(retorno, listType);
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
@@ -282,7 +282,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 				retorno = objectMapper.convertValue(retorno, listType);
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
@@ -339,7 +339,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 		return objectMapper;
 	}
 
-	private void handlerException(RuntimeException e) {
+	private void handlerException(Exception e) {
 		String erroInterno = "Ocorreu um erro interno, entre em contato com a TI!";
 
 		if (e instanceof TSApplicationException) {

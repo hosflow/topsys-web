@@ -20,19 +20,19 @@ public final class TSCookie {
 
 		Cookie[] cookies = this.httpServletRequest.getCookies();
 
-		Cookie donaBenta = null;
+		Cookie cookie = null;
 
 		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals(nome)) {
-					donaBenta = cookie;
+			for (Cookie c : cookies) {
+				if (c.getName().equals(nome)) {
+					cookie = c;
 					break;
 				}
 
 			}
 		}
 
-		return donaBenta;
+		return cookie;
 
 	}
 	
