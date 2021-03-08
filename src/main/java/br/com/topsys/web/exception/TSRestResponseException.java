@@ -37,7 +37,7 @@ public class TSRestResponseException implements ResponseErrorHandler {
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
 		
-		log.error("ResponseBody: {}", getObjectMapper(toString(response.getBody())).getMensagem());
+		log.error("ResponseBody: {}", getObjectMapper(toString(response.getBody())).getMessage());
 
 	}
 
@@ -50,12 +50,11 @@ public class TSRestResponseException implements ResponseErrorHandler {
 		
 		String erroLog = "URL: {}, HttpMethod: {}, ResponseBody: {}";
 		
-		if (model.getCodigo() == HttpStatus.INTERNAL_SERVER_ERROR.value() || model.getStatus() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
+		if (model.getStatus() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
 			
-			throw new TSSystemException(model.getMensagem() != null ? model.getMensagem() : model.getMessage());
+			throw new TSSystemException(model.getMessage());
 
-		}else if(model.getCodigo() == HttpStatus.BAD_REQUEST.value() 
-				|| model.getStatus() == HttpStatus.BAD_REQUEST.value()
+		}else if(model.getStatus() == HttpStatus.BAD_REQUEST.value()
 				|| model.getStatus() == HttpStatus.FORBIDDEN.value()
 				|| model.getStatus() == HttpStatus.NOT_FOUND.value()) {
 			
@@ -65,11 +64,11 @@ public class TSRestResponseException implements ResponseErrorHandler {
 				log.error("Trace: {}", model.getTrace());
 			}
 			
-			throw new TSApplicationException(model.getMensagem() != null ? model.getMensagem() : model.getMessage(), TSType.ERROR);
+			throw new TSApplicationException(model.getMessage(),TSType.ERROR);
 		
 		}
 
-		throw new TSApplicationException(model.getMensagem());
+		throw new TSApplicationException(model.getMessage());
 
 	}
 

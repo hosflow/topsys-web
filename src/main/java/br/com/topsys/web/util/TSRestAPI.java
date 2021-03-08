@@ -38,6 +38,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 	@Autowired
 	private HttpSession httpSession;
+		
 
 	@Value("${topsys.base.url}")
 	private String baseURL;
@@ -88,7 +89,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
@@ -122,7 +123,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
@@ -161,7 +162,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
@@ -194,7 +195,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 				retorno = objectMapper.convertValue(retorno, classe);
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
@@ -241,7 +242,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 				retorno = objectMapper.convertValue(retorno, listType);
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
@@ -281,7 +282,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 				retorno = objectMapper.convertValue(retorno, listType);
 			}
 
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
@@ -315,13 +316,13 @@ public final class TSRestAPI<T extends TSMainModel> {
 
 		if (object instanceof TSLazyModel) {
 			TSLazyModel<T> model = (TSLazyModel<T>) object;
-			model.getModel().setControleAcesso(new TSControleAcessoSession(this.httpSession).getTSControleAcesso());
+			model.getModel().setControleAcesso(new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso());
 			return model;
 		}
 
 		if (object instanceof TSMainModel) {
 			TSMainModel model = (TSMainModel) object;
-			model.setControleAcesso(new TSControleAcessoSession(this.httpSession).getTSControleAcesso());
+			model.setControleAcesso(new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso());
 			return model;
 		}
 
@@ -338,7 +339,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 		return objectMapper;
 	}
 
-	private void handlerException(RuntimeException e) {
+	private void handlerException(Exception e) {
 		String erroInterno = "Ocorreu um erro interno, entre em contato com a TI!";
 
 		if (e instanceof TSApplicationException) {

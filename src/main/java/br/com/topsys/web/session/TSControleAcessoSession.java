@@ -5,16 +5,14 @@ import javax.servlet.http.HttpSession;
 import br.com.topsys.base.model.TSControleAcesso;
 
 
-public class TSControleAcessoSession {
+public final class TSControleAcessoSession {
 
 
 	private HttpSession httpSession;
-
+	
 	public TSControleAcessoSession(HttpSession httpSession) {
 		this.httpSession = httpSession;
 	}
-	
-	
 
 	public TSControleAcesso getTSControleAcesso() {
 		TSControleAcesso controleAcesso = (TSControleAcesso) httpSession.getAttribute(TSTypeSession.OBJECT_SESSION_MODEL.name());
