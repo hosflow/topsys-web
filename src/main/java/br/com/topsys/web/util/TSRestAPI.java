@@ -333,7 +333,7 @@ public final class TSRestAPI<T extends TSMainModel> {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		objectMapper.registerModule(new JavaTimeModule());	
-		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		objectMapper.setSerializationInclusion(Include.NON_NULL);
 		
 		return objectMapper;
