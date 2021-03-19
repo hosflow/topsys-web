@@ -8,6 +8,7 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.topsys.base.model.TSMainModel;
+import br.com.topsys.base.model.TSRestModel;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.util.TSRestAPI;
 import lombok.Data;
@@ -21,7 +22,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	protected static final String OPERACAO_DUPLICATE_OK = "Clone realizado com sucesso! Após gravar, as informação serão inseridas.";
 
 	@Autowired
-	private transient TSRestAPI<T> restAPI;
+	private transient TSRestAPI restAPI;
 
 	private T model;
 
@@ -78,11 +79,17 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	protected void beforePersist() {
 	}
 
+	@SuppressWarnings("unchecked")
 	public void get() {
 
 		try {
 
-			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get", this.getModel(), super.getToken()));
+			this.setModel((T) this.getRestAPI().post(TSRestModel.builder()
+											.modelClass(this.getModelClass())
+											.model(this.getModel())
+											.url(this.getURL() + "/get")
+											.token(super.getToken())
+											.build()));
 
 			this.afterGet();
 
@@ -92,11 +99,17 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void getHistory(T modelHistory) {
 
 		try {
 
-			T history = this.getRestAPI().post(this.getModelClass(), this.getURL() + "/get-history", modelHistory, super.getToken());
+			T history = (T) this.getRestAPI().post(TSRestModel.builder()
+											.modelClass(this.getModelClass())
+											.model(modelHistory)
+											.url(this.getURL() + "/get-history")
+											.token(super.getToken())
+											.build());
 
 			this.tableHistory.set(this.tableHistory.indexOf(history), history);
 
@@ -105,11 +118,17 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void findHistory() {
 
 		try {
 
-			this.tableHistory = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find-history", this.getModel(), super.getToken());
+			this.tableHistory = this.getRestAPI().postList(TSRestModel.builder()
+												.modelClass(this.getModelClass())
+												.model(this.getModel())
+												.url(this.getURL() + "/find-history")
+												.token(super.getToken())
+												.build());
 
 			setHistoryActiveTabIndex("-1");
 
@@ -118,6 +137,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void insert() {
 
 		if (!isValidFields()) {
@@ -130,7 +150,12 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.beforeInsert();
 
-			this.setModel(this.getRestAPI().post(this.getModelClass(), this.getURL() + "/insert", this.getModel(), super.getToken()));
+			this.setModel((T) this.getRestAPI().post(TSRestModel.builder()
+												.modelClass(this.getModelClass())
+												.model(this.getModel())
+												.url(this.getURL() + "/insert")
+												.token(super.getToken())
+												.build()));
 
 			this.addInfoMessage(OPERACAO_OK);
 
@@ -156,7 +181,14 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.beforeUpdate();
 
-			this.getRestAPI().post(this.getModelClass(), this.getURL() + "/update", this.getModel(), super.getToken());
+			this.getRestAPI().post(TSRestModel.builder()
+							.modelClass(this.getModelClass())
+							.model(this.getModel())
+							.url(this.getURL() + "/update")
+							.token(super.getToken())
+							.build());
+					
+					
 
 			this.addInfoMessage(OPERACAO_OK);
 
@@ -178,5 +210,6 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	public boolean isFlagUpdate() {
 		return !TSUtil.isEmpty(this.getModel().getId());
 	}
-
+	
+	
 }

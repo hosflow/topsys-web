@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.topsys.base.model.TSLazyModel;
 import br.com.topsys.base.model.TSMainModel;
+import br.com.topsys.base.model.TSRestModel;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.util.TSRestAPI;
 import lombok.Data;
@@ -24,7 +25,7 @@ import lombok.EqualsAndHashCode;
 public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	@Autowired
-	private transient TSRestAPI<T> restAPI;
+	private transient TSRestAPI restAPI;
 
 	private T model;
 
@@ -57,6 +58,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 		initFields();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void find() {
 
 		if (!isValidFields()) {
@@ -65,8 +67,13 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.table = this.getRestAPI().postList(this.getModelClass(), this.getURL() + "/find", this.getModel(),
-					super.getToken());
+			this.table = this.getRestAPI().postList(TSRestModel.builder()
+																.modelClass(this.getModelClass())
+																.model(this.getModel())
+																.url(this.getURL() + "/find")
+																.token(this.getToken())
+																.build());			
+					
 
 			this.addResultMessage(table);
 		} catch (Exception e) {
@@ -87,8 +94,13 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	public void delete() {
 		try {
 
-			this.getRestAPI().post(this.getModelClass(), this.getURL() + "/delete", this.getModel(), super.getToken());
-
+			this.getRestAPI().post(TSRestModel.builder()
+					.modelClass(this.getModelClass())
+					.url(this.getURL() + "/delete")
+					.model(this.getModel())
+					.token(this.getToken())
+					.build());	
+				
 			this.addInfoMessage(OPERACAO_OK);
 
 			this.find();
@@ -101,8 +113,13 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	private class LazyList extends LazyDataModel<T> {
 
 		public LazyList() {
-			setRowCount(
-					(Integer) getRestAPI().postObject(Integer.class, getURL() + "/rowcount", getModel(), getToken()));
+			setRowCount((Integer) getRestAPI().post(TSRestModel.builder()
+											.modelClass(Integer.class)
+											.model(getModel())
+											.url(getURL() + "/rowcount")
+											.token(getToken())
+											.build()));
+							
 			addResultMessage(getRowCount());
 		}
 
@@ -134,12 +151,18 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 			return String.valueOf(model.getId());
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public List<T> load(int offset, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
 			List<T> retorno = null;
 			try {
-				retorno =  getRestAPI().postList(getModelClass(), getURL() + "/find-lazy",
-						new TSLazyModel<T>(getModel(), offset, pageSize), getToken());
+				retorno =  getRestAPI().postList(TSRestModel.builder()
+															.modelClass(getModelClass())
+															.model(new TSLazyModel<T>(getModel(), offset, pageSize))
+															.url(getURL() + "/find-lazy")
+															.token(getToken())
+															.build());
+					
 
 			} catch (Exception e) {
 				handlerException(e);

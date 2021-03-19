@@ -58,6 +58,9 @@ public abstract class TSMainFaces implements Serializable {
 		}
 		return list;
 	}
+	
+	
+
 
 	private TSMessageFaces getMessageFaces() {
 		return new TSMessageFaces(FacesContext.getCurrentInstance());
