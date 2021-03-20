@@ -53,7 +53,6 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 		initFields();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void find() {
 
 		if (!isValidFields()) {
@@ -62,8 +61,8 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.table = super.getRestAPI().postList(TSRestModel.builder()
-																.modelClass(this.getModelClass())
+			this.table = super.getRestAPI().postList(this.getModelClass(),
+													TSRestModel.builder()
 																.model(this.getModel())
 																.url(this.getURL() + "/find")
 																.token(this.getToken())
@@ -71,6 +70,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 					
 
 			this.addResultMessage(table);
+			
 		} catch (Exception e) {
 			handlerException(e);
 		}
@@ -89,12 +89,12 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	public void delete() {
 		try {
 
-			super.getRestAPI().post(TSRestModel.builder()
-					.modelClass(this.getModelClass())
-					.url(this.getURL() + "/delete")
-					.model(this.getModel())
-					.token(this.getToken())
-					.build());	
+			super.getRestAPI().post(this.getModelClass(),
+									TSRestModel.builder()
+									.url(this.getURL() + "/delete")
+									.model(this.getModel())
+									.token(this.getToken())
+									.build());	
 				
 			this.addInfoMessage(OPERACAO_OK);
 
@@ -108,8 +108,8 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	private class LazyList extends LazyDataModel<T> {
 
 		public LazyList() {
-			setRowCount((Integer) getRestAPI().post(TSRestModel.builder()
-											.modelClass(Integer.class)
+			setRowCount(getRestAPI().post(Integer.class,
+											TSRestModel.builder()
 											.model(getModel())
 											.url(getURL() + "/rowcount")
 											.token(getToken())
@@ -146,13 +146,12 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 			return String.valueOf(model.getId());
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public List<T> load(int offset, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
 			List<T> retorno = null;
 			try {
-				retorno =  getRestAPI().postList(TSRestModel.builder()
-															.modelClass(getModelClass())
+				retorno =  getRestAPI().postList(getModelClass(), 
+												TSRestModel.builder()
 															.model(new TSLazyModel<T>(getModel(), offset, pageSize))
 															.url(getURL() + "/find-lazy")
 															.token(getToken())

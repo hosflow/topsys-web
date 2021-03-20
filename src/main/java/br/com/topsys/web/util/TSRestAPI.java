@@ -1,6 +1,5 @@
 package br.com.topsys.web.util;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,24 +46,17 @@ public final class TSRestAPI {
 
 	private RestTemplate restTemplate;
 
-	public TSRestAPI(String baseURL) {
-		this.baseURL = baseURL;
-		this.restTemplate = new RestTemplate();
-		this.restTemplate.setErrorHandler(new TSRestResponseException());
-	}
-
 	public TSRestAPI() {
 		this.restTemplate = new RestTemplate();
 		this.restTemplate.setErrorHandler(new TSRestResponseException());
 	}
 
-	
 
-	public Object post(TSRestModel restModel) {
+	public <T> T post(Class<T> classe, TSRestModel restModel) {
 
 		Object model = accessControl(restModel.getModel());
-
-		Object retorno = null;
+		
+		T retorno = null;
 
 		HttpEntity<Object> entity = null;
 
@@ -75,16 +67,16 @@ public final class TSRestAPI {
 			entity = getHttpEntity(model, restModel.getToken());
 
 			if (TSUtil.isEmpty(restModel.getBaseUrl())) {
-				retorno = restTemplate.postForObject(this.getBaseURL() + restModel.getUrl(), entity, restModel.getModelClass());
+				retorno = restTemplate.postForObject(this.getBaseURL() + restModel.getUrl(), entity, classe);
 			} else {
-				retorno = restTemplate.postForObject(restModel.getBaseUrl() + restModel.getUrl(), entity, restModel.getModelClass());
+				retorno = restTemplate.postForObject(restModel.getBaseUrl() + restModel.getUrl(), entity, classe);
 			}
 
 			if (!TSUtil.isEmpty(retorno)) {
 
 				objectMapper = getObjectMapper();
 
-				retorno = objectMapper.convertValue(retorno, restModel.getModelClass());
+				retorno = objectMapper.convertValue(retorno, classe);
 			}
 
 		} catch (Exception e) {
@@ -96,24 +88,24 @@ public final class TSRestAPI {
 	}
 
 	
-	public Object get(TSRestModel restModel) {
+	public <T> T get(Class<T> classe,TSRestModel restModel) {
 
-		Object retorno = null;
+		T retorno = null;
 
 		ObjectMapper objectMapper = null;
 
 		try {
 			if (TSUtil.isEmpty(restModel.getBaseUrl())) {
-				retorno = restTemplate.getForObject(this.getBaseURL() +  restModel.getUrl(),  restModel.getModelClass());
+				retorno = restTemplate.getForObject(this.getBaseURL() +  restModel.getUrl(), classe);
 			} else {
-				retorno = restTemplate.getForObject(restModel.getBaseUrl() +  restModel.getUrl(),  restModel.getModelClass());
+				retorno = restTemplate.getForObject(restModel.getBaseUrl() +  restModel.getUrl(), classe);
 			}
 
 			if (!TSUtil.isEmpty(retorno)) {
 
 				objectMapper = getObjectMapper();
 
-				retorno = objectMapper.convertValue(retorno,  restModel.getModelClass());
+				retorno = objectMapper.convertValue(retorno, classe);
 			}
 
 		} catch (Exception e) {
@@ -127,12 +119,12 @@ public final class TSRestAPI {
 
 	
 
-	@SuppressWarnings("rawtypes")
-	public List postList(TSRestModel restModel) {
+	@SuppressWarnings("unchecked")
+	public <T> List<T> postList(Class<T> classe,TSRestModel restModel) {
 
 		Object model = accessControl(restModel.getModel());
 
-		List retorno = null;
+		List<T> retorno = null;
 
 		HttpEntity<Object> entity = null;
 
@@ -155,7 +147,7 @@ public final class TSRestAPI {
 
 				objectMapper = getObjectMapper();
 
-				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, restModel.getModelClass());
+				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
 
 				retorno = objectMapper.convertValue(retorno, listType);
 			}
@@ -171,10 +163,10 @@ public final class TSRestAPI {
 	
 
 	
-	@SuppressWarnings("rawtypes")
-	public List getList(TSRestModel restModel) {
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getList(Class<T> classe, TSRestModel restModel) {
 
-		List retorno = null;
+		List<T> retorno = null;
 
 		ObjectMapper objectMapper = null;
 
@@ -193,7 +185,7 @@ public final class TSRestAPI {
 
 				objectMapper = getObjectMapper();
 
-				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, restModel.getModelClass());
+				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
 
 				retorno = objectMapper.convertValue(retorno, listType);
 			}
