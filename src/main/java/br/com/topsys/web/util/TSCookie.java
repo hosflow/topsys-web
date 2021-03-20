@@ -44,13 +44,13 @@ public final class TSCookie {
 
 	public void add(String nome, String valor, Integer duracao) {
 
-		Cookie donaBenta = new Cookie(nome, valor);
+		Cookie cookie = new Cookie(nome, valor);
 
-		donaBenta.setMaxAge(duracao);
+		cookie.setMaxAge(duracao);
 		
-		donaBenta.setHttpOnly(true);
+		cookie.setHttpOnly(true);
 
-		this.httpServletResponse.addCookie(donaBenta);
+		this.httpServletResponse.addCookie(cookie);
 
 	}
 
