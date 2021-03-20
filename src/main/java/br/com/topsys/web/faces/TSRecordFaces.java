@@ -5,12 +5,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.primefaces.event.SelectEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.model.TSRestModel;
 import br.com.topsys.base.util.TSUtil;
-import br.com.topsys.web.util.TSRestAPI;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,9 +18,6 @@ import lombok.EqualsAndHashCode;
 public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	protected static final String OPERACAO_DUPLICATE_OK = "Clone realizado com sucesso! Após gravar, as informação serão inseridas.";
-
-	@Autowired
-	private transient TSRestAPI restAPI;
 
 	private T model;
 
@@ -84,7 +79,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.setModel((T) this.getRestAPI().post(TSRestModel.builder()
+			this.setModel((T) super.getRestAPI().post(TSRestModel.builder()
 											.modelClass(this.getModelClass())
 											.model(this.getModel())
 											.url(this.getURL() + "/get")
@@ -104,7 +99,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			T history = (T) this.getRestAPI().post(TSRestModel.builder()
+			T history = (T) super.getRestAPI().post(TSRestModel.builder()
 											.modelClass(this.getModelClass())
 											.model(modelHistory)
 											.url(this.getURL() + "/get-history")
@@ -123,7 +118,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.tableHistory = this.getRestAPI().postList(TSRestModel.builder()
+			this.tableHistory = super.getRestAPI().postList(TSRestModel.builder()
 												.modelClass(this.getModelClass())
 												.model(this.getModel())
 												.url(this.getURL() + "/find-history")
@@ -150,7 +145,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.beforeInsert();
 
-			this.setModel((T) this.getRestAPI().post(TSRestModel.builder()
+			this.setModel((T) super.getRestAPI().post(TSRestModel.builder()
 												.modelClass(this.getModelClass())
 												.model(this.getModel())
 												.url(this.getURL() + "/insert")
@@ -181,7 +176,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.beforeUpdate();
 
-			this.getRestAPI().post(TSRestModel.builder()
+			super.getRestAPI().post(TSRestModel.builder()
 							.modelClass(this.getModelClass())
 							.model(this.getModel())
 							.url(this.getURL() + "/update")

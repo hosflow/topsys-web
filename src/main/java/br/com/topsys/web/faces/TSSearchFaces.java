@@ -9,13 +9,11 @@ import javax.annotation.PostConstruct;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.topsys.base.model.TSLazyModel;
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.model.TSRestModel;
 import br.com.topsys.base.util.TSUtil;
-import br.com.topsys.web.util.TSRestAPI;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,9 +21,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
-
-	@Autowired
-	private transient TSRestAPI restAPI;
 
 	private T model;
 
@@ -67,7 +62,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.table = this.getRestAPI().postList(TSRestModel.builder()
+			this.table = super.getRestAPI().postList(TSRestModel.builder()
 																.modelClass(this.getModelClass())
 																.model(this.getModel())
 																.url(this.getURL() + "/find")
@@ -94,7 +89,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	public void delete() {
 		try {
 
-			this.getRestAPI().post(TSRestModel.builder()
+			super.getRestAPI().post(TSRestModel.builder()
 					.modelClass(this.getModelClass())
 					.url(this.getURL() + "/delete")
 					.model(this.getModel())

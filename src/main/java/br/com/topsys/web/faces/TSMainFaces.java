@@ -20,6 +20,7 @@ import br.com.topsys.base.model.TSControleAcesso;
 import br.com.topsys.base.util.TSType;
 import br.com.topsys.web.session.TSControleAcessoSession;
 import br.com.topsys.web.util.TSCookie;
+import br.com.topsys.web.util.TSRestAPI;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +40,9 @@ public abstract class TSMainFaces implements Serializable {
 
 	@Autowired
 	private transient HttpServletResponse httpServletResponse;
+	
+	@Autowired
+	private transient TSRestAPI restAPI;
 
 	private Integer tabActive;
 
