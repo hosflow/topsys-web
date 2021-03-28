@@ -162,7 +162,7 @@ public abstract class TSMainFaces implements Serializable {
 			TSApplicationException tsApplicationException = (TSApplicationException) e;
 
 			if (TSType.ERROR.equals(tsApplicationException.getTSType())) {
-				log.info(e.getMessage());
+				log.debug(e.getMessage());
 				this.addErrorMessage(e.getMessage());
 
 			} else {
