@@ -39,7 +39,6 @@ public final class TSRestAPI {
 
 	@Autowired
 	private HttpSession httpSession;
-		
 
 	@Value("${topsys.base.url}")
 	private String baseURL;
@@ -51,62 +50,17 @@ public final class TSRestAPI {
 		this.restTemplate.setErrorHandler(new TSRestResponseException());
 	}
 
-
 	public <T> T post(Class<T> classe, TSRestModel restModel) {
 
-		Object model = accessControl(restModel.getModel());
-		
 		T retorno = null;
-
-		HttpEntity<Object> entity = null;
-
-		ObjectMapper objectMapper = null;
 
 		try {
 
-			entity = getHttpEntity(model, restModel.getToken());
+			Object model = accessControl(restModel.getModel());
 
-			if (TSUtil.isEmpty(restModel.getBaseUrl())) {
-				retorno = restTemplate.postForObject(this.getBaseURL() + restModel.getUrl(), entity, classe);
-			} else {
-				retorno = restTemplate.postForObject(restModel.getBaseUrl() + restModel.getUrl(), entity, classe);
-			}
+			retorno = postForObject(classe, restModel, model);
 
-			if (!TSUtil.isEmpty(retorno)) {
-
-				objectMapper = getObjectMapper();
-
-				retorno = objectMapper.convertValue(retorno, classe);
-			}
-
-		} catch (Exception e) {
-			this.handlerException(e);
-		}
-
-		return retorno;
-
-	}
-
-	
-	public <T> T get(Class<T> classe,TSRestModel restModel) {
-
-		T retorno = null;
-
-		ObjectMapper objectMapper = null;
-
-		try {
-			if (TSUtil.isEmpty(restModel.getBaseUrl())) {
-				retorno = restTemplate.getForObject(this.getBaseURL() +  restModel.getUrl(), classe);
-			} else {
-				retorno = restTemplate.getForObject(restModel.getBaseUrl() +  restModel.getUrl(), classe);
-			}
-
-			if (!TSUtil.isEmpty(retorno)) {
-
-				objectMapper = getObjectMapper();
-
-				retorno = objectMapper.convertValue(retorno, classe);
-			}
+			retorno = convertObject(classe, retorno);
 
 		} catch (Exception e) {
 			this.handlerException(e);
@@ -117,40 +71,17 @@ public final class TSRestAPI {
 	}
 
 
-	
-
-	@SuppressWarnings("unchecked")
-	public <T> List<T> postList(Class<T> classe,TSRestModel restModel) {
-
-		Object model = accessControl(restModel.getModel());
+	public <T> List<T> postList(Class<T> classe, TSRestModel restModel) {
 
 		List<T> retorno = null;
 
-		HttpEntity<Object> entity = null;
-
-		ObjectMapper objectMapper = null;
-
-		CollectionType listType = null;
-
 		try {
 
-			entity = getHttpEntity(model, restModel.getToken());
+			Object model = accessControl(restModel.getModel());
 
-			if (TSUtil.isEmpty(restModel.getBaseUrl())) {
-				retorno = restTemplate.postForObject(this.getBaseURL() + restModel.getUrl(), entity, List.class);
-			} else {
-				retorno = restTemplate.postForObject(restModel.getBaseUrl() + restModel.getUrl(), entity, List.class);
+			retorno = postForList(restModel, model);
 
-			}
-
-			if (!TSUtil.isEmpty(retorno)) {
-
-				objectMapper = getObjectMapper();
-
-				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
-
-				retorno = objectMapper.convertValue(retorno, listType);
-			}
+			retorno = convertList(classe, retorno);
 
 		} catch (Exception e) {
 			this.handlerException(e);
@@ -160,41 +91,76 @@ public final class TSRestAPI {
 
 	}
 
-	
+	public <T> T get(Class<T> classe, TSRestModel restModel) {
 
-	
-	@SuppressWarnings("unchecked")
+		T retorno = null;
+
+		try {
+			retorno = getForObject(classe, restModel);
+
+			retorno = convertObject(classe, retorno);
+
+		} catch (Exception e) {
+			this.handlerException(e);
+		}
+
+		return retorno;
+
+	}
+
 	public <T> List<T> getList(Class<T> classe, TSRestModel restModel) {
 
 		List<T> retorno = null;
 
-		ObjectMapper objectMapper = null;
-
-		CollectionType listType = null;
-
 		try {
 
-			if (TSUtil.isEmpty(restModel.getBaseUrl())) {
-				retorno = restTemplate.getForObject(this.getBaseURL() + restModel.getUrl(), List.class);
-			} else {
-				retorno = restTemplate.getForObject(restModel.getBaseUrl() + restModel.getUrl(), List.class);
+			retorno = getForList(restModel);
 
-			}
-
-			if (!TSUtil.isEmpty(retorno)) {
-
-				objectMapper = getObjectMapper();
-
-				listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
-
-				retorno = objectMapper.convertValue(retorno, listType);
-			}
+			retorno = convertList(classe, retorno);
 
 		} catch (Exception e) {
 			this.handlerException(e);
 		}
 
 		return retorno;
+
+	}
+	
+	private <T> T postForObject(Class<T> classe, TSRestModel restModel, Object model) {
+		
+		HttpEntity<Object> entity = getHttpEntity(model, restModel.getToken());
+
+		return TSUtil.isEmpty(restModel.getBaseUrl()) ?
+		       restTemplate.postForObject(this.getBaseURL() + restModel.getUrl(), entity, classe) :
+	           restTemplate.postForObject(restModel.getBaseUrl() + restModel.getUrl(), entity, classe);
+	
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> List<T> postForList(TSRestModel restModel, Object model) {
+
+		HttpEntity<Object> entity = getHttpEntity(model, restModel.getToken());
+
+		return TSUtil.isEmpty(restModel.getBaseUrl())
+				? restTemplate.postForObject(this.getBaseURL() + restModel.getUrl(), entity, List.class)
+				: restTemplate.postForObject(restModel.getBaseUrl() + restModel.getUrl(), entity, List.class);
+
+	}
+
+	private <T> T getForObject(Class<T> classe, TSRestModel restModel) {
+
+		return TSUtil.isEmpty(restModel.getBaseUrl())
+				? restTemplate.getForObject(this.getBaseURL() + restModel.getUrl(), classe)
+				: restTemplate.getForObject(restModel.getBaseUrl() + restModel.getUrl(), classe);
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> List<T> getForList(TSRestModel restModel) {
+
+		return TSUtil.isEmpty(restModel.getBaseUrl())
+				? restTemplate.getForObject(this.getBaseURL() + restModel.getUrl(), List.class)
+				: restTemplate.getForObject(restModel.getBaseUrl() + restModel.getUrl(), List.class);
 
 	}
 
@@ -219,13 +185,13 @@ public final class TSRestAPI {
 		return entity;
 	}
 
-	
 	@SuppressWarnings("unchecked")
 	private Object accessControl(final Object object) {
 
 		if (object instanceof TSLazyModel) {
 			TSLazyModel<? extends TSMainModel> model = (TSLazyModel<? extends TSMainModel>) object;
-			model.getModel().setControleAcesso(new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso());
+			model.getModel()
+					.setControleAcesso(new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso());
 			return model;
 		}
 
@@ -241,11 +207,35 @@ public final class TSRestAPI {
 	private ObjectMapper getObjectMapper() {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		objectMapper.registerModule(new JavaTimeModule());	
+		objectMapper.registerModule(new JavaTimeModule());
 		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		objectMapper.setSerializationInclusion(Include.NON_NULL);
-		
+
 		return objectMapper;
+	}
+
+	private <T> T convertObject(Class<T> classe, T retorno) {
+
+		if (!TSUtil.isEmpty(retorno)) {
+
+			retorno = getObjectMapper().convertValue(retorno, classe);
+		}
+
+		return retorno;
+	}
+
+	private <T> List<T> convertList(Class<T> classe, List<T> retorno) {
+
+		if (!TSUtil.isEmpty(retorno)) {
+
+			ObjectMapper objectMapper = getObjectMapper();
+
+			CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, classe);
+
+			retorno = objectMapper.convertValue(retorno, listType);
+		}
+
+		return retorno;
 	}
 
 	private void handlerException(Exception e) {
@@ -253,7 +243,7 @@ public final class TSRestAPI {
 
 		if (e instanceof TSApplicationException) {
 
-			throw new TSApplicationException(e.getMessage(),((TSApplicationException) e).getTSType());
+			throw new TSApplicationException(e.getMessage(), ((TSApplicationException) e).getTSType());
 
 		} else {
 			log.error(e.getMessage());

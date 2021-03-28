@@ -52,17 +52,16 @@ public class TSRestResponseException implements ResponseErrorHandler {
 		
 		if (model.getStatus() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
 			
+			log.error(erroLog, url, method, body);
+			
 			throw new TSSystemException(model.getMessage());
 
 		}else if(model.getStatus() == HttpStatus.BAD_REQUEST.value()
 				|| model.getStatus() == HttpStatus.FORBIDDEN.value()
-				|| model.getStatus() == HttpStatus.NOT_FOUND.value()) {
+				|| model.getStatus() == HttpStatus.NOT_FOUND.value()
+				|| model.getStatus() == HttpStatus.METHOD_NOT_ALLOWED.value()) {
 			
-			log.error(erroLog, url, method, body);
-			
-			if(!TSUtil.isEmpty(model.getTrace())) {
-				log.error("Trace: {}", model.getTrace());
-			}
+			log.debug(erroLog, url, method, body);
 			
 			throw new TSApplicationException(model.getMessage(),TSType.ERROR);
 		

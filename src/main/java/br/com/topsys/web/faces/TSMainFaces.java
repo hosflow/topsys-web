@@ -40,7 +40,7 @@ public abstract class TSMainFaces implements Serializable {
 
 	@Autowired
 	private transient HttpServletResponse httpServletResponse;
-	
+
 	@Autowired
 	private transient TSRestAPI restAPI;
 
@@ -51,20 +51,16 @@ public abstract class TSMainFaces implements Serializable {
 	protected List<SelectItem> initCombo(List<?> coll, String nomeValue, String nomeLabel) {
 		List<SelectItem> list = new ArrayList<>();
 
-		for (Object o : coll) {
-			try {
-
+		try {
+			for (Object o : coll) {
 				list.add(new SelectItem(BeanUtils.getProperty(o, nomeValue), BeanUtils.getProperty(o, nomeLabel)));
-
-			} catch (Exception e) {
-				this.handlerException(e);
 			}
+		} catch (Exception e) {
+			this.handlerException(e);
 		}
+
 		return list;
 	}
-	
-	
-
 
 	private TSMessageFaces getMessageFaces() {
 		return new TSMessageFaces(FacesContext.getCurrentInstance());
