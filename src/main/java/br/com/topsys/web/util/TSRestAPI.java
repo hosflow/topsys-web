@@ -211,7 +211,7 @@ public final class TSRestAPI {
 		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		objectMapper.setSerializationInclusion(Include.NON_DEFAULT);
 		
-		return objectMapper;
+		return objectMapper; 
 	}
 
 	private <T> T convertObject(Class<T> classe, T retorno) {
