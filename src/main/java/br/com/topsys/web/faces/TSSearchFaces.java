@@ -24,7 +24,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	private T model;
 
-	protected abstract Class<T> getModelClass();
+	protected abstract Class<T> getModelClass(); 
 
 	protected abstract String getURL();
 

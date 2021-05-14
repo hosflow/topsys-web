@@ -16,7 +16,7 @@ public final class TSCookie {
 		this.httpServletResponse = httpServletResponse;
 	}
 	
-	public Cookie getCookie(String nome) {
+	public Cookie getCookie(String nome) { 
 
 		Cookie[] cookies = this.httpServletRequest.getCookies();
 
