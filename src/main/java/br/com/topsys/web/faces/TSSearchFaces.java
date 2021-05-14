@@ -31,7 +31,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	private List<T> table;
 	private LazyDataModel<T> tablePagination;
 
-	public void initFields() {
+	public void initFields() { 
 
 		try {
 
