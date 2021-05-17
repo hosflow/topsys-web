@@ -32,7 +32,7 @@
 		<lombok.version>1.18.18</lombok.version>
 		<topsys.version>2.0</topsys.version>
 		<beanutils.version>1.9.4</beanutils.version>
-		<joinfaces.version>4.5.0-m2</joinfaces.version>
+		<joinfaces.version>4.5.0-rc1</joinfaces.version>
 		<primefaces.version>10.0.0</primefaces.version>
 	</properties>
 
