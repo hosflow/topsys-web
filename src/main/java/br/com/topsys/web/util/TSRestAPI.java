@@ -252,5 +252,27 @@ public final class TSRestAPI {
 		}
 
 	}
+	
+	/*
+	private RestTemplate createRestTemplateSslWithPooling() {
+        SSLContext sslContext = new SSLContextBuilder()
+            .loadTrustMaterial(trustStore.getURL(), trustStorePassword.toCharArray())
+            .build();
+        SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder
+            .<ConnectionSocketFactory> create()
+            .register("https", socketFactory)
+            .build();
+        PoolingHttpClientConnectionManager poolingConnManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+        poolingConnManager.setMaxTotal(50);
+        poolingConnManager.setDefaultMaxPerRoute(50);
+        CloseableHttpClient httpClient = HttpClients.custom()
+            .setSSLSocketFactory(socketFactory)
+            .setConnectionManager(poolingConnManager)
+            .build();
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
+        return new RestTemplate(factory);
+    }
+    */
 
 }
