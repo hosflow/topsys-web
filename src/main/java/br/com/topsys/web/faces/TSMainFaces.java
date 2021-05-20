@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSControleAcessoModel;
+import br.com.topsys.base.model.TSPacienteModel;
 import br.com.topsys.base.util.TSType;
 import br.com.topsys.web.session.TSControleAcessoSession;
+import br.com.topsys.web.session.TSPacienteSession;
 import br.com.topsys.web.util.TSCookie;
 import br.com.topsys.web.util.TSRestAPI;
 import lombok.Data;
@@ -126,6 +128,10 @@ public abstract class TSMainFaces implements Serializable {
 
 	protected TSControleAcessoModel getTSControleAcesso() {
 		return new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso();
+	}
+	
+	protected TSPacienteModel getTSPaciente() {
+		return new TSPacienteSession(this.getHttpSession()).getTSPaciente();
 	}
 
 	protected void showDialog(String dialog) {
