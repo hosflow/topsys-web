@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.topsys.base.exception.TSApplicationException;
-import br.com.topsys.base.model.TSControleAcesso;
+import br.com.topsys.base.model.TSControleAcessoModel;
 import br.com.topsys.base.util.TSType;
 import br.com.topsys.web.session.TSControleAcessoSession;
 import br.com.topsys.web.util.TSCookie;
@@ -124,7 +124,7 @@ public abstract class TSMainFaces implements Serializable {
 		return this.getCookie().getValue(nome);
 	}
 
-	protected TSControleAcesso getTSControleAcesso() {
+	protected TSControleAcessoModel getTSControleAcesso() {
 		return new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso();
 	}
 

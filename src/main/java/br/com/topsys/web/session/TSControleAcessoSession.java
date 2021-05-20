@@ -2,7 +2,7 @@ package br.com.topsys.web.session;
 
 import javax.servlet.http.HttpSession;
 
-import br.com.topsys.base.model.TSControleAcesso;
+import br.com.topsys.base.model.TSControleAcessoModel;
 
 
 public final class TSControleAcessoSession {
@@ -14,12 +14,12 @@ public final class TSControleAcessoSession {
 		this.httpSession = httpSession;
 	}
 
-	public TSControleAcesso getTSControleAcesso() {
-		TSControleAcesso controleAcesso = (TSControleAcesso) httpSession.getAttribute(TSTypeSession.OBJECT_SESSION_MODEL.name());
+	public TSControleAcessoModel getTSControleAcesso() {
+		TSControleAcessoModel controleAcesso = (TSControleAcessoModel) httpSession.getAttribute(TSTypeSession.CONTROLE_ACESSO_SESSION_MODEL.name());
 		
 		if (controleAcesso == null) {
-			controleAcesso = new TSControleAcesso();
-			httpSession.setAttribute(TSTypeSession.OBJECT_SESSION_MODEL.name(), controleAcesso);
+			controleAcesso = new TSControleAcessoModel();
+			httpSession.setAttribute(TSTypeSession.CONTROLE_ACESSO_SESSION_MODEL.name(), controleAcesso);
 		}
 		
 		return controleAcesso;
