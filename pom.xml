@@ -8,31 +8,19 @@
 	<name>TopSys IT Solutions - WEB</name>
 
 	<description>TopSys IT Solutions - WEB</description>
-	<url>http://maven.apache.org</url>
-
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-
-	<scm>
-		<url>https://svn.apache.org/viewvc/maven</url>
-	</scm>
+	
 
 	<properties>
 		<java.version>15</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>15</maven.compiler.source>
 		<maven.compiler.target>15</maven.compiler.target>
-		<spring.boot.version>2.5.0-SNAPSHOT</spring.boot.version>
+		<spring.boot.version>2.5.1</spring.boot.version>
 		<maven.source.version>3.2.0</maven.source.version>
 		<lombok.version>1.18.18</lombok.version>
 		<topsys.version>2.0</topsys.version>
 		<beanutils.version>1.9.4</beanutils.version>
-		<joinfaces.version>4.5.0-rc1</joinfaces.version>
+		<joinfaces.version>4.5.1</joinfaces.version>
 		<primefaces.version>10.0.0</primefaces.version>
 	</properties>
 
@@ -116,36 +104,6 @@
 		</plugins>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-		</repository>
-		<repository>
-			<id>spring-snapshots</id>
-			<name>Spring Snapshots</name>
-			<url>https://repo.spring.io/snapshot</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>spring-snapshots</id>
-			<name>Spring Snapshots</name>
-			<url>https://repo.spring.io/snapshot</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
-
+	
 
 </project>
