@@ -54,7 +54,7 @@ public final class TSMessageFaces {
 
 	public void addResult(Integer quantidade) {
 
-		String mensagem = "A pesquisa não retornou nenhuma ocorrência";
+		String mensagem = "Nenhum registro encontrado";
 
 		if (!TSUtil.isEmpty(quantidade) && quantidade > 0) {
 
