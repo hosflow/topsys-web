@@ -1,7 +1,9 @@
 package br.com.topsys.web.util;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpSession;
 
@@ -208,6 +210,7 @@ public final class TSRestAPI {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.setTimeZone(TimeZone.getTimeZone(ZoneId.systemDefault()));
 		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		objectMapper.setSerializationInclusion(Include.NON_NULL);
 		
