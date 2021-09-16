@@ -21,6 +21,7 @@ import br.com.topsys.base.util.TSType;
 import br.com.topsys.web.session.TSControleAcessoSession;
 import br.com.topsys.web.util.TSCookie;
 import br.com.topsys.web.util.TSRestAPI;
+import io.sentry.Sentry;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -173,6 +174,7 @@ public abstract class TSMainFaces implements Serializable {
 			} 
 
 		} else {
+			Sentry.captureException(e); 
 			e.printStackTrace();
 			this.addErrorMessage(e.getMessage());
 
