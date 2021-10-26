@@ -62,6 +62,16 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	}
 
+	public String onRowSelect() {
+
+		setTabActive(0);
+
+		this.get();
+		
+		return null;
+
+	}
+
 	protected void afterGet() {
 	}
 
@@ -78,12 +88,8 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.setModel(super.getRestAPI().post(this.getModelClass(),
-												TSRestModel.builder()
-												.model(this.getModel())
-												.url(this.getURL() + "/get")
-												.token(super.getToken())
-												.build()));
+			this.setModel(super.getRestAPI().post(this.getModelClass(), TSRestModel.builder().model(this.getModel())
+					.url(this.getURL() + "/get").token(super.getToken()).build()));
 
 			this.afterGet();
 
@@ -97,12 +103,8 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			T history = super.getRestAPI().post(this.getModelClass(),
-													TSRestModel.builder()
-													.model(modelHistory)
-													.url(this.getURL() + "/get-history")
-													.token(super.getToken())
-													.build());
+			T history = super.getRestAPI().post(this.getModelClass(), TSRestModel.builder().model(modelHistory)
+					.url(this.getURL() + "/get-history").token(super.getToken()).build());
 
 			this.tableHistory.set(this.tableHistory.indexOf(history), history);
 
@@ -115,12 +117,8 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.tableHistory = super.getRestAPI().postList(this.getModelClass(),
-															TSRestModel.builder()
-															.model(this.getModel())
-															.url(this.getURL() + "/find-history")
-															.token(super.getToken())
-															.build());
+			this.tableHistory = super.getRestAPI().postList(this.getModelClass(), TSRestModel.builder()
+					.model(this.getModel()).url(this.getURL() + "/find-history").token(super.getToken()).build());
 
 			setHistoryActiveTabIndex("-1");
 
@@ -141,12 +139,8 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.beforeInsert();
 
-			this.setModel(super.getRestAPI().post(this.getModelClass(),
-												TSRestModel.builder()
-												.model(this.getModel())
-												.url(this.getURL() + "/insert")
-												.token(super.getToken())
-												.build()));
+			this.setModel(super.getRestAPI().post(this.getModelClass(), TSRestModel.builder().model(this.getModel())
+					.url(this.getURL() + "/insert").token(super.getToken()).build()));
 
 			this.addInfoMessage(OPERACAO_OK);
 
@@ -172,14 +166,8 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.beforeUpdate();
 
-			super.getRestAPI().post(this.getModelClass(),
-									TSRestModel.builder()
-									.model(this.getModel())
-									.url(this.getURL() + "/update")
-									.token(super.getToken())
-									.build());
-					
-					
+			super.getRestAPI().post(this.getModelClass(), TSRestModel.builder().model(this.getModel())
+					.url(this.getURL() + "/update").token(super.getToken()).build());
 
 			this.addInfoMessage(OPERACAO_OK);
 
@@ -201,6 +189,5 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	public boolean isFlagUpdate() {
 		return !TSUtil.isEmpty(this.getModel().getId());
 	}
-	
-	
+
 }
