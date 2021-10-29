@@ -28,6 +28,8 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	protected abstract String getURL();
 
 	private String historyActiveTabIndex;
+	
+	private static final String DASHBOARD = "dashboard?faces-redirect=true";
 
 	public void initFields() {
 
@@ -60,6 +62,13 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		}
 
+	}
+	
+	public String clearFields() {
+		
+		initFields();
+		
+		return DASHBOARD;
 	}
 
 	public String onRowSelect() {
