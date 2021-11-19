@@ -30,6 +30,12 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	private List<T> table;
 	private LazyDataModel<T> tablePagination;
+	
+	protected void beforeDelete() {
+	}
+	
+	protected void afterDelete() {
+	}
 
 	public void initFields() { 
 
@@ -89,12 +95,17 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 	public void delete() {
 		try {
 
+			this.beforeDelete();
+			
+			
 			super.getRestAPI().post(this.getModelClass(),
 									TSRestModel.builder()
 									.url(this.getURL() + "/delete")
 									.model(this.getModel())
 									.token(this.getToken())
 									.build());	
+			
+			this.afterDelete();
 				
 			this.addInfoMessage(OPERACAO_OK);
 

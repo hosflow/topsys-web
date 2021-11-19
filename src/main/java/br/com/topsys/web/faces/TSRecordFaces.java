@@ -92,6 +92,15 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	protected void beforePersist() {
 	}
+	
+	protected void afterInsert() {
+	}
+
+	protected void afterUpdate() {
+	}
+
+	protected void afterPersist() {
+	}
 
 	public void get() {
 
@@ -150,6 +159,10 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.setModel(super.getRestAPI().post(this.getModelClass(), TSRestModel.builder().model(this.getModel())
 					.url(this.getURL() + "/insert").token(super.getToken()).build()));
+			
+			this.afterPersist();
+
+			this.afterInsert();
 
 			this.addInfoMessage(OPERACAO_OK);
 
@@ -177,6 +190,10 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			super.getRestAPI().post(this.getModelClass(), TSRestModel.builder().model(this.getModel())
 					.url(this.getURL() + "/update").token(super.getToken()).build());
+			
+			this.afterPersist();
+
+			this.afterInsert();
 
 			this.addInfoMessage(OPERACAO_OK);
 
