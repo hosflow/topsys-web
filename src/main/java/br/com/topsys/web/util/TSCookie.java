@@ -18,18 +18,22 @@ public final class TSCookie {
 	
 	public Cookie getCookie(String nome) { 
 
-		Cookie[] cookies = this.httpServletRequest.getCookies();
-
 		Cookie cookie = null;
+		
+		if(this.httpServletRequest != null) {
 
-		if (cookies != null) {
-			for (Cookie c : cookies) {
-				if (c.getName().equals(nome)) {
-					cookie = c;
-					break;
+			Cookie[] cookies = this.httpServletRequest.getCookies();
+
+			if (cookies != null) {
+				for (Cookie c : cookies) {
+					if (c.getName().equals(nome)) {
+						cookie = c;
+						break;
+					}
+
 				}
-
 			}
+
 		}
 
 		return cookie;
