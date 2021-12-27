@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSControleAcessoModel;
 import br.com.topsys.base.util.TSType;
+import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.session.TSControleAcessoSession;
 import br.com.topsys.web.util.TSCookie;
 import br.com.topsys.web.util.TSRestAPI;
@@ -159,24 +160,32 @@ public abstract class TSMainFaces implements Serializable {
 
 	@ExceptionHandler(Exception.class)
 	protected void handlerException(Exception e) {
+		this.handlerException(e, null);
+
+	}
+	
+	protected void handlerException(Exception e, String message) {
+		
+		String messageAux = TSUtil.isEmpty(message) ? e.getMessage() : message;
+				
 		if (e instanceof TSApplicationException) {
 
 			TSApplicationException tsApplicationException = (TSApplicationException) e;
 
 			if (TSType.ERROR.equals(tsApplicationException.getTSType())) {
-				log.debug(e.getMessage());
-				this.addErrorMessage(e.getMessage());
+				log.debug(messageAux);
+				this.addErrorMessage(messageAux);
 
 			} else {
 
-				this.addInfoMessage(e.getMessage());
+				this.addInfoMessage(messageAux);
 
 			} 
 
 		} else {
 			Sentry.captureException(e); 
 			e.printStackTrace();
-			this.addErrorMessage(e.getMessage());
+			this.addErrorMessage(messageAux);
 
 		}
 
