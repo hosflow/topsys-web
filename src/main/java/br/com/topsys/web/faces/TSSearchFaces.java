@@ -118,15 +118,19 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 	private class LazyList extends LazyDataModel<T> {
 
+		private int count = 0;
+		
 		public LazyList() {
-			setRowCount(getRestAPI().post(Integer.class,
-											TSRestModel.builder()
-											.model(getModel())
-											.url(getURL() + "/rowcount")
-											.token(getToken())
-											.build()));
+			count = getRestAPI().post(Integer.class,
+					TSRestModel.builder()
+					.model(getModel())
+					.url(getURL() + "/rowcount")
+					.token(getToken())
+					.build());
+			
+			setRowCount(count);
 							
-			addResultMessage(getRowCount());
+			addResultMessage(count);
 		}
 
 		@Override
@@ -175,6 +179,11 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 
 			return retorno;
 
+		}
+
+		@Override
+		public int count(Map<String, FilterMeta> filterBy) {
+			return count;
 		}
 
 	}
