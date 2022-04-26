@@ -50,11 +50,11 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 		initFields();
 	}
 
-	public void onRowSelect(SelectEvent<T> event) {
+	public void onRowSelect(Long valor) {
 
-		if (!TSUtil.isEmpty(event.getObject())) {
+		if (!TSUtil.isEmpty(valor)) {
 
-			getModel().setId(event.getObject().getId());
+			getModel().setId(valor);
 		
 			setTabActive(0);
 
