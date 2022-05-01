@@ -28,7 +28,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	protected abstract String getURL();
 
 	private String historyActiveTabIndex;
-	
+
 	private static final String DASHBOARD = "dashboard?faces-redirect=true";
 
 	public void initFields() {
@@ -50,24 +50,20 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 		initFields();
 	}
 
-	public void onRowSelect(Long valor) {
+	public void onRowSelect(SelectEvent<T> event) {
 
-		if (!TSUtil.isEmpty(valor)) {
+		getModel().setId(event.getObject().getId());
 
-			getModel().setId(valor);
-		
-			setTabActive(0);
+		setTabActive(0);
 
-			this.get();
-
-		}
+		this.get();
 
 	}
-	
+
 	public String clearFields() {
-		
+
 		initFields();
-		
+
 		return DASHBOARD;
 	}
 
@@ -76,7 +72,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 		setTabActive(0);
 
 		this.get();
-		
+
 		return null;
 
 	}
@@ -92,7 +88,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 	protected void beforePersist() {
 	}
-	
+
 	protected void afterInsert() {
 	}
 
@@ -159,7 +155,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.setModel(super.getRestAPI().post(this.getModelClass(), TSRestModel.builder().model(this.getModel())
 					.url(this.getURL() + "/insert").token(super.getToken()).build()));
-			
+
 			this.afterPersist();
 
 			this.afterInsert();
@@ -190,7 +186,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			super.getRestAPI().post(this.getModelClass(), TSRestModel.builder().model(this.getModel())
 					.url(this.getURL() + "/update").token(super.getToken()).build());
-			
+
 			this.afterPersist();
 
 			this.afterInsert();
