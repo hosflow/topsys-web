@@ -50,9 +50,10 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 		initFields();
 	}
 
-	public void onRowSelect(Long id) {
+	@SuppressWarnings("unchecked")
+	public void onRowSelect(SelectEvent<?> event) {
 
-		getModel().setId(id);
+		setModel((T)event.getObject());
 
 		setTabActive(0);
 
@@ -67,7 +68,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 		return DASHBOARD;
 	}
 
-	public String onRowSelect() {
+	/*public String onRowSelect() {
 
 		setTabActive(0);
 
@@ -75,7 +76,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		return null;
 
-	}
+	}*/
 
 	protected void afterGet() {
 	}
