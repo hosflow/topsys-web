@@ -3,8 +3,13 @@ package br.com.topsys.web.faces;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 
+import org.primefaces.context.PrimeExternalContext;
+import org.primefaces.context.PrimeFacesContext;
+import org.primefaces.context.PrimeRequestContext;
 import org.primefaces.event.SelectEvent;
+import org.springframework.web.servlet.support.RequestContext;
 
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.model.TSRestModel;
@@ -145,6 +150,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	public void insert() {
 
 		if (!isValidFields()) {
+			PrimeRequestContext.getCurrentInstance().getCallbackParams().put("valido", false);
 			return;
 		}
 
@@ -166,16 +172,23 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 			if (super.isClearFields()) {
 				this.initFields();
 			}
+			
+			PrimeRequestContext.getCurrentInstance().getCallbackParams().put("valido", true);
 
 		} catch (Exception e) {
+			PrimeRequestContext.getCurrentInstance().getCallbackParams().put("valido", false);
 			handlerException(e);
+			
 		}
-
+		
+		
+		
 	}
 
 	public void update() {
 
 		if (!isValidFields()) {
+			PrimeRequestContext.getCurrentInstance().getCallbackParams().put("valido", false);
 			return;
 		}
 
@@ -193,8 +206,11 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 			this.afterInsert();
 
 			this.addInfoMessage(OPERACAO_OK);
+			
+			PrimeRequestContext.getCurrentInstance().getCallbackParams().put("valido", true);
 
 		} catch (Exception e) {
+			PrimeRequestContext.getCurrentInstance().getCallbackParams().put("valido", false);
 			handlerException(e);
 		}
 
