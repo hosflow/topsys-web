@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.PrimeFaces;
 import org.primefaces.context.PrimeExternalContext;
 import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.context.PrimeRequestContext;
@@ -150,7 +151,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	public void insert() {
 
 		if (!isValidFields()) {
-			PrimeRequestContext.getCurrentInstance().getCallbackParams().put("valido", false);
+			PrimeFaces.current().ajax().addCallbackParam("valido", false);
 			return;
 		}
 
@@ -173,10 +174,10 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 				this.initFields();
 			}
 			
-			PrimeRequestContext.getCurrentInstance().getCallbackParams().put("valido", true);
+			PrimeFaces.current().ajax().addCallbackParam("valido", true);
 
 		} catch (Exception e) {
-			PrimeRequestContext.getCurrentInstance().getCallbackParams().put("valido", false);
+			PrimeFaces.current().ajax().addCallbackParam("valido", false);
 			handlerException(e);
 			
 		}
@@ -188,7 +189,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	public void update() {
 
 		if (!isValidFields()) {
-			PrimeRequestContext.getCurrentInstance().getCallbackParams().put("valido", false);
+			PrimeFaces.current().ajax().addCallbackParam("valido", false);
 			return;
 		}
 
@@ -207,10 +208,10 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.addInfoMessage(OPERACAO_OK);
 			
-			PrimeRequestContext.getCurrentInstance().getCallbackParams().put("valido", true);
+			PrimeFaces.current().ajax().addCallbackParam("valido", true);
 
 		} catch (Exception e) {
-			PrimeRequestContext.getCurrentInstance().getCallbackParams().put("valido", false);
+			PrimeFaces.current().ajax().addCallbackParam("valido", false);
 			handlerException(e);
 		}
 
