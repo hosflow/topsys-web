@@ -10,5 +10,15 @@ public abstract class TSServiceFacade {
 	
 	@Autowired
 	private transient TSRestAPI restAPI;
+	
+	private String token;
+	
+	public TSServiceFacade() {
+		
+	}
+	
+	public TSServiceFacade(String token) {
+		this.token = token;
+	}
 
 }
