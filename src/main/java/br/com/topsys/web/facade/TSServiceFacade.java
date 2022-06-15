@@ -16,10 +16,6 @@ public abstract class TSServiceFacade {
 	
 	private String token;
 	
-	public TSServiceFacade() {
-		
-	}
-	
 	public TSServiceFacade(String token) {
 		this.token = token;
 	}
