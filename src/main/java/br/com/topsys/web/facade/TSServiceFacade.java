@@ -37,5 +37,18 @@ public abstract class TSServiceFacade {
 
 
 	}
+	
+	public <T> T post(Class<T> classe, Object model, String endpoint, String baseUrl) {
+
+		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(endpoint).token(this.getToken()).build());
+
+	}
+	
+	public <T> List<T> list(Class<T> classe, Object model, String endpoint, String baseUrl) {
+
+		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(endpoint).token(this.getToken()).build());
+
+
+	}
 
 }
