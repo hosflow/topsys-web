@@ -14,37 +14,33 @@ public abstract class TSServiceFacade {
 	@Autowired
 	private transient TSRestAPI restAPI;
 	
-	private String token;
-	
-	public TSServiceFacade(String token) {
-		this.token = token;
-	}
-	
 	
 	public <T> T post(Class<T> classe, Object model, String endpoint) {
 
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).url(endpoint).token(this.getToken()).build());
+		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).url(endpoint).build());
 
 	}
 	
 	public <T> List<T> list(Class<T> classe, Object model, String endpoint) {
 
-		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).url(endpoint).token(this.getToken()).build());
+		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).url(endpoint).build());
 
 
 	}
 	
 	public <T> T post(Class<T> classe, Object model, String endpoint, String baseUrl) {
 
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(endpoint).token(this.getToken()).build());
+		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(endpoint).build());
 
 	}
 	
 	public <T> List<T> list(Class<T> classe, Object model, String endpoint, String baseUrl) {
 
-		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(endpoint).token(this.getToken()).build());
+		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(endpoint).build());
 
 
 	}
+	
+	
 
 }
