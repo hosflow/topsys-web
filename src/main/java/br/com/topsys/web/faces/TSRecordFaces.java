@@ -204,7 +204,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.afterPersist();
 
-			this.afterInsert();
+			this.afterUpdate();
 
 			this.addInfoMessage(OPERACAO_OK);
 			
