@@ -5,7 +5,7 @@ import javax.servlet.http.HttpSession;
 import br.com.topsys.base.model.TSControleAcessoModel;
 
 
-public final class TSControleAcessoSession {
+public class TSControleAcessoSession {
 
 
 	private HttpSession httpSession;

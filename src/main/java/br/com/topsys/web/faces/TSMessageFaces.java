@@ -7,7 +7,7 @@ import javax.faces.context.FacesContext;
 
 import br.com.topsys.base.util.TSUtil;
 
-public final class TSMessageFaces {
+public class TSMessageFaces {
 	
 	private FacesContext facesContext;
 	

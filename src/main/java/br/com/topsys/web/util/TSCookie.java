@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-public final class TSCookie {
+public class TSCookie {
 	
 	
 	private HttpServletRequest httpServletRequest;
