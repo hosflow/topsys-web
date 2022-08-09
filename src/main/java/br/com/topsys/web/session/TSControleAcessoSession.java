@@ -15,7 +15,7 @@ public class TSControleAcessoSession {
 		this.httpSession = httpSession;
 	}
 
-	public TSControleAcessoModel getTSControleAcesso() {
+	public TSControleAcessoModel getTSControleAcesso() { 
 		
 		if(httpSession == null) {
 			throw new TSApplicationException("Sessão expirada!");
