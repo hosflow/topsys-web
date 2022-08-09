@@ -1,5 +1,6 @@
 package br.com.topsys.web.util;
 
+import java.net.ConnectException;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -248,6 +250,10 @@ public class TSRestAPI {
 
 			throw new TSApplicationException(e.getMessage(), ((TSApplicationException) e).getTSType());
 
+		}else if (e instanceof ResourceAccessException) {
+			
+			throw new TSSystemException("Serviço indisponível!");
+			
 		} else {
 			log.error(e.getMessage());
 			e.printStackTrace();

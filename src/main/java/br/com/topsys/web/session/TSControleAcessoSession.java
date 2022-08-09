@@ -2,6 +2,7 @@ package br.com.topsys.web.session;
 
 import javax.servlet.http.HttpSession;
 
+import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSControleAcessoModel;
 
 
@@ -15,6 +16,11 @@ public class TSControleAcessoSession {
 	}
 
 	public TSControleAcessoModel getTSControleAcesso() {
+		
+		if(httpSession == null) {
+			throw new TSApplicationException("Sessão expirada!");
+		}
+		
 		TSControleAcessoModel controleAcesso = (TSControleAcessoModel) httpSession.getAttribute(TSTypeSession.CONTROLE_ACESSO_SESSION_MODEL.name());
 		
 		if (controleAcesso == null) {

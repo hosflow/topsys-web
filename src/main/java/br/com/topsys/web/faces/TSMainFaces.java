@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.topsys.base.constant.Endpoint;
 import br.com.topsys.base.exception.TSApplicationException;
+import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.model.TSControleAcessoModel;
 import br.com.topsys.base.model.TSRestModel;
 import br.com.topsys.base.util.TSType;
@@ -131,6 +132,14 @@ public abstract class TSMainFaces implements Serializable {
 
 	protected TSControleAcessoModel getTSControleAcesso() {
 		return new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso();
+	}
+	
+	protected TSRestAPI getRestAPI() {
+		if(this.restAPI == null) {
+			throw new TSSystemException("Serviço indisponível!");
+		}
+		
+		return this.restAPI;
 	}
 	
 
