@@ -38,8 +38,8 @@ public abstract class TSMainFaces implements Serializable {
 	protected static final String OPERACAO_OK = "Operação realizada com sucesso!";
 	
 
-	//@Autowired
-	//private transient HttpSession httpSession;
+	@Autowired
+	private transient HttpSession httpSession;
 
 	@Autowired
 	private transient HttpServletRequest httpServletRequest;
@@ -146,10 +146,6 @@ public abstract class TSMainFaces implements Serializable {
 		return this.restAPI;
 	}
 	
-	protected HttpSession getHttpSession() {
-		
-		return this.httpServletRequest.getSession(false);
-	}
 	
 	
 	protected void showDialog(String dialog) {
