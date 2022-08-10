@@ -1,6 +1,5 @@
 package br.com.topsys.web.util;
 
-import java.net.ConnectException;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;

@@ -38,8 +38,8 @@ public abstract class TSMainFaces implements Serializable {
 	protected static final String OPERACAO_OK = "Operação realizada com sucesso!";
 	
 
-	@Autowired
-	private transient HttpSession httpSession;
+	//@Autowired
+	//private transient HttpSession httpSession;
 
 	@Autowired
 	private transient HttpServletRequest httpServletRequest;
@@ -135,14 +135,23 @@ public abstract class TSMainFaces implements Serializable {
 	}
 	
 	protected TSRestAPI getRestAPI() {
+		
 		if(this.restAPI == null) {
+			
 			throw new TSSystemException("Serviço indisponível!");
+			
+			
 		}
 		
 		return this.restAPI;
 	}
 	
-
+	protected HttpSession getHttpSession() {
+		
+		return this.httpServletRequest.getSession(false);
+	}
+	
+	
 	protected void showDialog(String dialog) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("PF('");
@@ -195,9 +204,11 @@ public abstract class TSMainFaces implements Serializable {
 			} 
  
 		} else {
+			
+			this.addErrorMessage(messageAux);
 			Sentry.captureException(e); 
 			e.printStackTrace();
-			this.addErrorMessage(messageAux);
+		
 
 		}
 
