@@ -47,12 +47,16 @@ public abstract class TSMainFaces implements Serializable {
 	@Autowired
 	private transient HttpServletResponse httpServletResponse;
 
-	@Autowired
+	@Autowired(required = false)
 	private transient TSRestAPI restAPI;
 
 	private Integer tabActive;
 
 	private boolean clearFields;
+	
+	public TSMainFaces() {
+			
+	}
 
 	protected List<SelectItem> initCombo(List<?> coll, String nomeValue, String nomeLabel) {
 		List<SelectItem> list = new ArrayList<>();
