@@ -301,5 +301,9 @@ public abstract class TSMainFaces implements Serializable {
 	}
 	
 	
+	protected String getParameter(String value) {
+		return this.getHttpServletRequest().getParameter(value);
+	}
+	
 
 }
