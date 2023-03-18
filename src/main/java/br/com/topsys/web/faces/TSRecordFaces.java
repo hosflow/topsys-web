@@ -2,19 +2,13 @@ package br.com.topsys.web.faces;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.faces.context.FacesContext;
-
 import org.primefaces.PrimeFaces;
-import org.primefaces.context.PrimeExternalContext;
-import org.primefaces.context.PrimeFacesContext;
-import org.primefaces.context.PrimeRequestContext;
 import org.primefaces.event.SelectEvent;
-import org.springframework.web.servlet.support.RequestContext;
 
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.model.TSRestModel;
 import br.com.topsys.base.util.TSUtil;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

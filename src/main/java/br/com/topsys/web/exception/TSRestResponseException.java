@@ -8,6 +8,7 @@ import java.util.Scanner;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatus.Series;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
@@ -20,19 +21,13 @@ import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.model.TSResponseExceptionModel;
 import br.com.topsys.base.util.TSType;
-import br.com.topsys.base.util.TSUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component  
 public class TSRestResponseException implements ResponseErrorHandler {
 
-	@Override
-	public boolean hasError(ClientHttpResponse response) throws IOException {
-
-		return response.getStatusCode().series() == Series.CLIENT_ERROR
-				|| response.getStatusCode().series() == Series.SERVER_ERROR;
-	}
+	
 
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
@@ -86,5 +81,14 @@ public class TSRestResponseException implements ResponseErrorHandler {
 		return objectMapper.readValue(body, TSResponseExceptionModel.class);
 		
 	}
+
+	
+		@Override
+		public boolean hasError(ClientHttpResponse response) throws IOException {
+
+			return response.getStatusCode().is4xxClientError()
+					|| response.getStatusCode().is5xxServerError();
+		}
+	
 
 }

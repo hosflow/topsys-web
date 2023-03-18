@@ -6,9 +6,6 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.context.PrimeRequestContext;
@@ -26,6 +23,9 @@ import br.com.topsys.web.session.TSControleAcessoSession;
 import br.com.topsys.web.util.TSCookie;
 import br.com.topsys.web.util.TSRestAPI;
 import io.sentry.Sentry;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 

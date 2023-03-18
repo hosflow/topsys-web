@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -30,6 +28,7 @@ import br.com.topsys.base.model.TSRestModel;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.exception.TSRestResponseException;
 import br.com.topsys.web.session.TSControleAcessoSession;
+import jakarta.servlet.http.HttpSession;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
