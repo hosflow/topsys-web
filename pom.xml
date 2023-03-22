@@ -16,7 +16,7 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<lombok.version>1.18.24</lombok.version>
-		<spring.boot.version>3.0.3</spring.boot.version>
+		<spring.boot.version>3.0.4</spring.boot.version>
 		<maven.source.version>3.2.0</maven.source.version>
 		<topsys.version>2.0</topsys.version>
 		<beanutils.version>1.9.4</beanutils.version>
@@ -70,13 +70,6 @@
 			<groupId>br.com.topsys</groupId>
 			<artifactId>topsys-base</artifactId>
 			<version>${topsys.version}</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>io.sentry</groupId>
-			<artifactId>sentry-spring-boot-starter</artifactId>
-			<version>5.1.2</version>
 			<scope>compile</scope>
 		</dependency>
 

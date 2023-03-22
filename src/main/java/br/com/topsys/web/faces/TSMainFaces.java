@@ -22,7 +22,6 @@ import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.session.TSControleAcessoSession;
 import br.com.topsys.web.util.TSCookie;
 import br.com.topsys.web.util.TSRestAPI;
-import io.sentry.Sentry;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -206,7 +205,6 @@ public abstract class TSMainFaces implements Serializable {
 		} else {
 			
 			this.addErrorMessage(messageAux);
-			Sentry.captureException(e); 
 			e.printStackTrace();
 		
 
