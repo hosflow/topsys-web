@@ -16,11 +16,11 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<lombok.version>1.18.24</lombok.version>
-		<spring.boot.version>3.1.4</spring.boot.version>
+		<spring.boot.version>2.7.16</spring.boot.version>
 		<maven.source.version>3.2.0</maven.source.version>
 		<topsys.version>2.0</topsys.version>
 		<beanutils.version>1.9.4</beanutils.version>
-		<joinfaces.version>5.1.4</joinfaces.version>
+		<joinfaces.version>4.7.16</joinfaces.version>
 		<primefaces.version>11.0.0</primefaces.version>
 	</properties>
 

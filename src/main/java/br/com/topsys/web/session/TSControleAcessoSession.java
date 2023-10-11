@@ -1,8 +1,9 @@
 package br.com.topsys.web.session;
 
+import javax.servlet.http.HttpSession;
+
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSControleAcessoModel;
-import jakarta.servlet.http.HttpSession;
 
 
 public class TSControleAcessoSession {
