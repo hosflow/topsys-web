@@ -15,16 +15,12 @@ import org.primefaces.context.PrimeRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import br.com.topsys.base.constant.Endpoint;
 import br.com.topsys.base.exception.TSApplicationException;
-import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.model.TSControleAcessoModel;
-import br.com.topsys.base.model.TSRestModel;
 import br.com.topsys.base.util.TSType;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.session.TSControleAcessoSession;
 import br.com.topsys.web.util.TSCookie;
-import br.com.topsys.web.util.TSRestAPI;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public abstract class TSMainFaces implements Serializable {
 
-	protected static final String TOKEN = "token";
+	
 	protected static final String OPERACAO_OK = "Operação realizada com sucesso!";
 	
 
@@ -45,9 +41,6 @@ public abstract class TSMainFaces implements Serializable {
 
 	@Autowired
 	private transient HttpServletResponse httpServletResponse;
-
-	@Autowired(required = false)
-	private transient TSRestAPI restAPI;
 
 	private Integer tabActive;
 
@@ -112,18 +105,6 @@ public abstract class TSMainFaces implements Serializable {
 		return new TSCookie(this.getHttpServletRequest(), this.getHttpServletResponse());
 	}
 
-	protected String getToken() {
-
-		return this.getCookie().getValue(TOKEN);
-	}
-
-	protected void setToken(String token, Integer duracao) {
-		this.getCookie().add(TOKEN, token, duracao);
-	}
-
-	protected void removeToken() {
-		this.getCookie().add(TOKEN, "", 0);
-	}
 
 	protected void addCookie(String nome, String valor) {
 		this.getCookie().add(nome, valor, -1);
@@ -136,20 +117,6 @@ public abstract class TSMainFaces implements Serializable {
 	protected TSControleAcessoModel getTSControleAcesso() {
 		return new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso();
 	}
-	
-	protected TSRestAPI getRestAPI() {
-		
-		if(this.restAPI == null) {
-			
-			throw new TSSystemException("Serviço indisponível!");
-			
-			
-		}
-		
-		return this.restAPI;
-	}
-	
-	
 	
 	protected void showDialog(String dialog) {
 		StringBuilder builder = new StringBuilder();
@@ -211,97 +178,23 @@ public abstract class TSMainFaces implements Serializable {
 		}
 
 	}
-	
-	
-
-	protected <T> T get(Class<T> classe, Object model, String url, String baseUrl, String token) {
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(url + Endpoint.GET).token(token).build());
-	}
-	
-	protected <T> T getHistory(Class<T> classe, Object model, String url, String baseUrl, String token) {
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(url + Endpoint.GET_HISTORY).token(token).build());
-	}
-
-	protected <T> T getByExternalId(Class<T> classe, Object model, String url, String baseUrl, String token) {
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(url + Endpoint.GET_BY_EXTERNAL_ID).token(token).build());
-	}
-
-	protected <T> List<T> find(Class<T> classe, Object model, String url, String baseUrl, String token) {
-		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(url + Endpoint.FIND).token(token).build());
-	}
-
-	protected <T> List<T> findLazy(Class<T> classe, Object model, String url, String baseUrl, String token) {
-		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(url + Endpoint.FIND_LAZY).token(token).build());
-	}
-
-	protected <T> List<T> findHistory(Class<T> classe, Object model, String url, String baseUrl, String token) {
-		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(url + Endpoint.FIND_HISTORY).token(token).build());
-	}
-
-	protected <T> List<T> findAutocomplete(Class<T> classe, Object model, String url, String baseUrl, String token) {
-		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(url + Endpoint.FIND_AUTOCOMPLETE).token(token).build());
-	}
-
-	protected <T> T post(Class<T> classe, Object model, String url, String baseUrl, String token) {
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(url + Endpoint.INSERT).token(token).build());
-	}
-
-	protected <T> T put(Class<T> classe, Object model, String url, String baseUrl, String token) {
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(url + Endpoint.UPDATE).token(token).build());
-	}
-
-	protected <T> T delete(Class<T> classe, Object model, String url, String baseUrl, String token) {
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).baseUrl(baseUrl).url(url + Endpoint.DELETE).token(token).build());
-	}
-	
-
-
-	
-	
-	protected <T> T get(Class<T> classe, Object model, String url, String token) {
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).url(url + Endpoint.GET).token(token).build());
-	}
-	
-	protected <T> T getHistory(Class<T> classe, Object model, String url, String token) {
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).url(url + Endpoint.GET_HISTORY).token(token).build());
-	}
-
-	protected <T> T getByExternalId(Class<T> classe, Object model, String url, String token) {
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).url(url + Endpoint.GET_BY_EXTERNAL_ID).token(token).build());
-	}
-
-	protected <T> List<T> find(Class<T> classe, Object model, String url, String token) {
-		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).url(url + Endpoint.FIND).token(token).build());
-	}
-
-	protected <T> List<T> findLazy(Class<T> classe, Object model, String url, String token) {
-		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).url(url + Endpoint.FIND_LAZY).token(token).build());
-	}
-
-	protected <T> List<T> findHistory(Class<T> classe, Object model, String url, String token) {
-		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).url(url + Endpoint.FIND_HISTORY).token(token).build());
-	}
-
-	protected <T> List<T> findAutocomplete(Class<T> classe, Object model, String url, String token) {
-		return this.getRestAPI().postList(classe, TSRestModel.builder().model(model).url(url + Endpoint.FIND_AUTOCOMPLETE).token(token).build());
-	}
-
-	protected <T> T post(Class<T> classe, Object model, String url, String token) {
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).url(url + Endpoint.INSERT).token(token).build());
-	}
-
-	protected <T> T put(Class<T> classe, Object model, String url, String token) {
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).url(url + Endpoint.UPDATE).token(token).build());
-	}
-
-	protected <T> T delete(Class<T> classe, Object model, String url, String token) {
-		return this.getRestAPI().post(classe, TSRestModel.builder().model(model).url(url + Endpoint.DELETE).token(token).build());
-	}
-	
-	
+		
 	protected String getParameter(String value) {
 		return this.getHttpServletRequest().getParameter(value);
 	}
+	
+	protected String findLink() {
+		return null;
+	}
+
+	protected String newLink() {
+		return null;
+	}
+	
+	protected boolean hasAccess(){
+		return true;
+	}
+
 	
 
 }

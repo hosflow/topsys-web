@@ -7,8 +7,8 @@ import javax.annotation.PostConstruct;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
+import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSMainModel;
-import br.com.topsys.base.model.TSRestModel;
 import br.com.topsys.base.util.TSUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -69,16 +69,6 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 		return DASHBOARD;
 	}
 
-	/*public String onRowSelect() {
-
-		setTabActive(0);
-
-		this.get();
-
-		return null;
-
-	}*/
-
 	protected void afterGet() {
 	}
 
@@ -104,8 +94,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.setModel(super.getRestAPI().post(this.getModelClass(), TSRestModel.builder().model(this.getModel())
-					.url(this.getURL() + "/get").token(super.getToken()).build()));
+			this.setModel(handleGet());
 
 			this.afterGet();
 
@@ -119,8 +108,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			T history = super.getRestAPI().post(this.getModelClass(), TSRestModel.builder().model(modelHistory)
-					.url(this.getURL() + "/get-history").token(super.getToken()).build());
+			T history = handleGetHistory();
 
 			this.tableHistory.set(this.tableHistory.indexOf(history), history);
 
@@ -133,8 +121,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 		try {
 
-			this.tableHistory = super.getRestAPI().postList(this.getModelClass(), TSRestModel.builder()
-					.model(this.getModel()).url(this.getURL() + "/find-history").token(super.getToken()).build());
+			this.tableHistory = handleFindHistory();
 
 			setHistoryActiveTabIndex("-1");
 
@@ -156,8 +143,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.beforeInsert();
 
-			this.setModel(super.getRestAPI().post(this.getModelClass(), TSRestModel.builder().model(this.getModel())
-					.url(this.getURL() + "/insert").token(super.getToken()).build()));
+			this.setModel(handleInsert());
 
 			this.afterPersist();
 
@@ -194,8 +180,7 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 
 			this.beforeUpdate();
 
-			super.getRestAPI().post(this.getModelClass(), TSRestModel.builder().model(this.getModel())
-					.url(this.getURL() + "/update").token(super.getToken()).build());
+			handleUpdate();
 
 			this.afterPersist();
 
@@ -224,5 +209,28 @@ public abstract class TSRecordFaces<T extends TSMainModel> extends TSMainFaces {
 	public boolean isFlagUpdate() {
 		return !TSUtil.isEmpty(this.getModel().getId());
 	}
+	
+	
+	protected T handleInsert() throws TSApplicationException {
+		return null;
+	}
+
+	protected void handleUpdate() throws TSApplicationException {
+	
+	}
+
+	protected List<T> handleFindHistory(){
+		return null;
+	}
+	
+	protected T handleGetHistory(){
+		return null;
+	}
+	
+	protected T handleGet(){
+		return null;
+	}
+
+	
 
 }
