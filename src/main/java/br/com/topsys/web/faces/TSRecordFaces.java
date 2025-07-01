@@ -2,7 +2,6 @@ package br.com.topsys.web.faces;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
@@ -10,6 +9,7 @@ import org.primefaces.event.SelectEvent;
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.util.TSUtil;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

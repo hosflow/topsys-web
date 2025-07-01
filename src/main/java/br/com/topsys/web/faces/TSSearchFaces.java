@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
@@ -13,6 +12,7 @@ import org.primefaces.model.SortMeta;
 import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.util.TSUtil;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -128,7 +128,7 @@ public abstract class TSSearchFaces<T extends TSMainModel> extends TSMainFaces {
 			count = handleRowCount();
 			
 			setRowCount(count);
-							
+							 
 			addResultMessage(count);
 		}
 

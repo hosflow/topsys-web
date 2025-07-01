@@ -2,11 +2,11 @@ package br.com.topsys.web.session;
 
 public enum TSTypeSession {
 	
-	CONTROLE_ACESSO_SESSION_MODEL;
+	ACCESS_CONTROL_SESSION_MODEL;
 
 	TSTypeSession() {
 	}
 	
 	
-
+ 
 }

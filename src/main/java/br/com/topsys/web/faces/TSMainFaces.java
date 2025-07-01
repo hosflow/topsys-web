@@ -4,11 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.context.PrimeRequestContext;
@@ -16,11 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.topsys.base.exception.TSApplicationException;
-import br.com.topsys.base.model.TSControleAcessoModel;
+import br.com.topsys.base.model.TSAccessControlModel;
 import br.com.topsys.base.util.TSType;
 import br.com.topsys.base.util.TSUtil;
-import br.com.topsys.web.session.TSControleAcessoSession;
+import br.com.topsys.web.session.TSAccessControlSession;
 import br.com.topsys.web.util.TSCookie;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.model.SelectItem;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,7 +46,7 @@ public abstract class TSMainFaces implements Serializable {
 
 	private Integer tabActive;
 
-	private boolean clearFields;
+	private boolean clearFields; 
 	
 	public TSMainFaces() {
 			
@@ -114,8 +116,8 @@ public abstract class TSMainFaces implements Serializable {
 		return this.getCookie().getValue(nome);
 	}
 
-	protected TSControleAcessoModel getTSControleAcesso() {
-		return new TSControleAcessoSession(this.getHttpSession()).getTSControleAcesso();
+	protected TSAccessControlModel getTSControleAcesso() {
+		return new TSAccessControlSession(this.getHttpSession()).getTSControleAcesso();
 	}
 	
 	protected void showDialog(String dialog) {
