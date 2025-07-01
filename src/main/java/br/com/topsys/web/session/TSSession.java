@@ -20,6 +20,10 @@ public class TSSession {
 	public static HttpServletRequest getRequest() {
 		return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 	}
+	
+	public static void invalidate() {
+		 FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+	}
 
 }
   

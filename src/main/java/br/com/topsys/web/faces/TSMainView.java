@@ -27,6 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressWarnings("serial")
 @Slf4j
 public abstract class TSMainView implements Serializable {
+	
+	protected static final String SUCESSO = "sucesso";
 
 	protected TSAccessControlModel getAccessControl() {
 		return (TSAccessControlModel) TSSession.getObjectInSession(TSTypeSession.ACCESS_CONTROL_SESSION_MODEL.name());
