@@ -11,7 +11,7 @@ import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.util.TSType;
 import br.com.topsys.base.util.TSUtil;
-import br.com.topsys.service.main.TSMainBusiness;
+import br.com.topsys.service.main.TSMainService;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,7 +29,7 @@ public abstract class TSRecordView<T extends TSMainModel> extends TSMainView imp
 
 	}
 
-	protected abstract TSMainBusiness<T> getService();
+	protected abstract TSMainService<T> getService();
 
 	protected boolean validaCampos() {
 		return true;
@@ -78,7 +78,7 @@ public abstract class TSRecordView<T extends TSMainModel> extends TSMainView imp
 		}
 
 		this.model = model;
-
+ 
 		this.posDetail();
 
 	}

@@ -11,7 +11,7 @@ import org.primefaces.model.SortMeta;
 
 import br.com.topsys.base.model.TSMainModel;
 import br.com.topsys.base.util.TSUtil;
-import br.com.topsys.service.main.TSMainBusiness;
+import br.com.topsys.service.main.TSMainService;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,7 +24,7 @@ public abstract class TSSearchView<T extends TSMainModel> extends TSMainView {
 
 	protected LazyDataModel<T> lazyList;
 
-	protected abstract TSMainBusiness<T> getBusiness();
+	protected abstract TSMainService<T> getService();
 
 	public void init() {
 		super.init();
@@ -72,7 +72,7 @@ public abstract class TSSearchView<T extends TSMainModel> extends TSMainView {
 
 			if (first != this.first || !TSUtil.isEmpty(sortBy)) {
 				this.first = first;
-				this.grid = getBusiness().find(model, first, pageSize);
+				this.grid = getService().find(model, first, pageSize);
 			}
 
 			return this.grid;
@@ -81,7 +81,7 @@ public abstract class TSSearchView<T extends TSMainModel> extends TSMainView {
 
 		@Override
 		public int count(Map<String, FilterMeta> filterBy) {
-			return getBusiness().rowCount(model);
+			return getService().rowCount(model);
 		}
 
 	}
