@@ -17,6 +17,7 @@ import br.com.topsys.base.util.TSType;
 import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.session.TSSession;
 import br.com.topsys.web.session.TSTypeSession;
+import br.com.topsys.web.util.TSMessage;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.application.FacesMessage.Severity;
 import jakarta.faces.context.FacesContext;
@@ -39,20 +40,18 @@ public abstract class TSMainView implements Serializable {
 	}
 	
 	protected void addInfoMessage(String msg) {
-		this.addMessage(FacesMessage.SEVERITY_INFO, "Info!", msg);
+		TSMessage.addInfoMessage(msg);
 	}
 	
 	protected void addErrorMessage(String msg) {
-		this.addMessage(FacesMessage.SEVERITY_ERROR, "Erro!", msg);
+		TSMessage.addErrorMessage(msg);
 	}
 	
 	protected void addWarnMessage(String msg) {
-		this.addMessage(FacesMessage.SEVERITY_WARN, "Alerta!", msg);
+		TSMessage.addWarnMessage(msg);
 	}
 	
-	private void addMessage(Severity severity, String header, String message) {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, header, message));
-	}
+
 	
 	@SuppressWarnings("rawtypes")
 	protected List<SelectItem> initCombo(Collection coll, String nomeValue, String nomeLabel) {
@@ -74,39 +73,6 @@ public abstract class TSMainView implements Serializable {
 		return list;
 	}
 	
-	@ExceptionHandler(Exception.class)
-	protected void handlerException(Exception e) {
-		this.handlerException(e, null);
-
-	}
 	
-	protected void handlerException(Exception e, String message) {
-		
-		String messageAux = TSUtil.isEmpty(message) ? e.getMessage() : message;
-				
-		if (e instanceof TSApplicationException) {
-
-			TSApplicationException tsApplicationException = (TSApplicationException) e;
-
-			if (TSType.ERROR.equals(tsApplicationException.getTSType())) {
-				log.error(messageAux);
-				this.addErrorMessage(messageAux);
-
-			} else {
-
-				this.addInfoMessage(messageAux);
-
-			} 
- 
-		} else {
-			
-			this.addErrorMessage("Erro inesperado, ocorreu um erro inesperado. Contate a TI");
-			
-			e.printStackTrace();
-		
-
-		}
-
-	}
 	
 }
