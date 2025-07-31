@@ -42,15 +42,17 @@ public abstract class TSRecordView<T extends TSMainModel> extends TSMainView imp
 		}
 
 		this.model.setAccessControlModel(getAccessControl());
-
+		
+		this.model.setDataOperacao(OffsetDateTime.now());
+		
 		this.preSave();
 
 		if (TSUtil.isEmpty(this.model.getId())) {
-
+			
 			this.executeInsert();
 
 		} else {
-
+			
 			this.executeUpdate();
 
 		}

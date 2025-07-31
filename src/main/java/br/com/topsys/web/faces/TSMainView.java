@@ -7,24 +7,16 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
-
-import br.com.topsys.base.exception.TSApplicationException;
 import br.com.topsys.base.exception.TSSystemException;
 import br.com.topsys.base.model.TSAccessControlModel;
-import br.com.topsys.base.util.TSType;
-import br.com.topsys.base.util.TSUtil;
 import br.com.topsys.web.session.TSSession;
 import br.com.topsys.web.session.TSTypeSession;
 import br.com.topsys.web.util.TSMessage;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.application.FacesMessage.Severity;
-import jakarta.faces.context.FacesContext;
 import jakarta.faces.model.SelectItem;
 import lombok.extern.slf4j.Slf4j;
 
-
+ 
 @SuppressWarnings("serial")
 @Slf4j
 public abstract class TSMainView implements Serializable {
@@ -38,7 +30,7 @@ public abstract class TSMainView implements Serializable {
 	protected void init() { 
 		
 	}
-	
+	 
 	protected void addInfoMessage(String msg) {
 		TSMessage.addInfoMessage(msg);
 	}
