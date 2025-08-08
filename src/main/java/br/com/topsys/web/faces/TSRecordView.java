@@ -31,13 +31,13 @@ public abstract class TSRecordView<T extends TSMainModel> extends TSMainView imp
 
 	protected abstract TSMainService<T> getService();
 
-	protected boolean validaCampos() {
-		return true;
+	protected boolean validFields() {
+		return false;
 	}
 
 	public void save() {
 
-		if (!validaCampos()) {
+		if (validFields()) {
 			return;
 		}
 
