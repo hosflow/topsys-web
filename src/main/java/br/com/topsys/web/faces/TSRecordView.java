@@ -41,9 +41,7 @@ public abstract class TSRecordView<T extends TSMainModel> extends TSMainView imp
 			return;
 		}
 
-		this.model.setAccessControlModel(getAccessControl());
-		
-		this.model.setDataOperacao(OffsetDateTime.now());
+		this.initParameters();
 		
 		this.preSave();
 
@@ -60,6 +58,8 @@ public abstract class TSRecordView<T extends TSMainModel> extends TSMainView imp
 		super.addInfoMessage("Operação realizada com sucesso");
 
 	}
+
+	
 
 	protected void executeInsert() {
 		this.getService().insert(this.model);
@@ -113,8 +113,7 @@ public abstract class TSRecordView<T extends TSMainModel> extends TSMainView imp
 			throw new TSApplicationException("Registro não encontrado", TSType.ERROR);
 		}
 
-		model.setDataAtualizacao(OffsetDateTime.now());
-		model.setAccessControlModel(this.getAccessControl());
+		this.initParameters();
 		
 		this.getService().delete(model);
 
@@ -130,6 +129,12 @@ public abstract class TSRecordView<T extends TSMainModel> extends TSMainView imp
 	protected void preSave() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	private void initParameters() {
+		this.model.setAccessControlModel(getAccessControl());
+		
+		this.model.setDataOperacao(OffsetDateTime.now());
 	}
 
 }

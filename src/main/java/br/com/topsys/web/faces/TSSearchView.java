@@ -32,7 +32,17 @@ public abstract class TSSearchView<T extends TSMainModel> extends TSMainView {
 	}
 
 	public void find() {
+		
+		if (validFields()) {
+			return;
+		}
+		
 		this.lazyList = new LazyList(this.searchModel);
+	}
+
+	protected boolean validFields() {
+		
+		return false;
 	}
 
 	class LazyList extends LazyDataModel<T> {
