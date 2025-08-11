@@ -33,7 +33,7 @@ public abstract class TSSearchView<T extends TSMainModel> extends TSMainView {
 
 	public void find() {
 		
-		if (validFields()) {
+		if (!validFields()) {
 			return;
 		}
 		
@@ -42,7 +42,7 @@ public abstract class TSSearchView<T extends TSMainModel> extends TSMainView {
 
 	protected boolean validFields() {
 		
-		return false;
+		return true;
 	}
 
 	class LazyList extends LazyDataModel<T> {
