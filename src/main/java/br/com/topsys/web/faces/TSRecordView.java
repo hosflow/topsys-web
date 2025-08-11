@@ -32,12 +32,12 @@ public abstract class TSRecordView<T extends TSMainModel> extends TSMainView imp
 	protected abstract TSMainService<T> getService();
 
 	protected boolean validFields() {
-		return false;
+		return true;
 	}
 
 	public void save() {
 
-		if (validFields()) {
+		if (!validFields()) {
 			return;
 		}
 
@@ -131,7 +131,7 @@ public abstract class TSRecordView<T extends TSMainModel> extends TSMainView imp
 
 	}
 	
-	private void initParameters() {
+	protected void initParameters() {
 		this.model.setAccessControlModel(getAccessControl());
 		
 		this.model.setDataOperacao(OffsetDateTime.now());
