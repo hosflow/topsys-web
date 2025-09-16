@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.topsys</groupId>
 	<artifactId>topsys-web</artifactId>
-	<version>3.1.2</version>
+	<version>3.1.3</version>
 	<name>TopSys IT Solutions - WEB</name>
 
 	<description>TopSys IT Solutions - WEB</description>
@@ -24,7 +24,7 @@
 		<maven.compiler.target>23</maven.compiler.target>
 		
 		<spring.boot.version>3.5.3</spring.boot.version>
-		<topsys.version>3.1.2</topsys.version>
+		<topsys.version>3.1.3</topsys.version>
 		
 		<beanutils.version>1.9.4</beanutils.version>
 		 <joinfaces.version>5.5.0</joinfaces.version>
@@ -145,7 +145,7 @@
     <url>https://github.com/hosflow/topsys-web</url>
     <connection>scm:git:https://github.com/hosflow/topsys-web.git</connection>
 </scm>
-
+ 
 <developers>
     <developer>
         <id>topazio</id>
