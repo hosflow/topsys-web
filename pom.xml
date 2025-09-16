@@ -133,6 +133,25 @@
 		</plugins>
 	</build>
 
+<distributionManagement>
+    <repository>
+        <id>hosflow</id>
+        <name>GitHub Hosflow Packages</name>
+        <url>https://maven.pkg.github.com/hosflow/topsys-web</url>
+    </repository>
+</distributionManagement>
 
+<scm>
+    <url>https://github.com/hosflow/topsys-web</url>
+    <connection>scm:git:https://github.com/hosflow/topsys-web.git</connection>
+</scm>
+
+<developers>
+    <developer>
+        <id>topazio</id>
+        <name>André Topázio</name>
+        <email>andre.topazio@gmail.com</email>
+    </developer>
+</developers>
 
 </project>
