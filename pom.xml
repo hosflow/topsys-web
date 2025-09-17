@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.topsys</groupId>
 	<artifactId>topsys-web</artifactId>
-	<version>3.1.3</version>
+	<version>3.1.4</version>
 	<name>TopSys IT Solutions - WEB</name>
 
 	<description>TopSys IT Solutions - WEB</description>
@@ -23,11 +23,12 @@
 		<maven.compiler.source>23</maven.compiler.source>
 		<maven.compiler.target>23</maven.compiler.target>
 		
-		<spring.boot.version>3.5.3</spring.boot.version>
-		<topsys.version>3.1.3</topsys.version>
+		<topsys.version>3.1.4</topsys.version>
 		
 		<beanutils.version>1.11.0</beanutils.version>
-		 <joinfaces.version>5.5.0</joinfaces.version>
+		
+		<joinfaces.version>5.5.5</joinfaces.version>
+		
 		<primefaces.version>15.0.0</primefaces.version>
 	</properties>
 
@@ -69,14 +70,15 @@
 			<artifactId>primefaces</artifactId>
 			<version>${primefaces.version}</version>
 			<scope>compile</scope>
+			<classifier>jakarta</classifier>
 		</dependency>
 
-
+ 
 
 		<dependency>
 			<groupId>br.com.topsys</groupId>
 			<artifactId>topsys-service</artifactId>
-			<version>3.0</version>
+			<version>${topsys.version}</version>
 		</dependency>
 	</dependencies>
 
